@@ -12,6 +12,17 @@ export type Course = {
   name: string;
   instructor_id: string;
   description: string;
-  course_material: JSON;
   rating: number;
+};
+
+export type blocks = {
+  type: "text" | "title";
+  content: string;
+  size: number;
+};
+
+export type CourseMaterial = {
+  id: string;
+  course_id: string;
+  blocks: blocks[];
 };
