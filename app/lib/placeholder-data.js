@@ -20,6 +20,44 @@ const courses = [
     id: "d6e15727-9fe1-4961-8c5b-ea44a9bd81aa",
     name: "How to pull off a coup",
     instructor_id: users[1].id,
+    instructor_name: users[1].name,
+    category: "Politics",
+    description: "The US government knows what's best for your country pal",
+    rating: 5,
+  },
+  {
+    id: "d6e15727-9fe1-4961-8c5b-ea44a9bd81aa",
+    name: "How to pull off a coup",
+    instructor_id: users[1].id,
+    instructor_name: users[1].name,
+    category: "Politics",
+    description: "The US government knows what's best for your country pal",
+    rating: 5,
+  },
+  {
+    id: "d6e15727-9fe1-4961-8c5b-ea44a9bd81aa",
+    name: "How to pull off a coup",
+    instructor_id: users[1].id,
+    instructor_name: users[1].name,
+    category: "Politics",
+    description: "The US government knows what's best for your country pal",
+    rating: 5,
+  },
+  {
+    id: "d6e15727-9fe1-4961-8c5b-ea44a9bd81aa",
+    name: "How to pull off a coup",
+    instructor_id: users[1].id,
+    instructor_name: users[1].name,
+    category: "Politics",
+    description: "The US government knows what's best for your country pal",
+    rating: 5,
+  },
+  {
+    id: "d6e15727-9fe1-4961-8c5b-ea44a9bd81aa",
+    name: "How to pull off a coup",
+    instructor_id: users[1].id,
+    instructor_name: users[1].name,
+    category: "Politics",
     description: "The US government knows what's best for your country pal",
     rating: 5,
   },
@@ -45,4 +83,27 @@ const course_material = [
   },
 ];
 
-module.exports = { users, courses, course_material };
+const categories = [
+  {
+    id: "13D07535-C59E-4157-A011-F8D2EF4E0CBB",
+    name: "Development",
+    href: "",
+  },
+  {
+    id: "CC27C14A-0ACF-4F4A-A6C9-D45682C144B9",
+    name: "Business",
+    href: "",
+  },
+  {
+    id: "126eed9c-c90c-4ef6-a4a8-fcf7408d3c66",
+    name: "Design",
+    href: "",
+  },
+  {
+    id: "d6e15727-9fe1-4961-8c5b-ea44a9bd81aa",
+    name: "IT & Software",
+    href: "",
+  },
+];
+
+module.exports = { users, courses, course_material, categories };

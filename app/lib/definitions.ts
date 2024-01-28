@@ -11,6 +11,8 @@ export type Course = {
   id: string;
   name: string;
   instructor_id: string;
+  instructor_name: string;
+  category: string;
   description: string;
   rating: number;
 };
@@ -25,4 +27,10 @@ export type CourseMaterial = {
   id: string;
   course_id: string;
   blocks: blocks[];
+};
+
+export type Category = {
+  id: string;
+  name: string;
+  href: string;
 };
