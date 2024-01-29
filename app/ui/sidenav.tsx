@@ -5,7 +5,7 @@ import { categories } from "@/app/lib/placeholder-data";
 
 export default function SideNav() {
   return (
-    <>
+    <div className={classes.sideBar}>
       <FourallLogo />
       <div className={classes.Navbar}>
         <h2 className={classes.title}>Categories</h2>
@@ -17,6 +17,6 @@ export default function SideNav() {
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 }

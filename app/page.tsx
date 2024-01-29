@@ -11,7 +11,7 @@ export default async function Home() {
     <main>
       <SideNav />
       {/* <Header /> */}
-      {/* <SearchBox /> */}
+      <SearchBox />
 
       {/* <CoursesGrid heading="Recommendations" data={courses} /> */}
     </main>
