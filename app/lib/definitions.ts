@@ -15,9 +15,24 @@ export type Course = {
   category: string;
   description: string;
   rating: number;
+  reviews: review[];
+  sections: section[];
+  img_url: string;
 };
 
-export type blocks = {
+export type section = {
+  id: string;
+  name: string;
+  course_material_id: string;
+};
+
+export type review = {
+  id: string;
+  user: string;
+  review: string;
+};
+
+export type block = {
   type: "text" | "title";
   content: string;
   size: number;
@@ -26,7 +41,7 @@ export type blocks = {
 export type CourseMaterial = {
   id: string;
   course_id: string;
-  blocks: blocks[];
+  blocks: block[];
 };
 
 export type Category = {

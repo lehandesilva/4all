@@ -8,7 +8,7 @@ export default function SearchBox() {
   const [searchQuery, setSearchQuery] = useState("");
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const { replace, push } = useRouter();
+  const { replace } = useRouter();
 
   const searchHandler = (event: React.FormEvent) => {
     event.preventDefault();

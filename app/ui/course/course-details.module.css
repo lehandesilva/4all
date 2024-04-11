@@ -1,0 +1,42 @@
+/* course.module.css */
+.course {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* Adjust spacing between sections */
+  width: 80%; /* Adjust width as needed */
+  margin: 0 auto; /* Center the course container horizontally */
+  padding: 2rem; /* Add padding for content */
+  background-color: #f5f5f5; /* Light background color */
+  border-radius: 0.5rem; /* Rounded corners */
+}
+
+.course__title {
+  font-size: 2rem; /* Adjust title font size */
+  font-weight: bold;
+  margin-bottom: 0.5rem; /* Add space below title */
+}
+
+.course__description {
+  font-size: 1.2rem; /* Adjust description font size */
+  line-height: 1.5; /* Adjust line spacing for readability */
+  margin-bottom: 1rem; /* Add space below description */
+}
+
+.course__info {
+  display: flex;
+  justify-content: space-between; /* Align info items horizontally */
+  align-items: center; /* Align info items vertically */
+}
+
+.course__instructor,
+.course__rating {
+  font-size: 1rem; /* Adjust font size for info items */
+}
+
+.course__rating {
+  color: #f0984b; /* Orange color for rating */
+}
+
+.course__content {
+  /* Styles for the course content section */
+}

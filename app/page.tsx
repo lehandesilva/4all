@@ -9,7 +9,6 @@ import { courses } from "@/app/lib/placeholder-data";
 export default async function Home() {
   return (
     <main>
-      <SideNav />
       {/* <Header /> */}
       <SearchBox />
 

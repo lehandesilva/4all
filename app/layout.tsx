@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "@/app/ui/globals.css";
 import { inter } from "./ui/fonts";
+import SideNav from "./ui/sidenav";
 
 export const metadata: Metadata = {
   title: "4all",
@@ -14,7 +15,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <SideNav />
+        {children}
+      </body>
     </html>
   );
 }
