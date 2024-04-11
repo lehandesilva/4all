@@ -30,9 +30,14 @@ export default function CourseContent({
 }: {
   content: CourseMaterial;
 }) {
+  if (!content.blocks) {
+    return <div>No content to display</div>;
+  }
   return (
     <>
-      <div className={styles.content}></div>
+      <div className={styles.content}>
+        {content.blocks.map((block) => console.log(block.type))}
+      </div>
     </>
   );
 }
