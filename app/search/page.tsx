@@ -15,7 +15,6 @@ export default async function Search({
 
   return (
     <main>
-      <SideNav />
       <SearchBox />
       <CoursesGrid heading="Results" data={courses} />
     </main>

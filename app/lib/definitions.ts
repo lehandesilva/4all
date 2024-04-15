@@ -12,7 +12,7 @@ export type Course = {
   name: string;
   instructor_id: string;
   instructor_name: string;
-  category: string;
+  categoryId: string;
   description: string;
   rating: number;
   reviews: review[];

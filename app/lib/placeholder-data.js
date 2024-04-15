@@ -8,103 +8,11 @@ const users = [
   },
   {
     id: "3958dc9e-787f-4377-85e9-fec4b6a6442a",
-    name: "The CIA",
-    email: "cia@nextmail.com",
+    name: "admin",
+    email: "admin@nextmail.com",
     password: "123456",
   },
 ];
-
-const courses = [
-  {
-    id: "d6e15727-9fe1-4961-8c5b-ea44a9bd81aa",
-    name: "How to pull off a coup",
-    instructor_id: users[1].id,
-    instructor_name: users[1].name,
-    category: "Politics",
-    description: "The US government knows what's best for your country pal",
-    rating: 5,
-    reviews: [
-      {
-        id: "d6e15727-9fe1-4961-8c5b-ea44a9bd81dd",
-        user: "nam",
-        review: "lol get gud",
-      },
-    ],
-    sections: [
-      {
-        id: "d6e15727-9fe1-4961-8c5b-ea44a9bd8bba",
-        name: "Setup",
-        course_material_id: "CC27C14A-0ACF-4F4A-A6C9-D45682C144B9",
-      },
-      {
-        id: "76d65c26-f784-44a2-ac19-586678f7c2f2",
-        name: "Rooting out communism",
-        course_material_id: "126eed9c-c90c-4ef6-a4a8-fcf7408d3c66",
-      },
-      {
-        id: "50ca3e18-62cd-11ee-8c99-0242ac120002",
-        name: "Shitting and pissing",
-        course_material_id: "13D07535-C59E-4157-A011-F8D2EF4E0CBB",
-      },
-    ],
-    img_url: "",
-  },
-];
-
-const course_material = [
-  {
-    id: "CC27C14A-0ACF-4F4A-A6C9-D45682C144B9",
-    course_id: courses[0].id,
-    blocks: [
-      {
-        type: "title",
-        content: "What the deepstate is made off",
-        size: 3,
-      },
-      {
-        type: "text",
-        content:
-          "What do all of the three letter agencies and the vatican city have in common? They're all a part of the deepstate. :O",
-        size: 1,
-      },
-    ],
-  },
-  {
-    id: "126eed9c-c90c-4ef6-a4a8-fcf7408d3c66",
-    course_id: courses[0].id,
-    blocks: [
-      {
-        type: "title",
-        content: "shit and piss",
-        size: 3,
-      },
-      {
-        type: "text",
-        content:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, odio! Deserunt quia error nostrum praesentium magni, totam voluptatum ad illo maxime nesciunt incidunt tempora laboriosam officiis quo omnis perferendis fuga! Facere nostrum illo aspernatur molestias corporis sed culpa dolores assumenda dolorum sequi natus unde veritatis quasi fugit, vitae ipsum ratione eos eveniet soluta laboriosam quam autem debitis! Facilis, iste praesentium! Aperiam iusto ipsum nulla dolores architecto ea voluptates odit, ex enim commodi. Magnam quia consectetur illo veniam expedita eveniet iste non optio, numquam repudiandae ab, aspernatur repellendus excepturi quas at!Mollitia aut quidem quo dolorum praesentium sit rerum, sapiente, omnis, numquam velit ipsam dolore delectus? Magni deserunt laudantium consequuntur ex tenetur ut facere natus aut! Nemo quas dolorem optio ut!Earum voluptatem incidunt obcaecati voluptates iure nostrum architecto quae alias minima illo dolores excepturi est inventore distinctio sunt, perspiciatis, praesentium aut numquam recusandae, consequatur consectetur. Esse sed itaque libero laudantium.Suscipit cumque laudantium rerum atque corporis quod incidunt repellendus libero, expedita maiores distinctio quisquam laborum nobis reprehenderit ad enim amet dolorem sunt eveniet dignissimos quaerat saepe ea quos esse? Provident!Odit similique nihil illum quibusdam dolorem mollitia! Exercitationem natus iusto reprehenderit nobis magnam illo dolorem, aliquam nihil voluptas id dolores voluptatibus beatae aut similique eaque perspiciatis numquam non in laboriosam.Cum accusamus dolores, esse nam ratione nostrum placeat nemo in? Quidem quo reiciendis officiis iste praesentium ea mollitia commodi et, sequi aliquam neque, animi sapiente odio. Minus consectetur inventore nobis!Iure quasi repudiandae minus consectetur molestias assumenda eaque repellendus possimus aut cum suscipit perspiciatis eveniet nesciunt est omnis, qui quidem consequatur nulla eligendi dignissimos doloremque? Quia incidunt dolores facere molestias!Eaque facere blanditiis distinctio minima veniam illum! Veritatis illo doloribus, fugiat corporis ex delectus culpa vero, expedita molestias quo quod, optio tenetur nobis nam. Omnis adipisci magni debitis aliquam accusantium?",
-        size: 1,
-      },
-    ],
-  },
-  {
-    id: "13D07535-C59E-4157-A011-F8D2EF4E0CBB",
-    course_id: courses[0].id,
-    blocks: [
-      {
-        type: "title",
-        content: "Fuck up cuba",
-        size: 3,
-      },
-      {
-        type: "text",
-        content:
-          "balls balls bacll Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur, dolores. Inventore tempora, esse dolorum atque distinctio, dicta, obcaecati quaerat itaque nisi quae fugit nobis ea fuga ad dolor voluptatum aut.",
-        size: 1,
-      },
-    ],
-  },
-];
-
 const categories = [
   {
     id: "13D07535-C59E-4157-A011-F8D2EF4E0CBB",
@@ -125,6 +33,98 @@ const categories = [
     id: "d6e15727-9fe1-4961-8c5b-ea44a9bd81aa",
     name: "IT & Software",
     href: "",
+  },
+];
+
+const courses = [
+  {
+    id: "d6e15727-9fe1-4961-8c5b-ea44a9bd81aa",
+    name: "Beginner's Guide to Data Science",
+    instructor_id: users[0].id,
+    instructor_name: users[0].name,
+    categoryId: categories[0].id,
+    description:
+      "Welcome to the Beginner's Guide to Data Science! In this course, we'll embark on an exciting journey into the fascinating world of data science. Whether you're a complete novice or have some experience with data analysis, this course will provide you with a solid foundation to kickstart your learning journey.",
+    rating: 5,
+    reviews: [
+      {
+        id: "d6e15727-9fe1-4961-8c5b-ea44a9bd81dd",
+        user: "nam",
+        review: "This is great!",
+      },
+    ],
+    sections: [
+      {
+        id: "d6e15727-9fe1-4961-8c5b-ea44a9bd8bba",
+        name: "Introduction to Data Science",
+        course_material_id: "CC27C14A-0ACF-4F4A-A6C9-D45682C144B9",
+      },
+      {
+        id: "76d65c26-f784-44a2-ac19-586678f7c2f2",
+        name: "Data Collection and Preparation",
+        course_material_id: "126eed9c-c90c-4ef6-a4a8-fcf7408d3c66",
+      },
+      {
+        id: "50ca3e18-62cd-11ee-8c99-0242ac120002",
+        name: "Exploratory Data Analysis (EDA)",
+        course_material_id: "13D07535-C59E-4157-A011-F8D2EF4E0CBB",
+      },
+    ],
+    img_url: "",
+  },
+];
+
+const course_material = [
+  {
+    id: "CC27C14A-0ACF-4F4A-A6C9-D45682C144B9",
+    course_id: courses[0].id,
+    blocks: [
+      {
+        type: "title",
+        content: "What is Data Science?",
+        size: 3,
+      },
+      {
+        type: "text",
+        content:
+          "Let's start our adventure with an exploration into the captivating realm of data science. Have you ever wondered how Netflix recommends movies you'll love or how Amazon suggests products you might want to buy? That's data science at work! Data science is all about extracting insights and knowledge from data to solve complex problems and make informed decisions. From predicting customer behavior to optimizing business operations, the possibilities are endless! In this section, we'll dive into the basics of data science, exploring its key concepts, applications, and real-world examples. By the end of this section, you'll have a solid understanding of what data science is all about and why it's such an exciting field to explore.",
+        size: 1,
+      },
+    ],
+  },
+  {
+    id: "13D07535-C59E-4157-A011-F8D2EF4E0CBB",
+    course_id: courses[0].id,
+    blocks: [
+      {
+        type: "title",
+        content: "Collecting Data",
+        size: 3,
+      },
+      {
+        type: "text",
+        content:
+          "Now that we've laid the groundwork, let's roll up our sleeves and get our hands dirty with some data! Data collection is the first step in any data science project. We'll learn how to gather data from various sources, including databases, APIs, and web scraping. But collecting data is just the beginning – we'll also dive into the crucial task of data cleaning and preprocessing. Trust me, clean data is the secret sauce to successful data analysis! In this section, we'll explore techniques for cleaning, transforming, and organizing data to ensure its quality and reliability. By the end of this section, you'll be equipped with the skills to collect and preprocess data effectively for your own data science projects.",
+        size: 1,
+      },
+    ],
+  },
+  {
+    id: "126eed9c-c90c-4ef6-a4a8-fcf7408d3c66",
+    course_id: courses[0].id,
+    blocks: [
+      {
+        type: "title",
+        content: "Data Analysis",
+        size: 3,
+      },
+      {
+        type: "text",
+        content:
+          "Ready to uncover hidden insights lurking within our datasets? Exploratory Data Analysis (EDA) is our trusty detective tool for unraveling the mysteries hidden within our data. We'll learn how to visualize and explore our data using graphs, charts, and statistical summaries. Who knew data could be so visually appealing? But EDA isn't just about pretty pictures – it's about gaining a deeper understanding of our data and identifying patterns, trends, and outliers that can guide our analysis. By the end of this section, you'll be a certified data detective, armed with the skills to uncover valuable insights from your datasets.",
+        size: 1,
+      },
+    ],
   },
 ];
 

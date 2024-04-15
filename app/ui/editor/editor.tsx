@@ -95,7 +95,10 @@ export default function Editor() {
               type="text"
               value={block.content}
               onChange={(event) => changeHandler(event, index)}
-              onFocus={() => changeSelectedBlock(block.id)}
+              onFocus={() => {
+                console.log(block.id);
+                changeSelectedBlock(block.id);
+              }}
             />
           </div>
         ))}
@@ -103,7 +106,7 @@ export default function Editor() {
       <div className={styles.sizeContainer}>
         <input
           type="number"
-          value={blocks[selectedBlock].size}
+          value={blocks.length > 0 ? blocks[selectedBlock].size : ""}
           onChange={(event) => handleSizeChange(event)}
         />
       </div>
@@ -114,12 +117,14 @@ export default function Editor() {
         <button className={styles.textBtn} onClick={handleTextClick}>
           Add text
         </button>
-        <button className={styles.removeBtn} onClick={handleRemoveClick}>
+        <button
+          className={styles.removeBtn}
+          disabled={blocks.length > 1 ? false : true}
+          onClick={handleRemoveClick}
+        >
           Remove
         </button>
       </div>
     </>
   );
 }
-// block should be an object with type, content and size
-// Two buttons to add text and title
