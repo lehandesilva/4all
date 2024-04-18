@@ -15,6 +15,9 @@ import {
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import crypto from "crypto";
+import bcrypt from "bcryptjs";
+import { type } from "os";
+
 const generateFileName = (bytes = 32) =>
   crypto.randomBytes(bytes).toString("hex");
 
@@ -34,6 +37,130 @@ export async function authenticate(
       }
     }
     throw error;
+  }
+}
+
+const signUpFormSchema = z.object({
+  name: z.string(),
+  email: z.string().email(),
+  password: z.string().min(6),
+});
+
+const commentFormSchema = z.object({
+  comment: z.string(),
+});
+
+const ratingFormSchema = z.object({
+  rating: z.number(),
+});
+export async function rateCourse(formData: FormData) {
+  let userRating = formData.get("rating");
+  const course_id = formData.get("courseId");
+
+  const numericRating = parseFloat(userRating);
+
+  try {
+    const result = await sql`
+      SELECT rating, users_rated
+      FROM courses
+      WHERE id = ${course_id}
+    `;
+
+    const currentRating = result.rows[0].rating;
+    const usersRated = result.rows[0].users_rated;
+
+    let newRating;
+    if (usersRated === 0) {
+      newRating = numericRating; // Set rating to user rating if no previous ratings
+    } else {
+      newRating =
+        (currentRating * usersRated + numericRating) / (usersRated + 1);
+    }
+    await sql`
+      UPDATE courses
+      SET rating = ${newRating},
+          users_rated = users_rated + 1
+      WHERE id = ${course_id}
+    `;
+    revalidatePath("/course");
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function addCommentAction(formData: FormData) {
+  const session = await auth();
+  const validatedFields = commentFormSchema.safeParse({
+    comment: formData.get("comment"),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Failed to add comment",
+    };
+  }
+  const course_id = formData.get("courseId");
+  const userDetails = await fetchUserByEmail(session?.user?.email as string);
+  const { comment } = validatedFields.data;
+  const date = new Date().toString();
+  let reviewArr = [];
+  try {
+    const result = await sql`
+      SELECT reviews
+      FROM courses
+      WHERE id = ${course_id}
+    `;
+
+    reviewArr = result.rows[0].reviews;
+  } catch (error) {
+    console.error(error);
+  }
+  const review = {
+    user: userDetails?.name,
+    review: comment,
+    timestamp: date,
+  };
+  reviewArr.unshift(review);
+
+  try {
+    await sql`
+        UPDATE courses
+        SET reviews = ${reviewArr}
+        WHERE id = ${course_id}
+    `;
+    revalidatePath("/");
+  } catch (error) {
+    console.error(error);
+  }
+}
+export async function signUpUser(formData: FormData) {
+  const validatedFields = signUpFormSchema.safeParse({
+    name: formData.get("name"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Missing Fields. Failed to Create user.",
+    };
+  }
+  const { name, email, password } = validatedFields.data;
+  const result = await sql`
+    SELECT * FROM users WHERE email = ${email}
+  `;
+
+  if (result.rows.length > 0) {
+    return { error: "Email already exists" };
+  } else {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await sql`
+        INSERT INTO users (name, email, password)
+        VALUES (${name},${email},${hashedPassword})
+      `;
+    redirect("/login");
   }
 }
 
@@ -105,8 +232,8 @@ export async function createCourse(prevState: State, formData: FormData) {
   console.log(image_url);
   try {
     const result = await sql`
-      INSERT INTO courses (name, instructor_id, instructor_name, category_id, description, rating, img_url)
-      VALUES (${name}, ${userDetails?.id}, ${userDetails?.name}, ${categoryId}, ${description}, 0, ${image_url})
+      INSERT INTO courses (name, instructor_id, instructor_name, category_id, description, rating, users_rated img_url)
+      VALUES (${name}, ${userDetails?.id}, ${userDetails?.name}, ${categoryId}, ${description}, 0, 0, ${image_url})
       RETURNING id;
     `;
 

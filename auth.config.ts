@@ -9,7 +9,6 @@ export const authConfig = {
       const isLoggedIn = !!auth?.user;
       const isOnCourse = nextUrl.pathname.startsWith("/course");
       const isOnProfile = nextUrl.pathname.startsWith("/profile");
-      const isOnLoginPage = nextUrl.pathname.startsWith("/login");
 
       if (isOnCourse || isOnProfile) {
         if (isLoggedIn) return true;
@@ -20,8 +19,3 @@ export const authConfig = {
   },
   providers: [], // Add providers with an empty array for now
 } satisfies NextAuthConfig;
-
-// } else if (isOnLoginPage && isLoggedIn) {
-//   return Response.redirect(new URL("/", nextUrl));
-// } else if (isLoggedIn) {
-// return Response.redirect(new URL("/", nextUrl));

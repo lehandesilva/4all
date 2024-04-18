@@ -3,6 +3,7 @@ import FourallLogo from "./4all-logo";
 import Link from "next/link";
 import { categories } from "@/app/lib/placeholder-data";
 import { signOut } from "@/auth";
+import { redirect } from "next/navigation";
 
 export default function SideNav() {
   return (
@@ -21,7 +22,7 @@ export default function SideNav() {
       <form
         action={async () => {
           "use server";
-          await signOut();
+          await signOut({ redirectTo: "/" });
         }}
       >
         <button className="">

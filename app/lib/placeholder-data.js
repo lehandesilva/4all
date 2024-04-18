@@ -1,3 +1,5 @@
+const { timeStamp } = require("console");
+
 //File contains placeholder data to seed the database with and to help develop the app initially
 const users = [
   {
@@ -45,12 +47,13 @@ const courses = [
     categoryId: categories[0].id,
     description:
       "Welcome to the Beginner's Guide to Data Science! In this course, we'll embark on an exciting journey into the fascinating world of data science. Whether you're a complete novice or have some experience with data analysis, this course will provide you with a solid foundation to kickstart your learning journey.",
-    rating: 5,
+    rating: 4.5,
+    users_rated: 2,
     reviews: [
       {
-        id: "d6e15727-9fe1-4961-8c5b-ea44a9bd81dd",
         user: "nam",
         review: "This is great!",
+        timestamp: "Thu Apr 18 2024 11:43:41 GMT+0100 (British Summer Time)",
       },
     ],
     sections: [
@@ -70,7 +73,8 @@ const courses = [
         course_material_id: "13D07535-C59E-4157-A011-F8D2EF4E0CBB",
       },
     ],
-    img_url: "",
+    img_url:
+      "https://4all-image-storage.s3.eu-west-2.amazonaws.com/photomode_29012023_144755.png",
   },
 ];
 

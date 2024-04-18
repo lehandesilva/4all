@@ -15,6 +15,7 @@ export type Course = {
   categoryId: string;
   description: string;
   rating: number;
+  users_rated: number;
   reviews: review[];
   sections: section[];
   img_url: string;
@@ -27,9 +28,9 @@ export type section = {
 };
 
 export type review = {
-  id: string;
   user: string;
   review: string;
+  timestamp: string;
 };
 
 export type block = {

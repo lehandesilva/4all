@@ -1,8 +1,9 @@
 import { sql } from "@vercel/postgres";
 import { User, Course, CourseMaterial, block, Category } from "./definitions";
-import { unstable_noStore as noStore } from "next/cache";
+import { unstable_noStore as noStore, revalidatePath } from "next/cache";
 
 export async function fetchCourseById(id: string) {
+  noStore();
   try {
     const result = await sql<Course>`
     SELECT *
