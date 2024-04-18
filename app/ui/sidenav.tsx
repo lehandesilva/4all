@@ -2,6 +2,7 @@ import classes from "./sidenav.module.css";
 import FourallLogo from "./4all-logo";
 import Link from "next/link";
 import { categories } from "@/app/lib/placeholder-data";
+import { signOut } from "@/auth";
 
 export default function SideNav() {
   return (
@@ -17,6 +18,16 @@ export default function SideNav() {
           ))}
         </div>
       </div>
+      <form
+        action={async () => {
+          "use server";
+          await signOut();
+        }}
+      >
+        <button className="">
+          <div className="">Sign Out</div>
+        </button>
+      </form>
     </div>
   );
 }

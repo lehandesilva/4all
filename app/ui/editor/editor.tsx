@@ -2,16 +2,30 @@
 import { block } from "@/app/lib/definitions";
 import { useRef, useState } from "react";
 import styles from "./editor.module.css";
-import { Content } from "next/font/google";
-export default function Editor() {
+interface EditorProps {
+  sectionId: number;
+  content?: { id: number; type: string; content: string; size: string }[]; // Array of block objects
+  onUpdateContent: (
+    sectionId: number,
+    newBlocks: { id: number; type: string; content: string; size: string }[]
+  ) => void;
+}
+
+export default function Editor({
+  sectionId,
+  content,
+  onUpdateContent,
+  ...props
+}: EditorProps) {
   const [blocks, setBlocks] = useState<
     { id: number; type: string; content: string; size: string }[]
   >([
     { id: 0, type: "title", content: "Add title here", size: "3" },
     { id: 1, type: "text", content: "Add text here", size: "1" },
   ]);
-  const [selectedBlock, setSelectedBlock] = useState<number>(0);
+  const [selectedBlock, setSelectedBlock] = useState<number | null>(null);
   const [blockCounter, setBlockCounter] = useState<number>(2);
+  const [sizeofSelected, setSizeofSeleceted] = useState<string>("");
 
   const dragBlock = useRef<number>(0);
   const draggedOverBlock = useRef<number>(0);
@@ -32,45 +46,59 @@ export default function Editor() {
     const updatedBlocks = [...blocks];
     updatedBlocks[index].content = newContent;
     setBlocks(updatedBlocks);
+    onUpdateContent(sectionId, updatedBlocks);
   };
 
   const handleTitleClick = () => {
-    setBlocks([
+    const updatedBlocks = [
       ...blocks,
       { id: blockCounter, type: "title", content: "", size: "3" },
-    ]);
+    ];
+    setBlocks(updatedBlocks);
+    onUpdateContent(sectionId, updatedBlocks);
     let temp = blockCounter;
     temp++;
     setBlockCounter(temp);
   };
 
   const handleTextClick = () => {
-    setBlocks([
+    const updatedBlocks = [
       ...blocks,
       { id: blockCounter, type: "text", content: "", size: "1" },
-    ]);
+    ];
+    setBlocks(updatedBlocks);
+    onUpdateContent(sectionId, updatedBlocks);
     let temp = blockCounter;
     temp++;
     setBlockCounter(temp);
   };
 
   const handleSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newContent = event.target.value;
-    const updatedBlocks = [...blocks];
-    updatedBlocks[selectedBlock].size = newContent;
-    setBlocks(updatedBlocks);
+    if (selectedBlock !== null) {
+      const newContent = event.target.value;
+      const updatedBlocks = [...blocks];
+      updatedBlocks[selectedBlock].size = newContent;
+      setBlocks(updatedBlocks);
+      setSizeofSeleceted(newContent); // Update sizeOfSelected here
+      onUpdateContent(sectionId, updatedBlocks);
+    }
   };
 
   const changeSelectedBlock = (blockId: number) => {
     setSelectedBlock(blockId);
+    const block = blocks.find((block) => block.id === blockId);
+    if (block) {
+      setSizeofSeleceted(block.size);
+    }
   };
 
   const handleRemoveClick = () => {
-    if (blocks.length > 1) {
+    if (selectedBlock !== null) {
       const updatedBlocks = [...blocks];
       updatedBlocks.splice(selectedBlock, 1); // Remove the selected block
-      setSelectedBlock(selectedBlock > 0 ? selectedBlock - 1 : 0); // Update selected block (if needed)
       setBlocks(updatedBlocks);
+      setSelectedBlock(null);
+      onUpdateContent(sectionId, updatedBlocks);
     }
   };
 
@@ -96,7 +124,6 @@ export default function Editor() {
               value={block.content}
               onChange={(event) => changeHandler(event, index)}
               onFocus={() => {
-                console.log(block.id);
                 changeSelectedBlock(block.id);
               }}
             />
@@ -106,7 +133,7 @@ export default function Editor() {
       <div className={styles.sizeContainer}>
         <input
           type="number"
-          value={blocks.length > 0 ? blocks[selectedBlock].size : ""}
+          value={sizeofSelected}
           onChange={(event) => handleSizeChange(event)}
         />
       </div>

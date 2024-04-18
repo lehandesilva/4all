@@ -1,9 +1,11 @@
-// make new component to the editor its logic
-// editor : start with the dragging shit from the video and get that shi over wit
+import CreateCourseForm from "@/app/ui/profile/create-course-form";
+import { fetchCategories } from "@/app/lib/data";
 
-import Editor from "@/app/ui/editor/editor";
-
-export default function Page() {
-  //form to input the course name, description, img
-  return <Editor />;
+export default async function Page() {
+  const categories = await fetchCategories();
+  return (
+    <>
+      <CreateCourseForm categories={categories} />
+    </>
+  );
 }

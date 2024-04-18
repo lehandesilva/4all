@@ -17,22 +17,22 @@ const categories = [
   {
     id: "13D07535-C59E-4157-A011-F8D2EF4E0CBB",
     name: "Development",
-    href: "",
+    href: "/dev",
   },
   {
     id: "CC27C14A-0ACF-4F4A-A6C9-D45682C144B9",
     name: "Business",
-    href: "",
+    href: "/biz",
   },
   {
     id: "126eed9c-c90c-4ef6-a4a8-fcf7408d3c66",
     name: "Design",
-    href: "",
+    href: "/des",
   },
   {
     id: "d6e15727-9fe1-4961-8c5b-ea44a9bd81aa",
     name: "IT & Software",
-    href: "",
+    href: "/nerd",
   },
 ];
 

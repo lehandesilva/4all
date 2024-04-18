@@ -54,8 +54,8 @@ async function seedCourses(client) {
         category_id UUID REFERENCES categories(id),
         description TEXT,
         rating DECIMAL(2, 1),
-        reviews JSONB DEFAULT [],
-        sections JSONB DEFAULT [],
+        reviews JSONB [],
+        sections JSONB [],
         img_url TEXT,
         CONSTRAINT fk_instructor_user FOREIGN KEY (instructor_id) REFERENCES users(id)
       );
@@ -66,7 +66,7 @@ async function seedCourses(client) {
     const insertedCourses = await Promise.all(
       courses.map(async (course) => {
         return client.sql`
-          INSERT INTO courses (id, name, instructor_id, instructor_name, category_id, description, rating, reviews, sections img_url)
+          INSERT INTO courses (id, name, instructor_id, instructor_name, category_id, description, rating, reviews, sections ,img_url)
           VALUES (${course.id}, ${course.name}, ${course.instructor_id}, ${course.instructor_name}, ${course.categoryId}, ${course.description}, ${course.rating}, ${course.reviews}, ${course.sections}, ${course.img_url})
           ON CONFLICT (id) DO NOTHING;
         `;
@@ -90,7 +90,7 @@ async function seedCourseMaterial(client) {
       CREATE TABLE IF NOT EXISTS course_material (
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
         course_id UUID REFERENCES courses(id),
-        blocks JSONB NOT NULL,
+        blocks JSONB [],
         CONSTRAINT fk_course_material FOREIGN KEY (course_id) REFERENCES courses(id)
       );
     `;
@@ -115,6 +115,7 @@ async function seedCourseMaterial(client) {
     throw error;
   }
 }
+
 async function seedCategories(client) {
   try {
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
@@ -123,7 +124,7 @@ async function seedCategories(client) {
       CREATE TABLE IF NOT EXISTS categories (
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
-        href TEXT,
+        href TEXT NOT NULL
       );
     `;
 
@@ -152,9 +153,9 @@ async function main() {
   const client = await db.connect();
 
   await seedUsers(client);
+  await seedCategories(client);
   await seedCourses(client);
   await seedCourseMaterial(client);
-  await seedCategories(client);
 
   await client.end();
 }

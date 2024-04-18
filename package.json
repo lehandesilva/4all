@@ -10,6 +10,8 @@
     "seed": "node -r dotenv/config ./scripts/seed.js"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.554.0",
+    "@aws-sdk/s3-request-presigner": "^3.554.0",
     "@vercel/postgres": "^0.5.1",
     "dotenv": "^16.3.1",
     "next": "^14.2.1",
