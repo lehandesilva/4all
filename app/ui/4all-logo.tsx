@@ -1,10 +1,12 @@
 import Image from "next/image";
-import svgLogo from "@/public/red.png";
 
 export default function FourallLogo() {
+  const siteImg =
+    "https://4all-image-storage.s3.eu-west-2.amazonaws.com/4allSiteLogo.png";
+
   return (
     <div>
-      <Image src={svgLogo} width={100} alt="4all Logo" />
+      <Image src={siteImg} width={100} height={60} alt="4all Logo" />
     </div>
   );
 }

@@ -1,5 +1,4 @@
 // display the comments
-import { timeStamp } from "console";
 import styles from "./comments.module.css";
 
 export default function CommentSection({
@@ -7,6 +6,10 @@ export default function CommentSection({
 }: {
   comments: { user: string; review: string; timestamp: string }[];
 }) {
+  if (comments.length === 0) {
+    return <p>Be the first to comment</p>;
+  }
+
   return (
     <>
       <div className={styles.commentSection}>

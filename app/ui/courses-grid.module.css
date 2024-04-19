@@ -1,0 +1,68 @@
+/* Styles for the section heading container */
+.sectionHeading {
+  margin-left: 175px; /* Adjust margin for sidebar width */
+  padding: 1rem 0;
+  border-bottom: 1px solid #ddd; /* Add a thin border below the heading */
+}
+
+/* Styles for the heading text */
+.heading {
+  font-size: 1.5rem;
+  margin: 0; /* Remove default margin for heading */
+}
+
+/* Styles for the outer container for courses */
+.outerContainer {
+  margin-left: 175px; /* Adjust margin for sidebar width */
+  padding: 1rem;
+  display: flex; /* Allow courses to be displayed in a row */
+  flex-wrap: wrap; /* Wrap courses to multiple lines if needed */
+  justify-content: space-between; /* Space courses evenly */
+}
+
+.links {
+  text-decoration: none;
+}
+
+/* Styles for each course container */
+.courseContainer {
+  width: calc(
+    33% - 1.5rem
+  ); /* Adjust width based on number of courses per row */
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px; /* Add rounded corners for courses */
+  padding: 1rem;
+  text-decoration: none; /* Remove underline from link */
+  transition: all 0.2s ease-in-out; /* Add hover effect */
+}
+
+.courseContainer:hover {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Add a subtle hover shadow */
+}
+
+/* Styles for the image container */
+.imgContainer {
+  width: 100%; /* Image takes up full width of the course container */
+  text-align: center; /* Center image horizontally */
+  margin-bottom: 0.5rem;
+}
+
+/* Styles for the course information container */
+.infoContainer {
+  /* Adjust styles for information within the course container */
+}
+
+/* Styles for the course title */
+.courseTitle {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-decoration: none; /* Remove underline from link */
+}
+
+/* Styles for the course category */
+.courseCategory,
+.courseinstructor {
+  font-size: 0.8rem; /* Adjust font size for category and instructor */
+  color: #888; /* Set a lighter text color */
+}

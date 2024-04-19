@@ -2,6 +2,67 @@ import { sql } from "@vercel/postgres";
 import { User, Course, CourseMaterial, block, Category } from "./definitions";
 import { unstable_noStore as noStore, revalidatePath } from "next/cache";
 
+export async function fetchCoursesByQuery(queryString: string) {
+  noStore();
+  try {
+    const sanitizedQuery = queryString.replace(
+      /[-[\]{}()*+?.,\\^$|:]/g,
+      "\\$&"
+    ); // Escape special characters
+    const result = await sql`
+      SELECT id, name, instructor_name, rating, img_url 
+      FROM courses
+      WHERE LOWER(name) ILIKE  ${`%${sanitizedQuery}%`}
+        OR LOWER(instructor_name) ILIKE  ${`%${sanitizedQuery}%`}
+    `;
+    return result.rows;
+  } catch (error) {
+    return { message: "Database Error: Failed to get courses by query" };
+  }
+}
+
+export async function fetchCourses() {
+  noStore();
+  try {
+    const result = await sql`
+      SELECT id, name, instructor_name, rating, img_url 
+      FROM courses
+    `;
+    return result.rows;
+  } catch (error) {
+    return { message: "Database Error: Failed to get courses" };
+  }
+}
+
+export async function fetchCoursesByCategory(categoryId: string) {
+  noStore();
+  try {
+    const results = await sql`
+      SELECT id, name, instructor_name, rating, img_url
+      FROM courses
+      WHERE category_id = ${categoryId}
+    `;
+    if (results.rows.length === 0) {
+      return []; // Return an empty array if no courses found
+    }
+
+    return results.rows;
+  } catch (error) {
+    return { message: "Database Error: Failed to get courses" };
+  }
+}
+
+export async function fetchCategoryName(category_id: string) {
+  try {
+    const result = await sql`
+      SELECT name
+      FROM categories
+      WHERE id = ${category_id}
+    `;
+    return result.rows[0].name;
+  } catch (error) {}
+}
+
 export async function fetchCourseById(id: string) {
   noStore();
   try {
@@ -19,8 +80,7 @@ export async function fetchCourseById(id: string) {
     // Return the first row (assuming there should be only one course with the ID)
     return result.rows[0];
   } catch (error) {
-    console.error("Database error: ", error);
-    throw new Error("Failed to fetch course data");
+    return { message: "Error fetching course" };
   }
 }
 
@@ -40,8 +100,7 @@ export async function fetchCourseMaterialById(id: string) {
     // Return the first row (assuming there should be only one material with the ID)
     return result.rows[0];
   } catch (error) {
-    console.error("Database error: ", error);
-    throw new Error("Failed to fetch course data");
+    return { message: "Error fetching course section" };
   }
 }
 
@@ -61,34 +120,29 @@ export async function fetchUserByEmail(email: string) {
     const user = result.rows[0];
     return user;
   } catch (error) {
-    console.error("Database error: ", error);
-    throw new Error("Failed to fetch user");
+    return { message: "Database Error: Failed to user" };
   }
 }
 
-// Thumbnail data fetch query
-// it shouldnt include stuff like description and shit
+export async function fetchCoursesByInstructorId(instructorId: string) {
+  noStore();
+  try {
+    const result = await sql<Course>`
+    SELECT id, name, rating, img_url
+    FROM courses
+    WHERE instructor_id = ${instructorId}
+  `;
 
-// export async function fetchCoursesByInstructorId(instructorId: string) {
-//   noStore();
-//   try {
-//     const result = await sql<Course>`
-//     SELECT
-//     FROM courses
-//     WHERE instructor_id = ${instructorId}
-//   `;
+    // Check if any courses were found
+    if (result.rows.length === 0) {
+      return []; // Return an empty array if no courses found
+    }
 
-//     // Check if any courses were found
-//     if (result.rows.length === 0) {
-//       return []; // Return an empty array if no courses found
-//     }
-
-//     return result.rows;
-//   } catch (error) {
-//     console.error("Database error: ", error);
-//     throw new Error("Failed to fetch courses by instructor");
-//   }
-// }
+    return result.rows;
+  } catch (error) {
+    return { message: "Database Error: Failed to get courses by instructor" };
+  }
+}
 
 export async function fetchCategories() {
   try {
@@ -104,7 +158,6 @@ export async function fetchCategories() {
 
     return result.rows;
   } catch (error) {
-    console.error("Database error: ", error);
-    throw new Error("Failed to fetch categories");
+    return { message: "Error retrieving categories" };
   }
 }

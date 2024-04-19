@@ -5,7 +5,7 @@ import { sql } from "@vercel/postgres";
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
 import { auth } from "@/auth";
-import { fetchUserByEmail } from "./data";
+import { fetchCourseById, fetchUserByEmail } from "./data";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import {
@@ -40,19 +40,31 @@ export async function authenticate(
   }
 }
 
-const signUpFormSchema = z.object({
-  name: z.string(),
-  email: z.string().email(),
-  password: z.string().min(6),
-});
+export async function deleteCourse(courseId: string) {
+  const session = await auth();
+  const result = await fetchCourseById(courseId);
+
+  if (session?.user?.name === result?.instructor_name) {
+    try {
+      await sql`
+      DELETE FROM course_material
+      WHERE course_id = ${courseId};
+      `;
+      await sql`
+      DELETE FROM courses
+      WHERE id = ${courseId};
+      `;
+      revalidatePath("/");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
 
 const commentFormSchema = z.object({
   comment: z.string(),
 });
 
-const ratingFormSchema = z.object({
-  rating: z.number(),
-});
 export async function rateCourse(formData: FormData) {
   let userRating = formData.get("rating");
   const course_id = formData.get("courseId");
@@ -134,6 +146,15 @@ export async function addCommentAction(formData: FormData) {
     console.error(error);
   }
 }
+
+const signUpFormSchema = z.object({
+  name: z.string(),
+  email: z.string().email(),
+  password: z
+    .string()
+    .min(6, { message: "Please a password with 6 characters or more" }),
+});
+
 export async function signUpUser(formData: FormData) {
   const validatedFields = signUpFormSchema.safeParse({
     name: formData.get("name"),
@@ -164,9 +185,25 @@ export async function signUpUser(formData: FormData) {
   }
 }
 
+export type State = {
+  errors?: {
+    name?: string[];
+    categoryId?: string[];
+    description?: string[];
+    image_url?: string[];
+  };
+  message?: string | null;
+};
+
+interface Section {
+  id: number;
+  name: string;
+  content?: { id: number; type: string; content: string; size: string }[]; // Array of block objects
+}
+
 const courseFormSchema = z.object({
   id: z.string(),
-  name: z.string().min(1, "Course name must not be empty"),
+  name: z.string().min(10, { message: "Please enter a name for your course" }),
   instructor_id: z.string(),
   instructor_name: z.string(),
   categoryId: z.string({ invalid_type_error: "Select a category." }),
@@ -182,7 +219,7 @@ const courseFormSchema = z.object({
       course_material_id: z.string(),
     })
   ),
-  img_url: z.string(),
+  img_url: z.string().min(10, { message: "Must upload an image" }),
 });
 
 const CreateCourse = courseFormSchema.omit({
@@ -192,29 +229,13 @@ const CreateCourse = courseFormSchema.omit({
   rating: true,
   reviews: true,
   sections: true,
-  img_url: true,
 });
-
-export type State = {
-  errors?: {
-    name?: string[];
-    categoryId?: string[];
-    description?: string[];
-  };
-  message?: string | null;
-};
-
-interface Section {
-  id: number;
-  name: string;
-  content?: { id: number; type: string; content: string; size: string }[]; // Array of block objects
-}
-
 export async function createCourse(prevState: State, formData: FormData) {
   const validatedFields = CreateCourse.safeParse({
     name: formData.get("name"),
     categoryId: formData.get("categoryId"),
     description: formData.get("description"),
+    img_url: formData.get("image_url"),
   });
 
   if (!validatedFields.success) {
@@ -224,21 +245,20 @@ export async function createCourse(prevState: State, formData: FormData) {
     };
   }
 
-  const image_url = formData.get("image_url");
-  const { name, categoryId, description } = validatedFields.data;
+  const { name, categoryId, description, img_url } = validatedFields.data;
   const session = await auth();
   const userDetails = await fetchUserByEmail(session?.user?.email as string);
   let courseId;
-  console.log(image_url);
   try {
     const result = await sql`
-      INSERT INTO courses (name, instructor_id, instructor_name, category_id, description, rating, users_rated img_url)
-      VALUES (${name}, ${userDetails?.id}, ${userDetails?.name}, ${categoryId}, ${description}, 0, 0, ${image_url})
+      INSERT INTO courses (name, instructor_id, instructor_name, category_id, description, rating, users_rated, img_url)
+      VALUES (${name}, ${userDetails?.id}, ${userDetails?.name}, ${categoryId}, ${description}, 0, 0, ${img_url})
       RETURNING id;
     `;
 
     courseId = result.rows[0].id;
   } catch (error) {
+    console.error(error);
     // If a database error occurs, return a more specific error.
     return {
       message: "Database Error: Failed to Create Invoice.",
@@ -259,11 +279,6 @@ const sectionFormSchema = z.object({
       size: z.number(),
     })
   ),
-});
-
-const CreateCourseMaterial = sectionFormSchema.omit({
-  id: true,
-  content: true,
 });
 
 export async function createSections(formData: FormData) {
@@ -371,7 +386,8 @@ export async function deleteImage(img_url: string) {
   };
   try {
     await s3Client.send(new DeleteObjectCommand(deleteParams));
+    return { message: "Deleted image sucessfully" };
   } catch (error) {
-    console.error(error);
+    return { message: "Error while deleting image" };
   }
 }

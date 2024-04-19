@@ -10,7 +10,12 @@ export default function AddComment({ courseId }: { courseId: string }) {
       <div className={styles.addComment}>
         <form action={addCommentAction}>
           <input type="hidden" name="courseId" value={courseId} />
-          <input type="text" placeholder="Post comment" name="comment" />
+          <input
+            type="text"
+            placeholder="Post comment"
+            name="comment"
+            className={styles.commentInput}
+          />
           <button className={styles.commentBtn} type="submit">
             Add Comment
           </button>

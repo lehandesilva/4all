@@ -1,16 +1,21 @@
 import { auth } from "@/auth";
-// import { fetchUserByEmail, fetchCoursesByInstructorId } from "../lib/data";
+import { fetchUserByEmail, fetchCoursesByInstructorId } from "../lib/data";
+import Profile from "../ui/profile/profile-view";
+import ProfileCourses from "../ui/profile/profile-courses";
+import Link from "next/link";
+import CreateCourseBtn from "../ui/profile/create-btn";
 export default async function Page() {
-  // const session = await auth();
-  // const userDetails = await fetchUserByEmail(session?.user?.email);
-  // const userCourses = await fetchCoursesByInstructorId(session?.user?.id);
+  const session = await auth();
+  const user = await fetchUserByEmail(session?.user?.email);
+  const userCourses = await fetchCoursesByInstructorId(user?.id);
+
   return (
     <>
-      {/* <h1>{userDetails?.name}</h1>
-      <p>{`Email: ${userDetails?.email}`}</p>
-      <p>{`Courses created by ${userDetails?.name}`}</p>
-      {userCourses.map((course) => )} */}
-      <p>Profile Page</p>
+      <Profile user={user} />
+      <Link href="profile/create">
+        <CreateCourseBtn />
+      </Link>
+      <ProfileCourses userCourses={userCourses} />
     </>
   );
 }

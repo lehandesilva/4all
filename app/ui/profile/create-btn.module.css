@@ -1,0 +1,17 @@
+.createBtn {
+  position: fixed; /* Fix the button position to the viewport */
+  right: 1rem; /* Place the button 1rem from the right edge */
+  bottom: 1rem; /* Position the button 1rem from the bottom edge */
+  background-color: #4caf50; /* Green color for the button */
+  color: white; /* White text color for the button */
+  padding: 0.75rem 2rem; /* Adjust button padding */
+  border: none;
+  border-radius: 4px; /* Add rounded corners */
+  cursor: pointer; /* Indicate clickable button */
+  transition: background-color 0.2s ease-in-out; /* Add hover effect */
+  z-index: 10; /* Set a higher z-index to ensure the button appears above other content */
+}
+
+.createBtn:hover {
+  background-color: #3e8e41; /* Change button color on hover */
+}

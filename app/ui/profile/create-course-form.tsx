@@ -77,81 +77,118 @@ export default function CreateCourseForm({
   };
 
   return (
-    <form action={dispatch}>
-      <div>
-        <label htmlFor="name" className={styles.label}>
-          Name:
-        </label>
-        <input type="text" name="name" id="name" className={styles.textInput} />
-      </div>
-
-      <div className={styles.categoryDropDown}>
-        <label htmlFor="category">Category</label>
-        <select name="categoryId" id="category">
-          <option value="" disabled>
-            Select a category
-          </option>
-          {categories?.length > 0 ? (
-            categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))
-          ) : (
-            <option value="">No categories available</option>
-          )}
-        </select>
-      </div>
-
-      <div>
-        <label htmlFor="description" className={styles.label}>
-          Description
-        </label>
-        <input
-          type="text"
-          name="description"
-          id="description"
-          className={styles.textInput}
-        />
-      </div>
-
-      <input
-        type="file"
-        onChange={handleFileChange}
-        accept="image/jpeg,image/png"
-        name="file"
-      />
-
-      {previewImage && (
-        <div className={styles.previewImageContainer}>
-          <Image
-            src={previewImage}
-            alt="Course preview"
-            width={200}
-            height={200}
+    <div className={styles.courseCreateSection}>
+      <form action={dispatch}>
+        <div>
+          <label htmlFor="name" className={styles.label}>
+            Name:
+          </label>
+          <input
+            aria-describedby="name-error"
+            type="text"
+            name="name"
+            id="name"
+            className={styles.textInput}
           />
         </div>
-      )}
+        <div id="name-error" aria-live="polite" aria-atomic="true">
+          {state.errors?.name &&
+            state.errors.name.map((error: string) => (
+              <p className="" key={error}>
+                {error}
+              </p>
+            ))}
+        </div>
 
-      <input type="hidden" name="image_url" id="hiddenURL" />
-      {!imgUrl && (
-        <button className={styles.uploadFileBtn} onClick={handleImageUpload}>
-          Upload Image
-        </button>
-      )}
+        <div className={styles.categoryDropDown}>
+          <label htmlFor="category">Category</label>
+          <select name="categoryId" id="category">
+            <option value="" disabled>
+              Select a category
+            </option>
+            {categories?.length > 0 ? (
+              categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))
+            ) : (
+              <option value="">No categories available</option>
+            )}
+          </select>
+        </div>
 
-      {imgUrl && (
-        <button className={styles.removeImageBtn} onClick={handleRemoveImage}>
-          Remove Image
-        </button>
-      )}
+        <div>
+          <label htmlFor="description" className={styles.label}>
+            Description
+          </label>
+          <input
+            type="text"
+            name="description"
+            id="description"
+            className={styles.textInput}
+            aria-describedby="description-error"
+          />
+        </div>
+        <div id="description-error" aria-live="polite" aria-atomic="true">
+          {state.errors?.description &&
+            state.errors.description.map((error: string) => (
+              <p className="" key={error}>
+                {error}
+              </p>
+            ))}
+        </div>
 
-      <div>
-        <Link href="/profile" className="">
-          Cancel
-        </Link>
-        <button type="submit">Create Course</button>
-      </div>
-    </form>
+        <input
+          type="file"
+          onChange={handleFileChange}
+          accept="image/jpeg,image/png"
+          name="file"
+        />
+        {previewImage && (
+          <div className={styles.previewImageContainer}>
+            <Image
+              src={previewImage}
+              alt="Course preview"
+              width={200}
+              height={200}
+            />
+          </div>
+        )}
+
+        <input
+          type="hidden"
+          name="image_url"
+          id="hiddenURL"
+          aria-describedby="img-error"
+        />
+        <div id="img-error" aria-live="polite" aria-atomic="true">
+          {state.errors?.img_url &&
+            state.errors.img_url.map((error: string) => (
+              <p className="" key={error}>
+                {error}
+              </p>
+            ))}
+        </div>
+        {!imgUrl && (
+          <button className={styles.uploadFileBtn} onClick={handleImageUpload}>
+            Upload Image
+          </button>
+        )}
+
+        {imgUrl && (
+          <button className={styles.removeImageBtn} onClick={handleRemoveImage}>
+            Remove Image
+          </button>
+        )}
+
+        <div>
+          <Link href="/profile" className="">
+            Cancel
+          </Link>
+          <button type="submit">Create Course</button>
+        </div>
+      </form>
+    </div>
   );
 }

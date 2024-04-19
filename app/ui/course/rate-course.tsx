@@ -6,7 +6,13 @@ export default function RateCourse({ courseId }: { courseId: string }) {
     <>
       <div className={styles.container}>
         <form action={rateCourse}>
-          <input type="number" name="rating" min={0} max={10} />
+          <input
+            type="number"
+            name="rating"
+            min={0}
+            max={10}
+            className={styles.rateInput}
+          />
           <input type="hidden" name="courseId" value={courseId} />
           <button className={styles.submitRating} type="submit">
             Submit Rating

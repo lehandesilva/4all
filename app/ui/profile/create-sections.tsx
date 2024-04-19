@@ -67,60 +67,63 @@ export default function CreateSections({ courseId }: { courseId: string }) {
 
   return (
     <>
-      {sections?.map((section, index) => (
-        <div key={index} className={styles.section}>
-          <h2 className={styles.sectionName}>{section.name}</h2>
-          <Editor
-            sectionId={section.id}
-            content={section.content}
-            onUpdateContent={handleUpdateSectionContent}
-          />
-          <button
-            className={styles.removeSectionBtn}
-            onClick={() => handleRemoveSection(section.id)}
-          >
-            Remove Section
-          </button>
-        </div>
-      ))}
-      {showInput && (
-        <div>
-          <input
-            type="text"
-            placeholder="Enter Section Name"
-            onChange={handleSectionNameChange}
-          />
-          <button
-            className={styles.saveSection}
-            disabled={sectionName.length === 0}
-            onClick={handleSaveSection}
-          >
-            Add Section
-          </button>
-          <button
-            className={styles.cancelSection}
-            onClick={handleCancelAddSection}
-          >
-            Cancel
-          </button>
-        </div>
-      )}
+      <div className={styles.sectionEditor}>
+        {sections?.map((section, index) => (
+          <div key={index} className={styles.section}>
+            <h2 className={styles.sectionName}>{section.name}</h2>
+            <Editor
+              sectionId={section.id}
+              content={section.content}
+              onUpdateContent={handleUpdateSectionContent}
+            />
+            <button
+              className={styles.removeSectionBtn}
+              onClick={() => handleRemoveSection(section.id)}
+            >
+              Remove Section
+            </button>
+          </div>
+        ))}
+        {showInput && (
+          <div>
+            <input
+              type="text"
+              placeholder="Enter Section Name"
+              onChange={handleSectionNameChange}
+              className={styles.sectionNameInput}
+            />
+            <button
+              className={styles.saveSection}
+              disabled={sectionName.length === 0}
+              onClick={handleSaveSection}
+            >
+              Add Section
+            </button>
+            <button
+              className={styles.cancelSection}
+              onClick={handleCancelAddSection}
+            >
+              Cancel
+            </button>
+          </div>
+        )}
 
-      <button
-        className={styles.addSection}
-        onClick={handleAddSection}
-        disabled={showInput}
-      >
-        Add New Section
-      </button>
-
-      <form action={createSections}>
-        <input type="hidden" name="courseId" value={courseId} />
-        <input type="hidden" id="hiddenSections" name="sections" value="" />
-        <button className={styles.saveAllBtn} onClick={handleSaveChanges}>
-          Save Changes
+        <button
+          className={styles.addSection}
+          onClick={handleAddSection}
+          disabled={showInput}
+        >
+          Add New Section
         </button>
-      </form>
+
+        <form action={createSections}>
+          <input type="hidden" name="courseId" value={courseId} />
+          <input type="hidden" id="hiddenSections" name="sections" value="" />
+          <button className={styles.saveAllBtn} onClick={handleSaveChanges}>
+            Save Changes
+          </button>
+        </form>
+      </div>
     </>
   );
 }

@@ -1,0 +1,16 @@
+/* Styles for the container displaying a course information */
+.container {
+  display: flex; /* Allow course image and details to stack horizontally */
+  margin-left: 175px; /* Adjust margin for sidebar width */
+  padding: 1rem; /* Add some padding */
+}
+
+/* Styles for the course image container */
+.courseImage {
+  margin-right: 1rem; /* Add space between image and details */
+}
+
+/* Styles for the course details container */
+.courseDetails {
+  flex: 1; /* Allow details to occupy remaining space */
+}

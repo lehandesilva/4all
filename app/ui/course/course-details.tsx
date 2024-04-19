@@ -17,10 +17,9 @@ export default function CourseDetails({ course }: { course: Course }) {
       {course.img_url && (
         <Image
           src={course.img_url}
-          width={1000}
-          height={760}
-          className="hidden md:block"
-          alt="Screenshots of the dashboard project showing desktop version"
+          width={640}
+          height={360}
+          alt="Course Image"
         />
       )}
       <div className={styles.course__sections}>
@@ -28,6 +27,7 @@ export default function CourseDetails({ course }: { course: Course }) {
           <Link
             href={`/course/${course.id}/${section.course_material_id}`}
             key={section.id}
+            className={styles.link}
           >
             <div className={styles.section}>
               <h3 className={styles.section__title}>{`Section ${index + 1}: ${

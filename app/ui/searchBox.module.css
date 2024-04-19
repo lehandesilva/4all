@@ -1,0 +1,31 @@
+/* Styles for the search box container */
+.searchBox {
+  position: relative; /* For positioning the search icon (optional) */
+  display: flex;
+  align-items: center;
+  width: 100%; /* Initial width for all screens */
+  margin-right: 1rem; /* Adjust margin as needed */
+}
+
+/* Styles for the search input field */
+.search {
+  display: block; /* Fills the container width */
+  width: 100%; /* Ensures full width */
+  padding: 0.75rem 1rem; /* Reduce padding for a slightly smaller feel */
+  border: 1px solid #ccc; /* Light border */
+  border-radius: 25px; /* Increased roundness */
+  font-size: 0.9rem; /* Slightly smaller font size */
+  background-color: #fff; /* White background */
+}
+
+/* Media queries for different screen sizes */
+
+/* For smaller screens (adjust breakpoint as needed): */
+@media (max-width: 768px) {
+  .searchBox {
+    margin-bottom: 1rem; /* Add some margin on smaller screens */
+  }
+  .search {
+    font-size: 0.8rem; /* Adjust font size for smaller screens */
+  }
+}

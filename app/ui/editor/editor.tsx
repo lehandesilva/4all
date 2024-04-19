@@ -121,6 +121,7 @@ export default function Editor({
           >
             <input
               type="text"
+              className={styles.blockInput}
               value={block.content}
               onChange={(event) => changeHandler(event, index)}
               onFocus={() => {

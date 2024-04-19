@@ -1,0 +1,47 @@
+/* Base styles for the header, initially targeting all screens */
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background-color: #e9e9e9;
+  /* position: fixed; */
+  width: 95vw;
+  top: 0;
+  left: 0;
+  z-index: 5; /* Set a higher z-index for the header */
+}
+
+/* Media queries for different screen sizes */
+
+/* For smaller screens (adjust breakpoint as needed): */
+@media (max-width: 768px) {
+  .container {
+    padding: 0.5rem 1rem; /* Reduce padding for smaller screens */
+  }
+}
+
+/* For even smaller screens (optional, adjust breakpoint): */
+@media (max-width: 480px) {
+  .container {
+    flex-wrap: wrap; /* Wrap elements on smaller screens */
+  }
+  .ProfileBtn {
+    margin-top: 1rem; /* Add margin for better separation on smaller screens */
+  }
+}
+
+/* Styles for the profile button */
+.ProfileBtn {
+  background-color: #333;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.ProfileBtn:hover {
+  background-color: #222;
+}

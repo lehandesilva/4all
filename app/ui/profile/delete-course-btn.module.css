@@ -1,0 +1,61 @@
+/* Styles for the confirmation dialog container */
+.confirmDialog {
+  position: fixed; /* Fix the dialog position to the viewport */
+  top: 50%; /* Center the dialog vertically */
+  left: 50%; /* Center the dialog horizontally */
+  transform: translate(-50%, -50%); /* Account for offset due to centering */
+  background-color: #fff; /* Dialog background color */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  border-radius: 4px; /* Add rounded corners */
+  padding: 1rem; /* Add some padding */
+  z-index: 100; /* Set a high z-index to ensure the dialog appears above other content */
+}
+
+/* Styles for buttons within the confirmation dialog */
+.confirmDialog button {
+  /* Inherit styles from the shared ".btn" class (adjust as needed) */
+  padding: 0.75rem 1.5rem; /* Increase button padding */
+  font-weight: bold; /* Make button text bolder */
+  border: none; /* Remove default button border */
+  cursor: pointer; /* Indicate clickable button */
+  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out; /* Add hover effects */
+}
+
+/* Styles for the "Yes, Delete" button (adjust as needed) */
+.confirmDialog .confirm {
+  background-color: #e33423; /* Red color for confirmation button */
+  color: white; /* White text color for confirmation button */
+}
+
+/* Hover effect for the "Yes, Delete" button */
+.confirmDialog .confirm:hover {
+  background-color: #c0291d; /* Darken red on hover */
+  transform: scale(1.02); /* Slight scale up on hover */
+}
+
+.btn {
+  background-color: #ccc; /* Adjust button color */
+  color: black; /* Adjust button text color */
+  padding: 0.5rem 1rem; /* Adjust button padding */
+  border: none;
+  border-radius: 4px; /* Add rounded corners */
+  cursor: pointer; /* Indicate clickable button */
+  transition: background-color 0.2s ease-in-out; /* Add hover effect */
+  margin-left: 1rem; /* Add some space to the left */
+}
+
+.btn:hover {
+  background-color: #ddd; /* Change button color on hover */
+}
+
+/* Styles for the "Cancel" button (adjust as needed) */
+.confirmDialog .cancel {
+  background-color: #ddd; /* Gray color for cancel button */
+  color: black; /* Black text color for cancel button */
+}
+
+/* Hover effect for the "Cancel" button */
+.confirmDialog .cancel:hover {
+  background-color: #ccc; /* Lighten gray on hover */
+  transform: scale(1.02); /* Slight scale up on hover */
+}
