@@ -151,7 +151,7 @@ const signUpFormSchema = z.object({
     .min(6, { message: "Please a password with 6 characters or more" }),
 });
 
-export async function signUpUser(formData) {
+export async function signUpUser(prevState, formData) {
   const validatedFields = signUpFormSchema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),
