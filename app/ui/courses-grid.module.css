@@ -17,7 +17,7 @@
   padding: 1rem;
   display: flex; /* Allow courses to be displayed in a row */
   flex-wrap: wrap; /* Wrap courses to multiple lines if needed */
-  justify-content: space-between; /* Space courses evenly */
+  justify-content: space-around; /* Space courses evenly */
 }
 
 .links {
