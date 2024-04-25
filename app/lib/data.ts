@@ -79,9 +79,7 @@ export async function fetchCourseById(id: string) {
 
     // Return the first row (assuming there should be only one course with the ID)
     return result.rows[0];
-  } catch (error) {
-    return { message: "Error fetching course" };
-  }
+  } catch (error) {}
 }
 
 export async function fetchCourseMaterialById(id: string) {
