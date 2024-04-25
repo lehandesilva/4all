@@ -45,7 +45,7 @@ export default function CreateCourseForm({
     return hashHex;
   };
 
-  const handleImageUpload = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleImageUpload = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (file) {
       const signedURLResult = await getSignedURL({
@@ -72,7 +72,7 @@ export default function CreateCourseForm({
     }
   };
 
-  const handleRemoveImage = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRemoveImage = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (imgUrl) {
       await deleteImage(imgUrl);
