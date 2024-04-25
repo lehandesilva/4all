@@ -51,9 +51,7 @@ export async function deleteCourse(courseId) {
       WHERE id = ${courseId};
       `;
       revalidatePath("/");
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
 }
 
@@ -211,7 +209,6 @@ const CreateCourse = courseFormSchema.omit({
   sections: true,
 });
 export async function createCourse(prevState, formData) {
-  console.log("Creating Course");
   const validatedFields = CreateCourse.safeParse({
     name: formData.get("name"),
     categoryId: formData.get("categoryId"),
@@ -263,9 +260,9 @@ const sectionFormSchema = z.object({
 });
 
 export async function createSections(formData) {
-  console.log("Creating sections...");
-  const sections = formData.get("sections");
+  const sectionsJSON = formData.get("sections");
   const course_id = formData.get("courseId");
+  const sections = JSON.parse(sectionsJSON);
 
   const sectionPromises = sections.map(async (section) => {
     try {
@@ -339,8 +336,6 @@ export async function getSignedURL({ fileType, fileSize, checksum }) {
   });
 
   const id = signedURL.split("?")[0];
-  console.log(id);
-
   return { success: { url: signedURL, id: id } };
 }
 
