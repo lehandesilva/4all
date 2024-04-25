@@ -3,9 +3,11 @@ import Link from "next/link";
 import { signOut } from "@/auth";
 import { fetchCategories } from "../lib/data";
 import { auth } from "@/auth";
+import { Category } from "../lib/definitions";
 
 export default async function SideNav() {
   const categories = await fetchCategories();
+  const categoriesAsArray = categories as Category[]; // Assert as array
   const session = await auth();
   let authenticated = false;
   if (session?.user?.email) {
@@ -20,7 +22,7 @@ export default async function SideNav() {
             <p className={classes.category}>Home</p>
           </div>
         </Link>
-        {categories?.map((category) => (
+        {categoriesAsArray?.map((category) => (
           <Link
             className={classes.link}
             href={`/category/${category.id}`}

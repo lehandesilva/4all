@@ -20,7 +20,15 @@ export default async function Page({
       <h1></h1>
       <CoursesGrid
         heading={`Courses from our ${categoryName} section`}
-        data={courses}
+        data={
+          courses as {
+            id: string;
+            name: string;
+            instructor_name: string;
+            rating: string;
+            img_url: string;
+          }[]
+        }
       />
     </>
   );

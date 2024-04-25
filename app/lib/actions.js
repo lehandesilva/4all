@@ -1,6 +1,6 @@
 "use server";
 
-import { z } from "zod";
+import { Primitive, z } from "zod";
 import { sql } from "@vercel/postgres";
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
@@ -16,15 +16,11 @@ import {
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
-import { type } from "os";
 
 const generateFileName = (bytes = 32) =>
   crypto.randomBytes(bytes).toString("hex");
 
-export async function authenticate(
-  prevState: string | undefined,
-  formData: FormData
-) {
+export async function authenticate(prevState, formData) {
   try {
     await signIn("credentials", formData);
   } catch (error) {
@@ -40,7 +36,7 @@ export async function authenticate(
   }
 }
 
-export async function deleteCourse(courseId: string) {
+export async function deleteCourse(courseId) {
   const session = await auth();
   const result = await fetchCourseById(courseId);
 
@@ -65,7 +61,7 @@ const commentFormSchema = z.object({
   comment: z.string(),
 });
 
-export async function rateCourse(formData: FormData) {
+export async function rateCourse(formData) {
   let userRating = formData.get("rating");
   const course_id = formData.get("courseId");
 
@@ -100,7 +96,7 @@ export async function rateCourse(formData: FormData) {
   }
 }
 
-export async function addCommentAction(formData: FormData) {
+export async function addCommentAction(formData) {
   const session = await auth();
   const validatedFields = commentFormSchema.safeParse({
     comment: formData.get("comment"),
@@ -113,7 +109,7 @@ export async function addCommentAction(formData: FormData) {
     };
   }
   const course_id = formData.get("courseId");
-  const userDetails = await fetchUserByEmail(session?.user?.email as string);
+  const userDetails = await fetchUserByEmail(session?.user?.email);
   const { comment } = validatedFields.data;
   const date = new Date().toString();
   let reviewArr = [];
@@ -155,7 +151,7 @@ const signUpFormSchema = z.object({
     .min(6, { message: "Please a password with 6 characters or more" }),
 });
 
-export async function signUpUser(formData: FormData) {
+export async function signUpUser(formData) {
   const validatedFields = signUpFormSchema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),
@@ -183,22 +179,6 @@ export async function signUpUser(formData: FormData) {
       `;
     redirect("/login");
   }
-}
-
-export type State = {
-  errors?: {
-    name?: string[];
-    categoryId?: string[];
-    description?: string[];
-    image_url?: string[];
-  };
-  message?: string | null;
-};
-
-interface Section {
-  id: number;
-  name: string;
-  content?: { id: number; type: string; content: string; size: string }[]; // Array of block objects
 }
 
 const courseFormSchema = z.object({
@@ -230,7 +210,8 @@ const CreateCourse = courseFormSchema.omit({
   reviews: true,
   sections: true,
 });
-export async function createCourse(prevState: State, formData: FormData) {
+export async function createCourse(prevState, formData) {
+  console.log("Creating Course");
   const validatedFields = CreateCourse.safeParse({
     name: formData.get("name"),
     categoryId: formData.get("categoryId"),
@@ -247,7 +228,7 @@ export async function createCourse(prevState: State, formData: FormData) {
 
   const { name, categoryId, description, img_url } = validatedFields.data;
   const session = await auth();
-  const userDetails = await fetchUserByEmail(session?.user?.email as string);
+  const userDetails = await fetchUserByEmail(session?.user?.email);
   let courseId;
   try {
     const result = await sql`
@@ -281,66 +262,52 @@ const sectionFormSchema = z.object({
   ),
 });
 
-export async function createSections(formData: FormData) {
-  const sectionsJson = formData.get("sections");
+export async function createSections(formData) {
+  console.log("Creating sections...");
+  const sections = formData.get("sections");
   const course_id = formData.get("courseId");
-  const sections = JSON.parse(sectionsJson) as Section[];
 
   const sectionPromises = sections.map(async (section) => {
     try {
       const result = await sql`
-        INSERT INTO course_material (course_id, blocks)
-        VALUES (${course_id}, ${section.content})
-        RETURNING id;
-      `;
+          INSERT INTO course_material (course_id, blocks)
+          VALUES (${course_id}, ${section.content})
+          RETURNING id;
+        `;
       const course_material_id = result.rows[0].id;
       return {
         id: section.id,
         name: section.name,
         course_material_id: course_material_id,
       };
-    } catch (error) {
-      // Handle errors appropriately (e.g., throw or log)
-    }
+    } catch (error) {}
   });
 
   const sectionArr = await Promise.all(sectionPromises);
-  sql`
-      UPDATE courses
-      SET sections = ${sectionArr}
-      WHERE id = ${course_id};
-`;
+  if (sectionArr) {
+    sql`
+        UPDATE courses
+        SET sections = ${sectionArr}
+        WHERE id = ${course_id};
+  `;
+  }
   revalidatePath("/course");
   redirect(`/course/${course_id}`);
 }
 
 const s3Client = new S3Client({
-  region: process.env.AWS_S3_REGION!,
+  region: process.env.AWS_S3_REGION,
   credentials: {
-    accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY!,
+    accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
   },
 });
-
-interface SignedURLResponse {
-  failure?: string;
-  success?: { url: string; id: string };
-}
 
 const allowedFileTypes = ["image/jpeg", "image/png"];
 
 const maxFileSize = 1048576 * 10; // 1 MB
 
-type GetSignedURLParams = {
-  fileType: string;
-  fileSize: number;
-  checksum: string;
-};
-export async function getSignedURL({
-  fileType,
-  fileSize,
-  checksum,
-}: GetSignedURLParams): SignedURLResponse {
+export async function getSignedURL({ fileType, fileSize, checksum }) {
   const session = await auth();
 
   if (!session) {
@@ -357,13 +324,13 @@ export async function getSignedURL({
   }
 
   const putObjectCommand = new PutObjectCommand({
-    Bucket: process.env.AWS_BUCKET_NAME!,
+    Bucket: process.env.AWS_BUCKET_NAME,
     Key: generateFileName(),
     ContentType: fileType,
     ContentLength: fileSize,
     ChecksumSHA256: checksum,
     Metadata: {
-      userId: session.user!.id!,
+      userId: session.user.id,
     },
   });
 
@@ -377,11 +344,11 @@ export async function getSignedURL({
   return { success: { url: signedURL, id: id } };
 }
 
-export async function deleteImage(img_url: string) {
+export async function deleteImage(img_url) {
   const key = img_url.split("/").slice(-1)[0];
 
   const deleteParams = {
-    Bucket: process.env.AWS_BUCKET_NAME!,
+    Bucket: process.env.AWS_BUCKET_NAME,
     Key: key,
   };
   try {

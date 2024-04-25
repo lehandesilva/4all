@@ -1,4 +1,5 @@
 import { fetchCourseMaterialById } from "@/app/lib/data";
+import { CourseMaterial } from "@/app/lib/definitions";
 import CourseContent from "@/app/ui/course/course-content";
 import { notFound } from "next/navigation";
 
@@ -9,7 +10,7 @@ export default async function Page({ params }: { params: { matId: string } }) {
   }
   return (
     <>
-      <CourseContent content={content} />
+      <CourseContent content={content as CourseMaterial} />
     </>
   );
 }

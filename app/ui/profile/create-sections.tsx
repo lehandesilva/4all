@@ -34,6 +34,7 @@ export default function CreateSections({ courseId }: { courseId: string }) {
       },
     ];
     setSections(updatedSections);
+    console.log(updatedSections);
     setSectionName("");
     setShowInput(false); // Hide the input field after saving
   };
@@ -62,7 +63,9 @@ export default function CreateSections({ courseId }: { courseId: string }) {
   const handleSaveChanges = () => {
     const sectionsJson = JSON.stringify(sections);
     const hiddenInput = document.getElementById("hiddenSections"); // Access hidden input
-    hiddenInput.value = sectionsJson;
+    if (hiddenInput && hiddenInput instanceof HTMLInputElement) {
+      hiddenInput.value = sectionsJson;
+    }
   };
 
   return (

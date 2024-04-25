@@ -26,7 +26,9 @@ export default function CreateCourseForm({
       // Read the selected file as a URL using FileReader
       const reader = new FileReader();
       reader.onload = (e) => {
-        setPreviewImage(e.target.result as string); // Set preview image URL
+        if (e.target) {
+          setPreviewImage(e.target.result as string); // Set preview image URL
+        }
       };
       reader.readAsDataURL(e.target.files[0]);
     } else {
@@ -52,26 +54,29 @@ export default function CreateCourseForm({
         checksum: await computeSHA256(file),
       });
 
-      const { url, id } = signedURLResult.success;
-      console.log({ url });
-      console.log({ id });
-      const result = await fetch(url, {
-        method: "PUT",
-        headers: {
-          "Content-Type": file.type,
-        },
-        body: file,
-      });
-      const hiddenInput = document.getElementById("hiddenURL"); // Access hidden input
-      hiddenInput.value = id;
-      console.log(hiddenInput.value);
-      setImgUrl(id);
+      if (signedURLResult.success) {
+        const { url, id } = signedURLResult.success;
+        const result = await fetch(url, {
+          method: "PUT",
+          headers: {
+            "Content-Type": file.type,
+          },
+          body: file,
+        });
+        const hiddenInput = document.getElementById("hiddenURL"); // Access hidden input
+        if (hiddenInput && hiddenInput instanceof HTMLInputElement) {
+          hiddenInput.value = id;
+        }
+        setImgUrl(id);
+      }
     }
   };
 
   const handleRemoveImage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await deleteImage(imgUrl);
+    if (imgUrl) {
+      await deleteImage(imgUrl);
+    }
     setImgUrl(null);
     setPreviewImage(null);
   };

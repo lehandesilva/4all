@@ -98,6 +98,7 @@ export async function fetchCourseMaterialById(id: string) {
     }
 
     // Return the first row (assuming there should be only one material with the ID)
+    console.log(result.rows[0]);
     return result.rows[0];
   } catch (error) {
     return { message: "Error fetching course section" };
@@ -127,7 +128,7 @@ export async function fetchUserByEmail(email: string) {
 export async function fetchCoursesByInstructorId(instructorId: string) {
   noStore();
   try {
-    const result = await sql<Course>`
+    const result = await sql`
     SELECT id, name, rating, img_url
     FROM courses
     WHERE instructor_id = ${instructorId}
@@ -158,6 +159,6 @@ export async function fetchCategories() {
 
     return result.rows;
   } catch (error) {
-    return { message: "Error retrieving categories" };
+    return [];
   }
 }

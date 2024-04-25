@@ -3,20 +3,21 @@ import Link from "next/link";
 import ProfileCourse from "./profile-course";
 import DeleteCourseBtn from "./delete-course-btn";
 
-interface UserCoursesProps {
-  courses: { id: string; name: string; rating: number; img_url: string }[]; // Array of course objects
-}
-interface courseProps {
+export interface UserCoursesProps {
   id: string;
   name: string;
   rating: number;
-  img_url: string;
+  img_url: string; // Array of course objects
 }
 
-export default function ProfileCourses({ userCourses }: UserCoursesProps) {
+export default function ProfileCourses({
+  userCourses,
+}: {
+  userCourses: UserCoursesProps[];
+}) {
   return (
     <>
-      {userCourses.map((course: courseProps) => (
+      {userCourses.map((course: UserCoursesProps) => (
         <div className={styles.course} key={course.id}>
           <Link href={`/course/${course.id}`}>
             <ProfileCourse course={course} />
