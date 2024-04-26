@@ -19,7 +19,7 @@ export default function ProfileCourses({
     <>
       {userCourses.map((course: UserCoursesProps) => (
         <div className={styles.course} key={course.id}>
-          <Link href={`/course/${course.id}`}>
+          <Link href={`/course/${course.id}`} className={styles.courseLink}>
             <ProfileCourse course={course} />
           </Link>
           <DeleteCourseBtn courseId={course.id} />

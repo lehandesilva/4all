@@ -32,6 +32,17 @@
   margin-bottom: 0.5rem; /* Add some space below the dropdown */
 }
 
+.courseActionBtns {
+  margin: 1rem;
+  padding: 0.75rem;
+  background-color: rgb(24, 24, 24);
+  color: #ececec;
+  text-decoration: none;
+  border: none;
+  font-size: 1rem;
+  border-radius: 4px; /* Add rounded corners */
+}
+
 .categoryDropDown select {
   padding: 0.5rem 1rem; /* Add padding to the select element */
   border: 1px solid #ccc; /* Add a thin border */
@@ -68,6 +79,10 @@
 
 .uploadFileBtn:hover {
   background-color: #3e8e41; /* Change button color on hover */
+}
+
+.courseActionBtns:hover {
+  background-color: #3e8e41;
 }
 
 /* Styles for the "Remove Image" button */

@@ -12,3 +12,7 @@
   border-bottom: 1px solid #ddd; /* Add a thin separating line */
   padding-bottom: 0.5rem; /* Add some padding below the line */
 }
+
+.courseLink {
+  text-decoration: none;
+}

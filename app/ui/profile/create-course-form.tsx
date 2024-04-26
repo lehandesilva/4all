@@ -188,10 +188,12 @@ export default function CreateCourseForm({
         )}
 
         <div>
-          <Link href="/profile" className="">
+          <Link href="/profile" className={styles.courseActionBtns}>
             Cancel
           </Link>
-          <button type="submit">Create Course</button>
+          <button type="submit" className={styles.courseActionBtns}>
+            Create Course
+          </button>
         </div>
       </form>
     </div>

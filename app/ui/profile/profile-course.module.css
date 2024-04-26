@@ -14,3 +14,12 @@
 .courseDetails {
   flex: 1; /* Allow details to occupy remaining space */
 }
+
+.courseTitle {
+  text-decoration: none;
+  color: black;
+}
+
+.courseRating {
+  text-decoration: none;
+}

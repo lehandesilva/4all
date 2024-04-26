@@ -18,8 +18,8 @@ export default function ProfileCourse({
           />
         </div>
         <div className={styles.courseDetails}>
-          <h2>{course.name}</h2>
-          <p>Rating: {course.rating}</p>
+          <h2 className={styles.courseTitle}>{course.name}</h2>
+          <p className={styles.courseRating}>Rating: {course.rating}</p>
         </div>
       </div>
     </div>
