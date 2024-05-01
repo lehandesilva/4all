@@ -1,6 +1,6 @@
 "use server";
 
-import { Primitive, z } from "zod";
+import { z } from "zod";
 import { sql } from "@vercel/postgres";
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
@@ -118,7 +118,11 @@ export async function addCommentAction(formData) {
       WHERE id = ${course_id}
     `;
 
-    reviewArr = result.rows[0].reviews;
+    if (result.rows[0].reviews === null) {
+      reviewArr = [];
+    } else {
+      reviewArr = result.rows[0].reviews;
+    }
   } catch (error) {
     console.error(error);
   }
