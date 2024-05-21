@@ -3,7 +3,6 @@ import { User, Course, CourseMaterial, block, Category } from "./definitions";
 import { unstable_noStore as noStore, revalidatePath } from "next/cache";
 
 export async function fetchCoursesByQuery(queryString: string) {
-  noStore();
   try {
     const sanitizedQuery = queryString.replace(
       /[-[\]{}()*+?.,\\^$|:]/g,
@@ -22,7 +21,6 @@ export async function fetchCoursesByQuery(queryString: string) {
 }
 
 export async function fetchCourses() {
-  noStore();
   try {
     const result = await sql`
       SELECT id, name, instructor_name, rating, img_url 
@@ -35,7 +33,6 @@ export async function fetchCourses() {
 }
 
 export async function fetchCoursesByCategory(categoryId: string) {
-  noStore();
   try {
     const results = await sql`
       SELECT id, name, instructor_name, rating, img_url

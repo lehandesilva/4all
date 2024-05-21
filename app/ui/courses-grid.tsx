@@ -30,7 +30,7 @@ export default function CoursesGrid({
         <h2 className={classes.heading}>{heading}</h2>
       </div>
       <div className={classes.outerContainer}>
-        {data?.map((course) => (
+        {/* {data.map((course) => (
           <div className={classes.courseContainer} key={course.id}>
             <Link href={`/course/${course.id}`} className={classes.links}>
               <div className={classes.imgContainer}>
@@ -50,7 +50,7 @@ export default function CoursesGrid({
               </div>
             </Link>
           </div>
-        ))}
+        ))} */}
       </div>
     </>
   );
