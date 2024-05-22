@@ -1,18 +1,29 @@
 "use client";
-
 import styles from "./signup-form.module.css";
-import { signUpUser } from "../lib/actions";
-import { useFormState } from "react-dom";
+import { createNewUser } from "../server/actions";
+import { useState } from "react";
 
 export default function SignUp() {
-  const initialState = { message: "", errors: {} };
-  const [state, dispatch] = useFormState(signUpUser, initialState);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      const response = await createNewUser(new FormData(event.currentTarget));
+      if (response?.error) {
+        setErrorMessage(response.message);
+        return;
+      }
+    } catch (error) {
+      setErrorMessage("An error occurred");
+    }
+  };
 
   return (
     <>
       <div className={styles.SignUp}>
         <h1 className={styles.signInTitle}>Sign Up</h1>
-        <form action={dispatch}>
+        <form action={createNewUser} onSubmit={handleSubmit}>
           <div className={styles.signUpSection}>
             <label className={styles.labels} htmlFor="name">
               Name
@@ -23,6 +34,15 @@ export default function SignUp() {
               name="name"
               required
             />
+            <label className={styles.labels} htmlFor="age">
+              Age
+            </label>
+            <input
+              className={styles.signUpInput}
+              type="number"
+              name="age"
+              required
+            />
             <label className={styles.labels} htmlFor="email">
               Email
             </label>
@@ -31,16 +51,7 @@ export default function SignUp() {
               type="text"
               name="email"
               required
-              aria-describedby="email-error"
             />
-            <div id="email-error" className={styles.errorDisplaySection}>
-              {state.errors?.email &&
-                state.errors?.email.map((error: string) => (
-                  <p className={styles.error} key={error}>
-                    {error}
-                  </p>
-                ))}
-            </div>
             <label className={styles.labels} htmlFor="password">
               Password
             </label>
@@ -49,21 +60,15 @@ export default function SignUp() {
               type="password"
               name="password"
               required
-              aria-describedby="password-error"
             />
-            <div id="password-error" className={styles.errorDisplaySection}>
-              {state.errors?.password &&
-                state.errors?.password.map((error: string) => (
-                  <p className={styles.error} key={error}>
-                    {error}
-                  </p>
-                ))}
-            </div>
           </div>
           <button type="submit" className={styles.submitBtn}>
             Sign Up
           </button>
         </form>
+        <div className={styles.errorMessages}>
+          {<p className={styles.error}>{errorMessage}</p>}
+        </div>
       </div>
     </>
   );

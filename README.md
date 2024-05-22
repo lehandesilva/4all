@@ -9,3 +9,6 @@ TODO:
 [] = Recommendations powered by NLP
 [] = Make admin panel
 [] = Make questions and answers and use AI to be able to grade them
+
+[X] = Create signin functionality with form validation on server side and client side
+[] = Authentication using next-auth add userId and role to JWT token
