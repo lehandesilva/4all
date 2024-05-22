@@ -2,14 +2,10 @@ import {
   integer,
   pgEnum,
   pgTable,
-  serial,
   text,
-  time,
   timestamp,
-  uniqueIndex,
-  uuid,
-  varchar,
   jsonb,
+  uuid,
 } from "drizzle-orm/pg-core";
 
 export type section = {
@@ -25,7 +21,7 @@ export type history = {
 export const roleEnum = pgEnum("role", ["admin", "user", "paidUser"]);
 
 export const usersTable = pgTable("users_table", {
-  user_id: serial("userId").primaryKey(),
+  user_id: uuid("id").defaultRandom().primaryKey(),
   name: text("name").notNull(),
   age: text("age").notNull(),
   email: text("email").notNull().unique(),
@@ -35,26 +31,26 @@ export const usersTable = pgTable("users_table", {
 });
 
 export const categoriesTable = pgTable("categories_table", {
-  cat_Id: serial("categoryId").primaryKey(),
+  cat_Id: uuid("id").defaultRandom().primaryKey(),
   name: text("name").notNull(),
   href: text("href").notNull(),
 });
 
 export const coursesTable = pgTable("courses_table", {
-  course_id: serial("courseId").primaryKey(),
+  course_id: uuid("id").defaultRandom().primaryKey(),
   name: text("name").notNull(),
   instructor_name: text("instructor_name").notNull(),
   rating: text("rating").notNull(),
   users_rated: integer("users_rated").notNull(),
   img_url: text("img_url").notNull(),
-  category_id: integer("category_id").references(() => categoriesTable.cat_Id),
+  category_id: uuid("category_id").references(() => categoriesTable.cat_Id),
   sections: jsonb("sections").$type<section[]>(),
 });
 
 export const reviewsTable = pgTable("reviews_table", {
-  review_id: serial("review_id").primaryKey(),
-  course_id: integer("course_id").references(() => coursesTable.course_id),
-  user_id: integer("user_id").references(() => usersTable.user_id),
+  review_id: uuid("id").defaultRandom().primaryKey(),
+  course_id: uuid("course_id").references(() => coursesTable.course_id),
+  user_id: uuid("user_id").references(() => usersTable.user_id),
   comment: text("comment").notNull(),
   timestamp: timestamp("timestamp").defaultNow(),
 });
