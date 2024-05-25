@@ -1,13 +1,12 @@
 "use client";
 
 import styles from "./login-form.module.css";
-import { useFormState, useFormStatus } from "react-dom";
-import { authenticate } from "@/app/lib/actions";
-import { auth } from "@/auth";
 import Link from "next/link";
+import { useFormState, useFormStatus } from "react-dom";
+import { authenticate } from "../server/actions";
 
 export default function LoginForm() {
-  const [errorMessage, dispatch] = useFormState(authenticate, undefined);
+  const [errorMessage, dispatch] = useFormState(authenticate, "");
 
   return (
     <div className={styles.loginForm}>
@@ -35,7 +34,6 @@ export default function LoginForm() {
             name="password"
             placeholder="Enter password"
             required
-            minLength={6}
           />
         </div>
 

@@ -23,7 +23,7 @@ export default function SignUp() {
     <>
       <div className={styles.SignUp}>
         <h1 className={styles.signInTitle}>Sign Up</h1>
-        <form action={createNewUser} onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <div className={styles.signUpSection}>
             <label className={styles.labels} htmlFor="name">
               Name

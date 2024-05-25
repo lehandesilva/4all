@@ -1,16 +1,30 @@
 "use server";
 import { postgresDB } from "./db/postgresDB";
 import dbConnect from "./db/mongoDb";
-import { auth } from "@/auth";
+import { signIn } from "@/auth";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { usersTable } from "./db/schema";
-import { eq } from "drizzle-orm";
 import { checkEmailExists } from "./queries";
+import { AuthError } from "next-auth";
 
 // make password more complex
-//Check if user already exists
 // export async function createCourse();
+
+export async function authenticate(prevState: any, formData: FormData) {
+  try {
+    await signIn("credentials", formData);
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return "Invalid credentials.";
+        default:
+          return "Something went wrong.";
+      }
+    }
+  }
+}
 
 const signupFormSchema = z.object({
   name: z.string(),

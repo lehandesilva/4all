@@ -11,3 +11,12 @@ export async function checkEmailExists(email: string) {
 
   return result;
 }
+
+export async function fetchUserByEmail(email: string) {
+  const result = await postgresDB
+    .select()
+    .from(usersTable)
+    .where(eq(usersTable.email, email));
+
+  return result[0];
+}
