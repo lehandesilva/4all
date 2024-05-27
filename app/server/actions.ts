@@ -4,7 +4,7 @@ import dbConnect from "./db/mongoDb";
 import { signIn } from "@/auth";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
-import { usersTable } from "./db/schema";
+import { users } from "./db/schema";
 import { checkEmailExists } from "./queries";
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
@@ -66,7 +66,7 @@ export async function createNewUser(formData: FormData) {
   const hashedPassword = await bcrypt.hash(password, 10);
   // Insert user into database
   try {
-    const result = await postgresDB.insert(usersTable).values({
+    const result = await postgresDB.insert(users).values({
       name: name,
       email: email,
       password: hashedPassword,
