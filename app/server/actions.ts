@@ -1,6 +1,7 @@
 "use server";
 import { postgresDB } from "./db/postgresDB";
 import dbConnect from "./db/mongoDb";
+``;
 import { signIn } from "@/auth";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
@@ -8,13 +9,22 @@ import { users } from "./db/schema";
 import { checkEmailExists } from "./queries";
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 // make password more complex
 // export async function createCourse();
 
-export async function authenticate(prevState: any, formData: FormData) {
+export async function authenticate(formData: FormData) {
+  const password = formData.get("password");
+  const email = formData.get("email");
+
   try {
-    await signIn("credentials", formData);
+    await signIn("credentials", {
+      email,
+      password,
+      redirect: true,
+      redirectTo: "/",
+    });
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
@@ -24,6 +34,7 @@ export async function authenticate(prevState: any, formData: FormData) {
           return "Something went wrong.";
       }
     }
+    throw error;
   }
 }
 

@@ -6,10 +6,9 @@ import { useFormState, useFormStatus } from "react-dom";
 import { authenticate } from "../server/actions";
 
 export default function LoginForm() {
-  const handleSubmit = async (event: any) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const email = event.target.email.value;
-    const password = event.target.password.value;
+    const res = await authenticate(new FormData(event.currentTarget));
   };
 
   return (
@@ -59,15 +58,5 @@ export default function LoginForm() {
         </Link>
       </div>
     </div>
-  );
-}
-
-function LoginButton() {
-  const { pending } = useFormStatus();
-
-  return (
-    <button className={styles.loginButton} disabled={pending}>
-      Log in
-    </button>
   );
 }
