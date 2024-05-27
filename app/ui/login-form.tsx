@@ -6,11 +6,15 @@ import { useFormState, useFormStatus } from "react-dom";
 import { authenticate } from "../server/actions";
 
 export default function LoginForm() {
-  const [errorMessage, dispatch] = useFormState(authenticate, "");
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+  };
 
   return (
     <div className={styles.loginForm}>
-      <form action={dispatch}>
+      <form onSubmit={handleSubmit}>
         <h1 className={styles.loginTitle}>Login</h1>
         <div className={styles.loginSection}>
           <label className={styles.labels} htmlFor="email">
@@ -36,9 +40,8 @@ export default function LoginForm() {
             required
           />
         </div>
-
-        <LoginButton />
-        <div
+        <button className={styles.loginButton}>Log in</button>
+        {/* <div
           className={styles.errorDisplaySection}
           aria-live="polite"
           aria-atomic="true"
@@ -48,13 +51,13 @@ export default function LoginForm() {
               <p className={styles.error}>{errorMessage}</p>
             </>
           )}
-        </div>
-        <div className={styles.signupContainer}>
-          <Link href="/signUp">
-            <button className={styles.signupBtn}>Dont have an account?</button>
-          </Link>
-        </div>
+        </div> */}
       </form>
+      <div className={styles.signupContainer}>
+        <Link href="/signUp">
+          <button className={styles.signupBtn}>Dont have an account?</button>
+        </Link>
+      </div>
     </div>
   );
 }

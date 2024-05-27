@@ -5,6 +5,9 @@ import { z } from "zod";
 import { fetchUserByEmail } from "./app/server/queries";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     Credentials({
       // You can specify which fields should be submitted, by adding keys to the `credentials` object.

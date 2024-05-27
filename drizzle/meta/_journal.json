@@ -29,6 +29,20 @@
       "when": 1716359212868,
       "tag": "0003_massive_vermin",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1716817948685,
+      "tag": "0004_fantastic_landau",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1716822107170,
+      "tag": "0005_famous_taskmaster",
+      "breakpoints": true
     }
   ]
 }

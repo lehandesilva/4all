@@ -7,6 +7,7 @@ import bcrypt from "bcryptjs";
 import { usersTable } from "./db/schema";
 import { checkEmailExists } from "./queries";
 import { AuthError } from "next-auth";
+import { redirect } from "next/navigation";
 
 // make password more complex
 // export async function createCourse();
