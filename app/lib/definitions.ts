@@ -46,7 +46,7 @@ export type CourseMaterial = {
 };
 
 export type Category = {
-  id: string;
+  cat_Id: string;
   name: string;
   href: string;
 };

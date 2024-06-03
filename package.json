@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio",
+    "db:stu": "drizzle-kit studio",
     "db:gen": "drizzle-kit generate",
     "build": "next build",
     "start": "next start",

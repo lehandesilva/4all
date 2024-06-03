@@ -9,10 +9,8 @@ import { users } from "./db/schema";
 import { checkEmailExists } from "./queries";
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
-
-// make password more complex
-// export async function createCourse();
 
 export async function authenticate(formData: FormData) {
   const password = formData.get("password");
@@ -23,7 +21,7 @@ export async function authenticate(formData: FormData) {
       email,
       password,
       redirect: true,
-      redirectTo: "/",
+      redirectTo: DEFAULT_LOGIN_REDIRECT,
     });
   } catch (error) {
     if (error instanceof AuthError) {
