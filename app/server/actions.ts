@@ -2,7 +2,7 @@
 import { postgresDB } from "./db/postgresDB";
 import dbConnect from "./db/mongoDb";
 ``;
-import { signIn } from "@/auth";
+import { auth, signIn } from "@/auth";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { users } from "./db/schema";
@@ -11,6 +11,58 @@ import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import crypto from "crypto";
+
+const generateFileName = (bytes = 32) =>
+  crypto.randomBytes(bytes).toString("hex");
+
+const s3 = new S3Client({
+  region: process.env.AWS_S3_REGION!,
+  credentials: {
+    accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY!,
+  },
+});
+
+const acceptedTypes = ["image/jpeg", "image/png", "image/webp"];
+const maxSize = 1024 * 1024 * 10;
+
+export async function geteSignedUrl(
+  type: string,
+  size: number,
+  checksum: string
+) {
+  const session = await auth();
+  if (!session) {
+    return { failure: "Not authenticated" };
+  }
+  if (!acceptedTypes.includes(type)) {
+    return { failure: "Invalid file type" };
+  }
+
+  if (size > maxSize) {
+    return { failure: "Invalid file size" };
+  }
+
+  const putObjctCommand = new PutObjectCommand({
+    Bucket: process.env.AWS_BUCKET_NAME!,
+    Key: generateFileName(),
+    ContentType: type,
+    ContentLength: size,
+    ChecksumSHA256: checksum,
+    Metadata: {
+      userId: session.user.id !== undefined ? session.user.id : "",
+    },
+  });
+
+  const signedURL = await getSignedUrl(s3, putObjctCommand, {
+    expiresIn: 60,
+  });
+
+  return { success: { url: signedURL } };
+}
 
 export async function authenticate(formData: FormData) {
   const password = formData.get("password");

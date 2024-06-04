@@ -1,3 +1,21 @@
+/* Styles for the status message container */
+.statusContainer {
+  margin-top: 1rem; /* Add space above the status message */
+  padding: 0.5rem 1rem; /* Add some padding to the message */
+  border: 1px solid #ccc; /* Add a thin border to the message */
+  border-radius: 4px; /* Add rounded corners to the message */
+  background-color: #f5f5f5; /* Light gray background color for the message */
+  color: #333; /* Dark gray text color for the message */
+  font-size: 0.85rem; /* Make the message slightly smaller than the regular text */
+  text-align: center; /* Center the message horizontally */
+}
+
+/* Styles for the status message */
+.statusMessage {
+  margin-top: 0.25rem; /* Add some space above the status message */
+  color: #333; /* Dark gray text color for the message */
+  font-size: 0.85rem; /* Make the message slightly smaller than the regular text */
+}
 /* Styles for the course creation section container */
 .courseCreateSection {
   margin-left: 175px; /* Adjust margin for sidebar width */
