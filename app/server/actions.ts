@@ -5,7 +5,7 @@ import dbConnect from "./db/mongoDb";
 import { auth, signIn } from "@/auth";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
-import { users } from "./db/schema";
+import { coursesTable, users } from "./db/schema";
 import { checkEmailExists } from "./queries";
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
@@ -86,6 +86,50 @@ export async function authenticate(formData: FormData) {
     }
     throw error;
   }
+}
+
+const courseFormValidation = z.object({
+  name: z.string(),
+  description: z.string().min(30),
+  category: z.string(),
+});
+
+export async function createNewCourse(formData: FormData, signedURL: string) {
+  const session = await auth();
+  if (!session) {
+    return { error: true, message: "Not authenticated" };
+  }
+
+  const validatedFields = courseFormValidation.safeParse({
+    name: formData.get("name"),
+    description: formData.get("description"),
+    category: formData.get("category"),
+  });
+
+  if (!validatedFields.success) {
+    let errorMessage = "";
+    validatedFields.error.issues.forEach((issue) => {
+      errorMessage = errorMessage + issue.path[0] + ": " + issue.message + ". ";
+    });
+    return { error: true, message: errorMessage };
+  }
+
+  if (!signedURL) {
+    return { error: true, message: "Image was not uploaded" };
+  }
+
+  const { name, description, category } = validatedFields.data;
+
+  try {
+    const result = await postgresDB.insert(coursesTable).values({
+      name: name,
+      description: description,
+      instructor_name: session.user.name,
+      instructor_id: session.user.id,
+      img_url: signedURL.split("?")[0],
+      category_id: category,
+    });
+  } catch (error) {}
 }
 
 const signupFormSchema = z.object({

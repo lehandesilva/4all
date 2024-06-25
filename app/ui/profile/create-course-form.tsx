@@ -28,6 +28,7 @@ export default function CreateCourseForm({
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStatus("");
     const file = e.target.files?.[0];
     setFile(file);
 
@@ -61,7 +62,6 @@ export default function CreateCourseForm({
         return;
       }
       const url = signedUrl.success.url;
-
       await fetch(url, {
         method: "PUT",
         body: file,
@@ -69,15 +69,18 @@ export default function CreateCourseForm({
           "Content-Type": file?.type,
         },
       });
+
       setStatus("Submitted");
     }
   };
 
   return (
     <>
-      <div className={styles.statusContainer}>
-        <p className={styles.statusMessage}>{status}</p>
-      </div>
+      {status !== "" && (
+        <div className={styles.statusContainer}>
+          <p className={styles.statusMessage}>{status}</p>
+        </div>
+      )}
       <div className={styles.courseCreateSection}>
         <form onSubmit={handleSubmit}>
           <div>
@@ -90,6 +93,7 @@ export default function CreateCourseForm({
               name="name"
               id="name"
               className={styles.textInput}
+              required
             />
           </div>
 
@@ -121,6 +125,7 @@ export default function CreateCourseForm({
               id="description"
               className={styles.textInput}
               aria-describedby="description-error"
+              required
             />
           </div>
 
@@ -130,6 +135,7 @@ export default function CreateCourseForm({
             className={styles.fileInput}
             accept="image/jpeg,image/png,image/webp"
             name="media"
+            required
           />
           <div className={styles.imagePreview}>
             {fileUrl ? (

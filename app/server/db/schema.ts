@@ -67,11 +67,14 @@ export const categoriesTable = pgTable("categories_table", {
 });
 
 export const coursesTable = pgTable("courses_table", {
-  course_id: uuid("id").defaultRandom().primaryKey(),
+  course_id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull(),
+  instructor_id: text("instructor_id").references(() => users.id),
   instructor_name: text("instructor_name").notNull(),
-  rating: text("rating").notNull(),
-  users_rated: integer("users_rated").notNull(),
+  rating: text("rating"),
+  users_rated: integer("users_rated"),
   img_url: text("img_url").notNull(),
   category_id: uuid("category_id").references(() => categoriesTable.cat_Id),
   sections: jsonb("sections").$type<section[]>(),
