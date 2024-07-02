@@ -57,6 +57,13 @@
       "when": 1716825471253,
       "tag": "0007_parallel_invaders",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1719849699137,
+      "tag": "0008_melted_firestar",
+      "breakpoints": true
     }
   ]
 }

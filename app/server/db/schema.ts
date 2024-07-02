@@ -60,29 +60,34 @@ export const accounts = pgTable(
   })
 );
 
-export const categoriesTable = pgTable("categories_table", {
-  cat_Id: uuid("id").defaultRandom().primaryKey(),
+export const categoriesTable = pgTable("categories", {
+  cat_Id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull(),
   href: text("href").notNull(),
 });
 
-export const coursesTable = pgTable("courses_table", {
+export const coursesTable = pgTable("courses", {
   course_id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  name: text("name").notNull(),
+  name: text("name"),
+  description: text("description"),
   instructor_id: text("instructor_id").references(() => users.id),
-  instructor_name: text("instructor_name").notNull(),
+  instructor_name: text("instructor_name"),
   rating: text("rating"),
   users_rated: integer("users_rated"),
-  img_url: text("img_url").notNull(),
-  category_id: uuid("category_id").references(() => categoriesTable.cat_Id),
+  img_url: text("img_url"),
+  category_id: text("category_id").references(() => categoriesTable.cat_Id),
   sections: jsonb("sections").$type<section[]>(),
 });
 
-export const reviewsTable = pgTable("reviews_table", {
-  review_id: uuid("id").defaultRandom().primaryKey(),
-  course_id: uuid("course_id").references(() => coursesTable.course_id),
+export const reviewsTable = pgTable("reviews", {
+  review_id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  course_id: text("course_id").references(() => coursesTable.course_id),
   user_id: text("user_id").references(() => users.id),
   comment: text("comment").notNull(),
   timestamp: timestamp("timestamp").defaultNow(),

@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Category } from "@/app/lib/definitions";
-import { geteSignedUrl } from "@/app/server/actions";
+import { createNewCourse, geteSignedUrl } from "@/app/server/actions";
 
 export default function CreateCourseForm({
   categories,
@@ -44,8 +44,8 @@ export default function CreateCourseForm({
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setLoading(true);
     setStatus("Submitting");
     if (!file) {
@@ -69,8 +69,9 @@ export default function CreateCourseForm({
           "Content-Type": file?.type,
         },
       });
-
+      await createNewCourse(new FormData(event.target as HTMLFormElement), url);
       setStatus("Submitted");
+      setLoading(false);
     }
   };
 
@@ -154,11 +155,7 @@ export default function CreateCourseForm({
             <Link href="/profile" className={styles.courseActionBtns}>
               Cancel
             </Link>
-            <button
-              type="submit"
-              className={styles.courseActionBtns}
-              disabled={loading}
-            >
+            <button className={styles.courseActionBtns} disabled={loading}>
               Create Course
             </button>
           </div>

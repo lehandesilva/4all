@@ -8,7 +8,7 @@ import { authenticate } from "../server/actions";
 export default function LoginForm() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const res = await authenticate(new FormData(event.currentTarget));
+    await authenticate(new FormData(event.currentTarget));
   };
 
   return (

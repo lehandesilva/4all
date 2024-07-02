@@ -14,6 +14,7 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import crypto from "crypto";
+import { Name } from "drizzle-orm";
 
 const generateFileName = (bytes = 32) =>
   crypto.randomBytes(bytes).toString("hex");
@@ -103,7 +104,7 @@ export async function createNewCourse(formData: FormData, signedURL: string) {
   const validatedFields = courseFormValidation.safeParse({
     name: formData.get("name"),
     description: formData.get("description"),
-    category: formData.get("category"),
+    category: formData.get("categoryId"),
   });
 
   if (!validatedFields.success) {
@@ -121,15 +122,22 @@ export async function createNewCourse(formData: FormData, signedURL: string) {
   const { name, description, category } = validatedFields.data;
 
   try {
-    const result = await postgresDB.insert(coursesTable).values({
-      name: name,
-      description: description,
-      instructor_name: session.user.name,
-      instructor_id: session.user.id,
-      img_url: signedURL.split("?")[0],
-      category_id: category,
-    });
-  } catch (error) {}
+    const result = await postgresDB
+      .insert(coursesTable)
+      .values({
+        name: name,
+        description: description,
+        instructor_id: session.user.id,
+        instructor_name: session.user.name,
+        img_url: signedURL.split("?")[0],
+        category_id: category,
+      })
+      .returning({ id: coursesTable.course_id });
+    revalidatePath("/");
+    redirect(`/profile/create/${result[0].id}`);
+  } catch (error) {
+    return { error: true, message: "Database Error: Failed to create course" };
+  }
 }
 
 const signupFormSchema = z.object({
@@ -178,6 +186,7 @@ export async function createNewUser(formData: FormData) {
       age: age,
       role: "user",
     });
+    redirect("/login");
   } catch (error) {
     return { error: true, message: "Database Error: Failed to create user" };
   }
