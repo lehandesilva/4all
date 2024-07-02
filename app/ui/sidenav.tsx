@@ -25,8 +25,8 @@ export default async function SideNav() {
         {categoriesAsArray?.map((category) => (
           <Link
             className={classes.link}
-            href={`/category/${category.id}`}
-            key={category.id}
+            href={`/category/${category.cat_Id}`}
+            key={category.cat_Id}
           >
             <div className={classes.item}>
               <p className={classes.categoryName}>{category.name}</p>
