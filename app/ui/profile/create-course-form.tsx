@@ -69,7 +69,15 @@ export default function CreateCourseForm({
           "Content-Type": file?.type,
         },
       });
-      await createNewCourse(new FormData(event.target as HTMLFormElement), url);
+      const result = await createNewCourse(
+        new FormData(event.target as HTMLFormElement),
+        url
+      );
+      if (result.error !== undefined) {
+        setStatus(result.message);
+        setLoading(false);
+        return;
+      }
       setStatus("Submitted");
       setLoading(false);
     }

@@ -1,7 +1,7 @@
 "use server";
 import { postgresDB } from "./db/postgresDB";
 import dbConnect from "./db/mongoDb";
-``;
+
 import { auth, signIn } from "@/auth";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
@@ -14,7 +14,6 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import crypto from "crypto";
-import { Name } from "drizzle-orm";
 
 const generateFileName = (bytes = 32) =>
   crypto.randomBytes(bytes).toString("hex");
@@ -121,6 +120,8 @@ export async function createNewCourse(formData: FormData, signedURL: string) {
 
   const { name, description, category } = validatedFields.data;
 
+  let courseId: string | null = null;
+
   try {
     const result = await postgresDB
       .insert(coursesTable)
@@ -133,11 +134,13 @@ export async function createNewCourse(formData: FormData, signedURL: string) {
         category_id: category,
       })
       .returning({ id: coursesTable.course_id });
-    revalidatePath("/");
-    redirect(`/profile/create/${result[0].id}`);
+
+    courseId = result[0].id;
   } catch (error) {
     return { error: true, message: "Database Error: Failed to create course" };
   }
+  revalidatePath("/");
+  redirect(`/profile/create/${courseId}`);
 }
 
 const signupFormSchema = z.object({
