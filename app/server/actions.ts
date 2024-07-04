@@ -140,7 +140,7 @@ export async function createNewCourse(formData: FormData, signedURL: string) {
     return { error: true, message: "Database Error: Failed to create course" };
   }
   revalidatePath("/");
-  redirect(`/profile/create/${courseId}`);
+  redirect(`/course/${courseId}`);
 }
 
 const signupFormSchema = z.object({

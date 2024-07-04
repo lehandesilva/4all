@@ -18,11 +18,11 @@ export default async function Page({
   return (
     <>
       <CourseDetails course={course} />
-      <RateCourse courseId={courseId} />
+      {/* <RateCourse courseId={courseId} />
       <AddComment courseId={courseId} />
       <CommentSection
         comments={course.reviews !== null ? course.reviews : []}
-      />
+      /> */}
     </>
   );
 }
