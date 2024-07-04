@@ -73,7 +73,7 @@ export default function CreateCourseForm({
         new FormData(event.target as HTMLFormElement),
         url
       );
-      if (result.error !== undefined) {
+      if (result?.error) {
         setStatus(result.message);
         setLoading(false);
         return;
