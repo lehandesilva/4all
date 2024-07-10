@@ -1,5 +1,11 @@
 import { sql } from "@vercel/postgres";
-import { User, Course, CourseMaterial, block, Category } from "./definitions";
+import {
+  User,
+  Course,
+  CourseMaterial,
+  block,
+  Category,
+} from "../server/definitions";
 import { unstable_noStore as noStore, revalidatePath } from "next/cache";
 
 export async function fetchCoursesByQuery(queryString: string) {

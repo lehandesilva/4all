@@ -3,12 +3,14 @@ import mongoose, { Document, Schema } from "mongoose";
 export interface IBlock extends Document {
   type: string;
   content: string;
-  size: number;
-  order: number;
+  style: {
+    color: String | null;
+    size: Number | null;
+    align: String | null;
+  };
 }
 
 export interface ISection extends Document {
-  id: number;
   name: string;
   blocks: IBlock[];
 }
@@ -16,16 +18,19 @@ export interface ISection extends Document {
 const blockSchema: Schema = new mongoose.Schema({
   type: String,
   content: String,
-  size: Number,
-  order: Number,
+  style: {
+    color: String || null,
+    size: Number || null,
+    align: String || null,
+  },
 });
 
 const sectionSchema: Schema = new mongoose.Schema({
-  id: Number,
   name: String,
   blocks: [blockSchema],
 });
 
-const Section = mongoose.model<ISection>("Section", sectionSchema);
+const Section =
+  mongoose.models.Section || mongoose.model<ISection>("Section", sectionSchema);
 
 export default Section;

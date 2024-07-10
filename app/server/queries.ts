@@ -1,9 +1,22 @@
 import "server-only";
 import { postgresDB } from "./db/postgresDB";
-import { categoriesTable, users } from "./db/schema";
+import { categoriesTable, coursesTable, users } from "./db/schema";
 import { eq } from "drizzle-orm";
 
-export async function fetchCategories() {
+export async function fetchCourseDeets(courseId: string) {
+  const result = await postgresDB
+    .select()
+    .from(coursesTable)
+    .where(eq(coursesTable.id, courseId));
+  return result[0];
+}
+
+export async function fetchCourseSections(courseId: string) {
+  // get from mongodb
+  // check if its better to get individual sections or the whole thing
+}
+
+export default async function fetchCategories() {
   const result = await postgresDB.select().from(categoriesTable);
 
   return result;

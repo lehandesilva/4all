@@ -17,3 +17,12 @@ redirect users after sign up
 [] = Upload videos and images to S3 bucket
 
 display image on profile page and redo the whole page
+
+redo editor next.
+brainstorm editor options like video and quiz creation.
+
+editor needs to be able to have texts and titles just like before but
+now have to be able to embed videos as well.
+Be able to embed pictures as well.
+Same drag and drop system as before.
+Be able to create quizes as well.

@@ -4,7 +4,7 @@ import styles from "./create-course-form.module.css";
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Category } from "@/app/lib/definitions";
+import { Category } from "@/app/server/definitions";
 import { createNewCourse, geteSignedUrl } from "@/app/server/actions";
 
 export default function CreateCourseForm({
@@ -114,7 +114,7 @@ export default function CreateCourseForm({
               </option>
               {categories?.length > 0 ? (
                 categories.map((category) => (
-                  <option key={category.cat_Id} value={category.cat_Id}>
+                  <option key={category.id} value={category.id}>
                     {category.name}
                   </option>
                 ))

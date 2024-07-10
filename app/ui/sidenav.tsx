@@ -3,7 +3,7 @@ import Link from "next/link";
 import { signOut } from "@/auth";
 import { fetchCategories } from "../lib/data";
 import { auth } from "@/auth";
-import { Category } from "../lib/definitions";
+import { Category } from "../server/definitions";
 
 export default async function SideNav() {
   const categories = await fetchCategories();

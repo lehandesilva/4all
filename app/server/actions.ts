@@ -1,6 +1,7 @@
 "use server";
 import { postgresDB } from "./db/postgresDB";
 import dbConnect from "./db/mongoDb";
+import Section from "./models/Section";
 
 import { auth, signIn } from "@/auth";
 import { z } from "zod";
@@ -132,8 +133,9 @@ export async function createNewCourse(formData: FormData, signedURL: string) {
         instructor_name: session.user.name,
         img_url: signedURL.split("?")[0],
         category_id: category,
+        public: false,
       })
-      .returning({ id: coursesTable.course_id });
+      .returning({ id: coursesTable.id });
 
     courseId = result[0].id;
   } catch (error) {
@@ -193,4 +195,46 @@ export async function createNewUser(formData: FormData) {
   } catch (error) {
     return { error: true, message: "Database Error: Failed to create user" };
   }
+}
+
+export async function createSection(formData: FormData) {
+  const title = formData.get("title");
+  const content = formData.get("content");
+  try {
+    await dbConnect();
+    const section = await Section.create({
+      name: title,
+      blocks: [
+        {
+          type: "text",
+          content: content,
+          style: {
+            color: "black",
+            size: 2,
+            align: "center",
+          },
+        },
+      ],
+    });
+    console.log(section._id.toString());
+    //Bind courseId and update the section of that course
+  } catch (error) {
+    return { error: true, message: "Database Error: Failed to create section" };
+  }
+  // try {
+  //   const sectionId = await postgresDB.insert(coursesTable).values({
+  //     sections: ,
+  //   });
+  // } catch (error) {}
+  // Insert data
+  // await db.insert(table).values({
+  //   sections: [
+  //     { name: "Section 1", id: "1" },
+  //     { name: "Section 2", id: "2" },
+  //   ],
+  // });
+  // import { sql } from "drizzle-orm";
+  // await db.insert(table).values({
+  //   sections: sql`${sectionsData}::jsonb`,
+  // });
 }

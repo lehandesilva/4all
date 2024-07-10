@@ -6,14 +6,10 @@ import {
   text,
   timestamp,
   jsonb,
-  uuid,
+  boolean,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
-
-export type section = {
-  id: number;
-  name: string;
-};
+import { section } from "../definitions";
 
 export type history = {
   course_id: number;
@@ -61,7 +57,7 @@ export const accounts = pgTable(
 );
 
 export const categoriesTable = pgTable("categories", {
-  cat_Id: text("id")
+  id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull(),
@@ -69,17 +65,18 @@ export const categoriesTable = pgTable("categories", {
 });
 
 export const coursesTable = pgTable("courses", {
-  course_id: text("id")
+  id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name"),
   description: text("description"),
   instructor_id: text("instructor_id").references(() => users.id),
   instructor_name: text("instructor_name"),
+  public: boolean("public"),
   rating: text("rating"),
   users_rated: integer("users_rated"),
   img_url: text("img_url"),
-  category_id: text("category_id").references(() => categoriesTable.cat_Id),
+  category_id: text("category_id").references(() => categoriesTable.id),
   sections: jsonb("sections").$type<section[]>(),
 });
 
@@ -87,7 +84,7 @@ export const reviewsTable = pgTable("reviews", {
   review_id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  course_id: text("course_id").references(() => coursesTable.course_id),
+  course_id: text("course_id").references(() => coursesTable.id),
   user_id: text("user_id").references(() => users.id),
   comment: text("comment").notNull(),
   timestamp: timestamp("timestamp").defaultNow(),

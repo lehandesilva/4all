@@ -1,5 +1,4 @@
 "use client";
-import { block } from "@/app/lib/definitions";
 import { useRef, useState } from "react";
 import styles from "./editor.module.css";
 interface EditorProps {

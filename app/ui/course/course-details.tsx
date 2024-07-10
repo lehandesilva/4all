@@ -1,4 +1,4 @@
-import { Course, section } from "@/app/lib/definitions";
+import { Course } from "@/app/server/definitions";
 import styles from "./course-details.module.css";
 import Link from "next/link";
 import Image from "next/image";
@@ -25,7 +25,7 @@ export default function CourseDetails({ course }: { course: Course }) {
       <div className={styles.course__sections}>
         {course.sections?.map((section, index) => (
           <Link
-            href={`/course/${course.id}/${section.course_material_id}`}
+            href={`/course/${course.id}/${section.id}`}
             key={section.id}
             className={styles.link}
           >
