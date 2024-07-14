@@ -231,11 +231,23 @@ export async function createSection(courseId: string, formData: FormData) {
         },
       ],
     });
-    console.log(section._id.toString());
-    // Insert section into course
+    // Insert section into postgresdb
+    // Need to update the sections array by getting the sections and then update it
+    const result = await postgresDB
+      .select({ sections: coursesTable.sections })
+      .from(coursesTable)
+      .where(eq(coursesTable.id, courseId));
+    console.log(result[0].sections);
+
+    const newSection =
+      result[0].sections !== null
+        ? [...result[0].sections, { id: section._id, name: name }]
+        : [{ id: section._id, name: name }];
+
+    //update the result
     await postgresDB
       .update(coursesTable)
-      .set({ sections: [{ id: section._id, name: name }] })
+      .set({ sections: newSection })
       .where(eq(coursesTable.id, courseId));
   } catch (error) {
     return { error: true, message: "Database Error: Failed to create section" };
