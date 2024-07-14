@@ -9,7 +9,10 @@ export default async function Page({
   return (
     <>
       <p>Editing Page</p>
-      <SectionEdit courseSections={courseDetails.sections} />
+      <SectionEdit
+        courseSections={courseDetails.sections}
+        courseId={courseDetails.id}
+      />
     </>
   );
 }

@@ -15,6 +15,7 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import crypto from "crypto";
+import { eq } from "drizzle-orm";
 
 const generateFileName = (bytes = 32) =>
   crypto.randomBytes(bytes).toString("hex");
@@ -197,13 +198,27 @@ export async function createNewUser(formData: FormData) {
   }
 }
 
-export async function createSection(formData: FormData) {
-  const title = formData.get("title");
-  const content = formData.get("content");
+const editCourseFormSchema = z.object({
+  name: z.string(),
+  content: z.string(),
+});
+
+export async function createSection(courseId: string, formData: FormData) {
+  const validatedFields = editCourseFormSchema.safeParse({
+    name: formData.get("title"),
+    content: formData.get("content"),
+  });
+
+  if (!validatedFields.success) {
+    return { error: true, message: "Pleas" };
+  }
+
+  const { name, content } = validatedFields.data;
+
   try {
     await dbConnect();
     const section = await Section.create({
-      name: title,
+      name: name,
       blocks: [
         {
           type: "text",
@@ -217,24 +232,12 @@ export async function createSection(formData: FormData) {
       ],
     });
     console.log(section._id.toString());
-    //Bind courseId and update the section of that course
+    // Insert section into course
+    await postgresDB
+      .update(coursesTable)
+      .set({ sections: [{ id: section._id, name: name }] })
+      .where(eq(coursesTable.id, courseId));
   } catch (error) {
     return { error: true, message: "Database Error: Failed to create section" };
   }
-  // try {
-  //   const sectionId = await postgresDB.insert(coursesTable).values({
-  //     sections: ,
-  //   });
-  // } catch (error) {}
-  // Insert data
-  // await db.insert(table).values({
-  //   sections: [
-  //     { name: "Section 1", id: "1" },
-  //     { name: "Section 2", id: "2" },
-  //   ],
-  // });
-  // import { sql } from "drizzle-orm";
-  // await db.insert(table).values({
-  //   sections: sql`${sectionsData}::jsonb`,
-  // });
 }

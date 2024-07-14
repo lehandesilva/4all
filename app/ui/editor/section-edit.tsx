@@ -22,8 +22,10 @@ import { useState } from "react";
 
 export default function SectionEdit({
   courseSections,
+  courseId,
 }: {
   courseSections: Array<section> | null;
+  courseId: string;
 }) {
   const [sections, setSections] = useState();
   const handleAddSection = () => {
@@ -42,7 +44,7 @@ export default function SectionEdit({
         </button>
       </div>
       <div className={styles.editingSection}>
-        <EditorTest />
+        <EditorTest courseId={courseId} />
       </div>
     </>
   );

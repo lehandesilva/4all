@@ -3,10 +3,10 @@
 import classes from "./editor-test.module.css";
 import { useState } from "react";
 import { createSection } from "@/app/server/actions";
-export default function EditorTest() {
+export default function EditorTest({ courseId }: { courseId: string }) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await createSection(new FormData(e.target as HTMLFormElement));
+    await createSection(courseId, new FormData(e.target as HTMLFormElement));
   };
   return (
     <>
