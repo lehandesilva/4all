@@ -8,11 +8,7 @@ export default async function Page({
   const courseDetails = await fetchCourseDeets(params.courseId);
   return (
     <>
-      <p>Editing Page</p>
-      <SectionEdit
-        courseSections={courseDetails.sections}
-        courseId={courseDetails.id}
-      />
+      <SectionEdit courseDetails={courseDetails} />
     </>
   );
 }

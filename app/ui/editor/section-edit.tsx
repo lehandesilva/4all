@@ -1,15 +1,9 @@
 "use client";
 import styles from "./section-edit.module.css";
-import Editor from "./editor";
 import { section } from "@/app/server/definitions";
 import EditorTest from "./editor-test";
 import { useState } from "react";
-
-// interface Section {
-//   id: number;
-//   name: string;
-//   content?: { id: number; type: string; content: string; size: string }[]; // Array of block objects
-// }
+import { Course } from "@/app/server/definitions";
 
 // This page should have a side panel with all the sections that are available and an additional
 // button to add a new section. Import the course details and map the sections to the section edit
@@ -21,11 +15,9 @@ import { useState } from "react";
 // page needs the course sections from postgres to import the sections from mongodb
 
 export default function SectionEdit({
-  courseSections,
-  courseId,
+  courseDetails,
 }: {
-  courseSections: Array<section> | null;
-  courseId: string;
+  courseDetails: Course;
 }) {
   const [sections, setSections] = useState();
   const handleAddSection = () => {
@@ -33,18 +25,40 @@ export default function SectionEdit({
   };
   return (
     <>
-      <div className={styles.sectionsMiniMap}>
-        {courseSections?.map((section) => (
-          <div className={styles.singleSection} key={section.id}>
-            <h3 className={styles.sectionTitle}>{section.name}</h3>
+      <div className="flex">
+        <div className="w-96 h-dvh px-4 py-2 border-r-4 flex flex-col justify-between">
+          <div>
+            <div className="ml-8">
+              <input
+                type="text"
+                defaultValue={courseDetails.name || "Untitled"}
+                className="border-b-2 border-gray-300 p-2 focus:outline-none text-xl"
+              />
+            </div>
+            <h3 className="mt-4 p-3 font-semibold text-lg">Sections</h3>
+            {courseDetails.sections?.map((section) => (
+              <div
+                className="pl-6 py-1 m-1 border-[1px] rounded"
+                key={section.id}
+              >
+                <h3>{section.name}</h3>
+              </div>
+            ))}
+            <button
+              className="mt-6 border-2 rounded px-4 py-1 text-indigo-800 font-medium border-indigo-500"
+              onClick={handleAddSection}
+            >
+              Add New Section
+            </button>
           </div>
-        ))}
-        <button className={styles.addSectionBtn} onClick={handleAddSection}>
-          Add New Section
-        </button>
-      </div>
-      <div className={styles.editingSection}>
-        <EditorTest courseId={courseId} />
+          <div>
+            <button>Edit Course Details</button>
+          </div>
+        </div>
+
+        <div>
+          <EditorTest courseId={courseDetails.id!} />
+        </div>
       </div>
     </>
   );

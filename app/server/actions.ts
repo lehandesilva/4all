@@ -237,7 +237,6 @@ export async function createSection(courseId: string, formData: FormData) {
       .select({ sections: coursesTable.sections })
       .from(coursesTable)
       .where(eq(coursesTable.id, courseId));
-    console.log(result[0].sections);
 
     const newSection =
       result[0].sections !== null
