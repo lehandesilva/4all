@@ -1,8 +1,8 @@
 "use client";
 
-import classes from "./searchBox.module.css";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
+import { FaMagnifyingGlass } from "react-icons/fa6";
 
 export default function SearchBox() {
   const searchParams = useSearchParams();
@@ -24,11 +24,14 @@ export default function SearchBox() {
   }, 2000);
 
   return (
-    <div className={classes.searchBox}>
+    <div className="bg-p-3 rounded-full flex h-8">
+      <div className="w-4 m-2">
+        <FaMagnifyingGlass className="text-s-3" />
+      </div>
       <input
         type="text"
-        className={classes.search}
-        placeholder="Search Courses..."
+        className="outline-0 bg-transparent px-2 text-lg"
+        placeholder="Search"
         onChange={(e) => {
           searchHandler(e.target.value);
         }}

@@ -16,9 +16,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${inter.className} antialiased bg-p-1`}>
         <Header />
-        {/* <SideNav /> */}
         {children}
       </body>
     </html>

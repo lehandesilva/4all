@@ -13,7 +13,7 @@ export default async function Home() {
   const courses = await fetchCourses();
   return (
     <main>
-      <CoursesGrid heading="Recommendations" data={courses as Course[]} />
+      {/* <CoursesGrid heading="Recommendations" data={courses as Course[]} /> */}
     </main>
   );
 }

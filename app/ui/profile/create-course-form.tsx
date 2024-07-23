@@ -1,11 +1,12 @@
 "use client";
 
-import styles from "./create-course-form.module.css";
+// import styles from "./create-course-form.module.css";
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Category } from "@/app/server/definitions";
 import { createNewCourse, geteSignedUrl } from "@/app/server/actions";
+import { MdError } from "react-icons/md";
 
 export default function CreateCourseForm({
   categories,
@@ -85,33 +86,41 @@ export default function CreateCourseForm({
 
   return (
     <>
+      <h1 className="text-5xl text-s-3 font-light mt-20 ml-72 mb-5">
+        Create Course
+      </h1>
       {status !== "" && (
-        <div className={styles.statusContainer}>
-          <p className={styles.statusMessage}>{status}</p>
+        <div className="w-full bg-p-3 flex p-1 items-center justify-center">
+          <MdError className=" mx-2 text-s-1" />
+          <p className="text-s-3 text-lg">{status}</p>
         </div>
       )}
-      <div className={styles.courseCreateSection}>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="name" className={styles.label}>
-              Name:
-            </label>
+      <form onSubmit={handleSubmit}>
+        <div className="flex mt-8 w-full justify-evenly">
+          <div className="flex flex-col">
             <input
-              aria-describedby="name-error"
               type="text"
               name="name"
               id="name"
-              className={styles.textInput}
+              className="px-4 py-2 bg-p-3 focus:bg-s-6 outline-none rounded-2xl text-s-3 w-[40rem]"
+              placeholder="Title"
               required
             />
-          </div>
+            <input
+              type="text"
+              name="description"
+              id="description"
+              placeholder="Description"
+              className="px-4 py-2 mt-12 bg-p-3 focus:bg-s-6 outline-none rounded-2xl text-s-3 w-[35rem] h-52 "
+              required
+            />
 
-          <div className={styles.categoryDropDown}>
-            <label htmlFor="category">Category</label>
-            <select name="categoryId" id="category">
-              <option value="" disabled>
-                Select a category
-              </option>
+            <select
+              name="categoryId"
+              id="category"
+              className="px-4 py-2 mt-12 bg-p-3 focus:bg-s-6 outline-none rounded-2xl text-s-3 w-52"
+              defaultValue="Category"
+            >
               {categories?.length > 0 ? (
                 categories.map((category) => (
                   <option key={category.id} value={category.id}>
@@ -123,30 +132,15 @@ export default function CreateCourseForm({
               )}
             </select>
           </div>
-
-          <div>
-            <label htmlFor="description" className={styles.label}>
-              Description
-            </label>
+          <div className="flex flex-col">
             <input
-              type="text"
-              name="description"
-              id="description"
-              className={styles.textInput}
-              aria-describedby="description-error"
+              type="file"
+              onChange={handleFileChange}
+              className=""
+              accept="image/jpeg,image/png,image/webp"
+              name="media"
               required
             />
-          </div>
-
-          <input
-            type="file"
-            onChange={handleFileChange}
-            className={styles.fileInput}
-            accept="image/jpeg,image/png,image/webp"
-            name="media"
-            required
-          />
-          <div className={styles.imagePreview}>
             {fileUrl ? (
               <Image
                 src={fileUrl}
@@ -155,20 +149,20 @@ export default function CreateCourseForm({
                 height={200}
               />
             ) : (
-              <div className={styles.noImagePreview}></div>
+              <div className=""></div>
             )}
-          </div>
 
-          <div>
-            <Link href="/profile" className={styles.courseActionBtns}>
-              Cancel
-            </Link>
-            <button className={styles.courseActionBtns} disabled={loading}>
-              Create Course
-            </button>
+            <div>
+              <Link href="/profile" className="">
+                Cancel
+              </Link>
+              <button className="" disabled={loading}>
+                Create Course
+              </button>
+            </div>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </>
   );
 }

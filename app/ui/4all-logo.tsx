@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function FourallLogo() {
   const siteImg =
@@ -6,7 +7,9 @@ export default function FourallLogo() {
 
   return (
     <div>
-      <Image src={siteImg} width={100} height={60} alt="4all Logo" />
+      <Link href="/">
+        <Image src={siteImg} width={150} height={150} alt="4all Logo" />
+      </Link>
     </div>
   );
 }

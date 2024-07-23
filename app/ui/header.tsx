@@ -1,8 +1,8 @@
 import FourallLogo from "./4all-logo";
-import classes from "./header.module.css";
 import SearchBox from "./searchBox";
 import Link from "next/link";
 import { auth } from "@/auth";
+import { FaUser } from "react-icons/fa";
 
 export default async function Header() {
   const session = await auth();
@@ -13,16 +13,28 @@ export default async function Header() {
 
   return (
     <>
-      <div className={classes.container}>
-        <FourallLogo />
-        <div className={classes.searchBar}>
-          <SearchBox />
+      <div className="w-full h-20 flex items-center justify-between sticky">
+        <div className="w-36">
+          <FourallLogo />
         </div>
-        <Link href={authenticated ? "/profile" : "/login"}>
-          <button className={classes.ProfileBtn}>
-            {authenticated ? session?.user?.name : "Login"}
-          </button>
-        </Link>
+        <div className="flex items-center justify-evenly w-[35rem] bg-p-2 rounded-full h-12 ">
+          <SearchBox />
+          <Link href="/" className="pl-5 text-s-3">
+            Home
+          </Link>
+          <Link href="/" className="pl-12 text-s-3">
+            Categories
+          </Link>
+        </div>
+        <div className="mr-12">
+          <Link href={authenticated ? "/profile" : "/login"}>
+            {authenticated ? (
+              <FaUser className="text-s-3 text-3xl outline outline-1 rounded-full outline-s-3 outline-offset-4" />
+            ) : (
+              <button className="">Login</button>
+            )}
+          </Link>
+        </div>
       </div>
     </>
   );
