@@ -2,7 +2,8 @@ import "server-only";
 import { postgresDB } from "./db/postgresDB";
 import { categoriesTable, coursesTable, users } from "./db/schema";
 import { eq } from "drizzle-orm";
-
+import dbConnect from "./db/mongoDb";
+import Section from "./models/Section";
 export async function fetchCourseDeets(courseId: string) {
   const result = await postgresDB
     .select()
@@ -44,4 +45,10 @@ export async function fetchUserByEmail(email: string) {
     .where(eq(users.email, email));
 
   return result[0];
+}
+
+export async function fetchSectionById(sectionId: string) {
+  await dbConnect();
+  const section = await Section.find();
+  // console.log(section);
 }

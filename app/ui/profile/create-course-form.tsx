@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Category } from "@/app/server/definitions";
 import { createNewCourse, geteSignedUrl } from "@/app/server/actions";
 import { MdError } from "react-icons/md";
+import { IoCloudUploadSharp } from "react-icons/io5";
 
 export default function CreateCourseForm({
   categories,
@@ -136,27 +137,42 @@ export default function CreateCourseForm({
             <input
               type="file"
               onChange={handleFileChange}
-              className=""
+              className="w-[0.1px] h-[0.1px] opacity-0 overflow-hidden absolute -z-10"
               accept="image/jpeg,image/png,image/webp"
               name="media"
               required
+              id="media"
             />
             {fileUrl ? (
               <Image
                 src={fileUrl}
                 alt={file ? file.name : "unknown"}
-                width={200}
-                height={200}
+                width={640}
+                height={360}
+                className="rounded-2xl"
               />
             ) : (
-              <div className=""></div>
+              <div className="w-[640px] h-[360px] bg-p-3 rounded-2xl border-dashed border-2 border-[#77848d]">
+                <label
+                  htmlFor="media"
+                  className="hover:cursor-pointer text-[#77848d] w-full h-full flex justify-center items-center"
+                >
+                  Upload Course Image
+                </label>
+              </div>
             )}
 
-            <div>
-              <Link href="/profile" className="">
-                Cancel
+            <div className="mt-16">
+              <Link href="/profile">
+                <button className="px-4 py-2 border-2 border-s-2 rounded-full text-s-2 hover:bg-s-2 hover:text-s-3">
+                  Cancel
+                </button>
               </Link>
-              <button className="" disabled={loading}>
+              <button
+                className="px-4 py-2 bg-s-1 rounded-full text-s-3 ml-12"
+                type="submit"
+                disabled={loading}
+              >
                 Create Course
               </button>
             </div>

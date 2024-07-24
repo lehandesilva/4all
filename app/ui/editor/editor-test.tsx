@@ -10,7 +10,6 @@ export default function EditorTest({ courseId }: { courseId: string }) {
   };
   return (
     <>
-      <p>Editor</p>
       <form onSubmit={handleSubmit}>
         <input type="text" name="title" />
         <input type="text" name="content" />

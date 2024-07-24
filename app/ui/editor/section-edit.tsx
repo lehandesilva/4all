@@ -3,11 +3,14 @@ import { section } from "@/app/server/definitions";
 import EditorTest from "./editor-test";
 import { useState } from "react";
 import { Course } from "@/app/server/definitions";
+import clsx from "clsx";
 
 // This page should have a side panel with all the sections that are available and an additional
 // button to add a new section. Import the course details and map the sections to the section edit
-// component. The add new section button would also be on the section edit component. Section edit
-// will get two props, the id and name. If id and name is null then its a new section.
+// component. The add new section button would also be on the section edit component.
+
+// when a section is selected have to fetch section from mongo and pass to editor component
+// editor should preload the blocks and keep. Make videos playable on editor.
 
 // each section will contain a id, name, blocks<Array>
 // each block will contain type, content and style
@@ -18,40 +21,57 @@ export default function SectionEdit({
 }: {
   courseDetails: Course;
 }) {
+  const [selectedSection, setSelectedSection] = useState<string | undefined>();
   const [sections, setSections] = useState();
   const handleAddSection = () => {
     // add
   };
+  const handleSelectSection = (sectionId: string) => {
+    // fetch section from mongo and pass to editor component
+
+    setSelectedSection(sectionId);
+  };
   return (
     <>
-      <div className="flex">
-        <div className="w-96 h-dvh px-4 py-2 border-r-4 flex flex-col justify-between">
+      <div className="ml-8">
+        <input
+          type="text"
+          defaultValue={courseDetails.name || "Untitled"}
+          className="ml-10 mb-4 mt-6 border-b-[0.5px] text-2xl bg-transparent text-s-3 focus:outline-none"
+        />
+      </div>
+      <div className="flex border-t-2">
+        <div className="w-96 h-dvh px-4 py-2 bg-p-2 shadow-xl">
           <div>
-            <div className="ml-8">
-              <input
-                type="text"
-                defaultValue={courseDetails.name || "Untitled"}
-                className="border-b-2 border-gray-300 p-2 focus:outline-none text-xl"
-              />
-            </div>
-            <h3 className="mt-4 p-3 font-semibold text-lg">Sections</h3>
+            <h3 className="mt-4 p-3 font-semibold text-lg text-s-3">
+              Sections
+            </h3>
             {courseDetails.sections?.map((section) => (
               <div
-                className="pl-6 py-1 m-1 border-[1px] rounded"
+                className={clsx(
+                  "pl-3 py-2 m-2 rounded-lg text-s-3 hover:bg-p-3 hover:cursor-pointer",
+                  {
+                    "bg-s-1 border-4 border-s-1 hover:bg-s-1":
+                      selectedSection === section.id,
+                  }
+                )}
                 key={section.id}
+                onClick={() => handleSelectSection(section.id)}
               >
                 <h3>{section.name}</h3>
               </div>
             ))}
             <button
-              className="mt-6 border-2 rounded px-4 py-1 text-indigo-800 font-medium border-indigo-500"
+              className="mt-4 border-2 rounded-full px-2 py-1 text-s-2 font-medium border-s-2"
               onClick={handleAddSection}
             >
               Add New Section
             </button>
           </div>
           <div>
-            <button>Edit Course Details</button>
+            <button className="mt-6 border-2 rounded-full px-2 py-1 text-s-2 font-medium border-s-2">
+              Edit Course Details
+            </button>
           </div>
         </div>
 
