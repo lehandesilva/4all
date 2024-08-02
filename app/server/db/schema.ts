@@ -9,12 +9,7 @@ import {
   boolean,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
-import { section } from "../definitions";
-
-export type history = {
-  course_id: number;
-  section_id: number;
-};
+import { section_for_course, history, block } from "../definitions";
 
 export const roleEnum = pgEnum("role", ["admin", "user", "paidUser"]);
 
@@ -77,7 +72,7 @@ export const coursesTable = pgTable("courses", {
   users_rated: integer("users_rated"),
   img_url: text("img_url"),
   category_id: text("category_id").references(() => categoriesTable.id),
-  sections: jsonb("sections").$type<section[]>(),
+  sections: jsonb("sections").$type<section_for_course[]>(),
 });
 
 export const reviewsTable = pgTable("reviews", {
@@ -88,4 +83,13 @@ export const reviewsTable = pgTable("reviews", {
   user_id: text("user_id").references(() => users.id),
   comment: text("comment").notNull(),
   timestamp: timestamp("timestamp").defaultNow(),
+});
+
+export const sectionsTable = pgTable("sections", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  instructor_id: text("instructor_id").references(() => users.id),
+  name: text("name").notNull(),
+  blocks: jsonb("blocks").$type<block[]>(),
 });

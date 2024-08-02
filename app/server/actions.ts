@@ -1,12 +1,10 @@
 "use server";
 import { postgresDB } from "./db/postgresDB";
-import dbConnect from "./db/mongoDb";
-import Section from "./models/Section";
 
 import { auth, signIn } from "@/auth";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
-import { coursesTable, users } from "./db/schema";
+import { coursesTable, sectionsTable, users } from "./db/schema";
 import { checkEmailExists } from "./queries";
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
@@ -194,6 +192,7 @@ export async function createNewUser(formData: FormData) {
     });
     redirect("/login");
   } catch (error) {
+    console.log(error);
     return { error: true, message: "Database Error: Failed to create user" };
   }
 }
@@ -204,6 +203,10 @@ const editCourseFormSchema = z.object({
 });
 
 export async function createSection(courseId: string, formData: FormData) {
+  const session = await auth();
+  if (!session) {
+    return { error: true, message: "Not authenticated" };
+  }
   const validatedFields = editCourseFormSchema.safeParse({
     name: formData.get("title"),
     content: formData.get("content"),
@@ -216,21 +219,24 @@ export async function createSection(courseId: string, formData: FormData) {
   const { name, content } = validatedFields.data;
 
   try {
-    await dbConnect();
-    const section = await Section.create({
-      name: name,
-      blocks: [
-        {
-          type: "text",
-          content: content,
-          style: {
-            color: "black",
-            size: 2,
-            align: "center",
+    const sectionId = await postgresDB
+      .insert(sectionsTable)
+      .values({
+        instructor_id: session.user.id,
+        name: name,
+        blocks: [
+          {
+            type: "text",
+            content: content,
+            style: {
+              color: "black",
+              size: 2,
+              align: "center",
+            },
           },
-        },
-      ],
-    });
+        ],
+      })
+      .returning({ sectionId: sectionsTable.id });
     // Insert section into postgresdb
     // Need to update the sections array by getting the sections and then update it
     const result = await postgresDB
@@ -240,8 +246,8 @@ export async function createSection(courseId: string, formData: FormData) {
 
     const newSection =
       result[0].sections !== null
-        ? [...result[0].sections, { id: section._id, name: name }]
-        : [{ id: section._id, name: name }];
+        ? [...result[0].sections, { id: sectionId[0].sectionId, name: name }]
+        : [{ id: sectionId[0].sectionId, name: name }];
 
     //update the result
     await postgresDB
@@ -252,3 +258,67 @@ export async function createSection(courseId: string, formData: FormData) {
     return { error: true, message: "Database Error: Failed to create section" };
   }
 }
+
+// make course public logic
+export async function makeCoursePublic(courseId: string) {
+  await postgresDB
+    .update(coursesTable)
+    .set({ public: true })
+    .where(eq(coursesTable.id, courseId));
+}
+
+// make course private
+export async function makeCoursePrivate(courseId: string) {
+  await postgresDB
+    .update(coursesTable)
+    .set({ public: false })
+    .where(eq(coursesTable.id, courseId));
+}
+
+// Edit course
+
+const editCourseValidation = z.object({
+  name: z.string(),
+  description: z.string().min(30),
+});
+export async function editCourse(
+  courseId: string,
+  formData: FormData,
+  signedURL: string
+) {
+  const session = await auth();
+  if (!session) {
+    return { error: true, message: "Not authenticated" };
+  }
+
+  const validatedFields = editCourseValidation.safeParse({
+    name: formData.get("name"),
+    description: formData.get("description"),
+  });
+
+  if (!validatedFields.success) {
+    let errorMessage = "";
+    validatedFields.error.issues.forEach((issue) => {
+      errorMessage = errorMessage + issue.path[0] + ": " + issue.message + ". ";
+    });
+    return { error: true, message: errorMessage };
+  }
+
+  const { name, description } = validatedFields.data;
+
+  try {
+    const result = await postgresDB
+      .update(coursesTable)
+      .set({
+        name: name,
+        description: description,
+        img_url: signedURL.split("?")[0],
+      })
+      .where(eq(coursesTable.id, courseId));
+    return { error: false, message: "Course updated successfully" };
+  } catch (error) {
+    return { error: true, message: "Database Error: Failed to update course" };
+  }
+}
+
+// Delete course

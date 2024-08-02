@@ -18,12 +18,24 @@ export type Course = {
   users_rated: number | null;
   img_url: string | null;
   category_id: string | null;
-  sections: section[] | null;
+  sections: section_for_course[] | null;
 };
 
-export type section = {
+export type newSection = {
+  name: string;
+  blocks: block[];
+};
+
+export type section_for_course = {
   id: string;
   name: string;
+};
+
+export type section_for_section = {
+  id: string;
+  instructor_id: string | null;
+  name: string;
+  blocks: block[] | null;
 };
 
 export type review = {
@@ -36,4 +48,19 @@ export type Category = {
   id: string;
   name: string;
   href: string;
+};
+
+export type history = {
+  course_id: number;
+  section_id: number;
+};
+
+export type block = {
+  type: "text" | "image" | "video" | "quiz" | "subtitle";
+  content: string;
+  style: {
+    color: String | null;
+    size: Number | null;
+    align: String | null;
+  };
 };

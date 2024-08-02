@@ -1,6 +1,5 @@
 "use client";
 
-// import styles from "./create-course-form.module.css";
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";

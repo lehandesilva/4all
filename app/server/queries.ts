@@ -1,20 +1,18 @@
 import "server-only";
 import { postgresDB } from "./db/postgresDB";
-import { categoriesTable, coursesTable, users } from "./db/schema";
+import {
+  categoriesTable,
+  coursesTable,
+  sectionsTable,
+  users,
+} from "./db/schema";
 import { eq } from "drizzle-orm";
-import dbConnect from "./db/mongoDb";
-import Section from "./models/Section";
 export async function fetchCourseDeets(courseId: string) {
   const result = await postgresDB
     .select()
     .from(coursesTable)
     .where(eq(coursesTable.id, courseId));
   return result[0];
-}
-
-export async function fetchCourseSections(courseId: string) {
-  // get from mongodb
-  // check if its better to get individual sections or the whole thing
 }
 
 export default async function fetchCategories() {
@@ -48,7 +46,23 @@ export async function fetchUserByEmail(email: string) {
 }
 
 export async function fetchSectionById(sectionId: string) {
-  await dbConnect();
-  const section = await Section.find();
-  // console.log(section);
+  const result = await postgresDB
+    .select()
+    .from(sectionsTable)
+    .where(eq(sectionsTable.id, sectionId));
+
+  return result[0];
+}
+
+export async function fetchAllSectionsOfCourse(courseId: string) {
+  const sectionResults = await postgresDB
+    .select({ sections: coursesTable.sections })
+    .from(coursesTable)
+    .where(eq(coursesTable.id, courseId));
+
+  sectionResults[0].sections?.forEach(async (section) => {
+    await fetchSectionById(section.id).then((section) => {
+      console.log(section);
+    });
+  });
 }

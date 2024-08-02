@@ -64,6 +64,13 @@
       "when": 1719849699137,
       "tag": "0008_melted_firestar",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1721867177019,
+      "tag": "0009_ancient_giant_man",
+      "breakpoints": true
     }
   ]
 }

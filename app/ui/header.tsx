@@ -31,7 +31,9 @@ export default async function Header() {
             {authenticated ? (
               <FaUser className="text-s-3 text-3xl outline outline-1 rounded-full outline-s-3 outline-offset-4" />
             ) : (
-              <button className="">Login</button>
+              <button className="px-4 py-2 bg-s-1 rounded-full text-s-3 ml-12">
+                Login
+              </button>
             )}
           </Link>
         </div>
