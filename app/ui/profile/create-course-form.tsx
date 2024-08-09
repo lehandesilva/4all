@@ -119,7 +119,6 @@ export default function CreateCourseForm({
               name="categoryId"
               id="category"
               className="px-4 py-2 mt-12 bg-p-3 focus:bg-s-6 outline-none rounded-2xl text-s-3 w-52"
-              defaultValue="Category"
             >
               {categories?.length > 0 ? (
                 categories.map((category) => (

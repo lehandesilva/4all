@@ -56,7 +56,7 @@ export type history = {
 };
 
 export type block = {
-  type: "text" | "image" | "video" | "quiz" | "subtitle";
+  type: "text" | "image" | "video" | "quiz" | "subtitle" | string;
   content: string;
   style: {
     color: String | null;
