@@ -52,7 +52,28 @@ export default function EditorTest({
     setBlocks(updatedBlocks);
   };
 
-  const handleChangeVideo = () => {};
+  const [file, setFile] = useState<File | undefined>(undefined);
+  const [fileUrl, setFileUrl] = useState<string | undefined>(
+    block.content || undefined
+  );
+
+  const handleChangeVideo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(fileUrl);
+    const file = e.target.files?.[0];
+    setFile(file);
+    console.log(file);
+
+    if (fileUrl) {
+      URL.revokeObjectURL(fileUrl);
+    }
+
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setFileUrl(url);
+    } else {
+      setFileUrl(undefined);
+    }
+  };
 
   const handleBlockTypeChange = (
     e: React.FormEvent<HTMLSelectElement>,
