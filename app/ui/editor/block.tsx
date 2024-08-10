@@ -9,8 +9,10 @@ export default function Block({
   block,
   blockIndex,
   handleTypeChange,
+  handleChangeVideo,
   selectedBlock,
   handleBlockSelection,
+  files,
 }: {
   block: block;
   blockIndex: number;
@@ -18,8 +20,10 @@ export default function Block({
     e: React.FormEvent<HTMLSelectElement>,
     blockIndex: number
   ) => void;
+  handleChangeVideo: (e: React.ChangeEvent<HTMLInputElement>) => void;
   selectedBlock: boolean; // Add a prop to highlight the selected block when true
   handleBlockSelection: (blockIndex: number) => void;
+  files: File[];
 }) {
   const computeSHA256 = async (file: File) => {
     const buffer = await file.arrayBuffer();
@@ -77,7 +81,6 @@ export default function Block({
       </div>
     );
   } else if (block.type === "video") {
-    };
     return (
       <div>
         <div className="flex items-center m-8" key={blockIndex}>
@@ -90,15 +93,15 @@ export default function Block({
             accept="video/mp4, video/webm"
             className="w-[0.1px] h-[0.1px] opacity-0 overflow-hidden absolute -z-10"
             onFocus={() => handleBlockSelection(blockIndex)}
-            onChange={handleChangeVideo}
+            onChange={() => handleChangeVideo}
           />
-          {fileUrl ? (
+          {files[blockIndex] ? (
             <video
               width="640"
               height="360"
               controls
               preload="none"
-              src={fileUrl}
+              src={files[blockIndex].name}
             ></video>
           ) : (
             <div className="w-[640px] h-[360px] bg-p-3 rounded-2xl border-dashed border-2 border-[#77848d]">
