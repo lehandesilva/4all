@@ -14,6 +14,7 @@ import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import crypto from "crypto";
 import { eq } from "drizzle-orm";
+import { block, block_for_editor } from "./definitions";
 
 const generateFileName = (bytes = 32) =>
   crypto.randomBytes(bytes).toString("hex");
@@ -27,6 +28,14 @@ const s3 = new S3Client({
 });
 
 const acceptedTypes = ["image/jpeg", "image/png", "image/webp"];
+const acceptedTypes_EDITOR = [
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "video/mp4",
+  "video/webm",
+  "video/mkv",
+];
 const maxSize = 1024 * 1024 * 10;
 
 export async function geteSignedUrl(
@@ -38,7 +47,7 @@ export async function geteSignedUrl(
   if (!session) {
     return { failure: "Not authenticated" };
   }
-  if (!acceptedTypes.includes(type)) {
+  if (!acceptedTypes_EDITOR.includes(type)) {
     return { failure: "Invalid file type" };
   }
 
@@ -197,66 +206,95 @@ export async function createNewUser(formData: FormData) {
   }
 }
 
-const editCourseFormSchema = z.object({
-  name: z.string(),
-  content: z.string(),
+const styleSchema = z.object({
+  color: z.string().nullable(),
+  size: z.number().nullable(),
+  align: z.string().nullable(),
 });
 
-export async function createSection(courseId: string, formData: FormData) {
+// Define the schema for the block_for_editor object
+const blockForEditorSchema = z.object({
+  id: z.string(),
+  type: z.enum(["text", "image", "video", "quiz", "subtitle"]).or(z.string()),
+  content: z.string(),
+  style: styleSchema,
+});
+
+// Define the schema for an array of block_for_editor objects
+const blocksForEditorSchema = z.array(blockForEditorSchema);
+
+export async function createSection(
+  courseId: string,
+  blocks_from_editor: block[],
+  sectionId: string,
+  sectionName: string
+) {
   const session = await auth();
   if (!session) {
     return { error: true, message: "Not authenticated" };
   }
-  const validatedFields = editCourseFormSchema.safeParse({
-    name: formData.get("title"),
-    content: formData.get("content"),
-  });
+  const validatedFields = blocksForEditorSchema.safeParse(blocks_from_editor);
 
   if (!validatedFields.success) {
-    return { error: true, message: "Pleas" };
+    return { error: true, message: "Maneee who you fuckin wit" };
   }
 
-  const { name, content } = validatedFields.data;
+  const blocks = validatedFields.data;
 
   try {
-    const sectionId = await postgresDB
-      .insert(sectionsTable)
-      .values({
-        instructor_id: session.user.id,
-        name: name,
-        blocks: [
-          {
-            type: "text",
-            content: content,
-            style: {
-              color: "black",
-              size: 2,
-              align: "center",
-            },
-          },
-        ],
-      })
-      .returning({ sectionId: sectionsTable.id });
-    // Insert section into postgresdb
-    // Need to update the sections array by getting the sections and then update it
-    const result = await postgresDB
-      .select({ sections: coursesTable.sections })
-      .from(coursesTable)
-      .where(eq(coursesTable.id, courseId));
+    let newSection;
+    // First check if the section exists and if it does then update it, else use insert for it.
+    if (sectionId === "new") {
+      const sectionid_return = await postgresDB
+        .insert(sectionsTable)
+        .values({
+          instructor_id: session.user.id,
+          name: sectionName,
+          blocks: blocks,
+        })
+        .returning({ sectionId: sectionsTable.id });
+      // Insert section into postgresdb
+      // Need to update the sections array by getting the sections and then update it
+      const result = await postgresDB
+        .select({ sections: coursesTable.sections })
+        .from(coursesTable)
+        .where(eq(coursesTable.id, courseId));
 
-    const newSection =
-      result[0].sections !== null
-        ? [...result[0].sections, { id: sectionId[0].sectionId, name: name }]
-        : [{ id: sectionId[0].sectionId, name: name }];
+      newSection =
+        result[0].sections !== null
+          ? [
+              ...result[0].sections,
+              { id: sectionid_return[0].sectionId, name: sectionName },
+            ]
+          : [{ id: sectionid_return[0].sectionId, name: sectionName }];
+    } else {
+      await postgresDB
+        .update(sectionsTable)
+        .set({ name: sectionName, blocks: blocks })
+        .where(eq(sectionsTable.id, sectionId));
 
+      const result = await postgresDB
+        .select({ sections: coursesTable.sections })
+        .from(coursesTable)
+        .where(eq(coursesTable.id, courseId));
+      newSection = result[0].sections?.map((section) => {
+        if (section.id === sectionId) {
+          section.name = sectionName;
+        }
+        return section;
+      });
+    }
     //update the result
     await postgresDB
       .update(coursesTable)
       .set({ sections: newSection })
       .where(eq(coursesTable.id, courseId));
   } catch (error) {
+    console.log(error);
     return { error: true, message: "Database Error: Failed to create section" };
   }
+  revalidatePath("/");
+  redirect(`/course/${courseId}`);
 }
 
 // make course public logic

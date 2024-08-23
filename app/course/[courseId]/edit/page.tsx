@@ -1,4 +1,4 @@
-import { section_for_section, newSection } from "@/app/server/definitions";
+import { section_for_section } from "@/app/server/definitions";
 import {
   fetchAllSectionsOfCourse,
   fetchCourseDeets,
@@ -7,6 +7,7 @@ import {
 import SectionEdit from "@/app/ui/editor/section-edit";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { createId } from "@/app/lib/util";
 
 export default async function Page({
   params,
@@ -21,19 +22,22 @@ export default async function Page({
   if (session?.user.id !== courseDetails.instructor_id) {
     redirect("/");
   }
-  let sectionData: section_for_section | newSection | null = null;
+  let sectionData: section_for_section | null = null;
   if (sectionId) {
     if (sectionId === "new") {
       sectionData = {
+        id: "new",
+        instructor_id: session.user.id,
         name: "Untitled Section",
         blocks: [
           {
+            id: createId(),
             type: "text",
-            content: "Add something here...",
+            content: "Add Something",
             style: {
               color: "black",
               size: 2,
-              align: "center",
+              align: "left",
             },
           },
         ],

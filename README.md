@@ -14,9 +14,18 @@ Be able to create quizes as well.
 
 ## EDITOR
 
-Add a new block
-Needs drag and drop functionality
-Needs video and image support
-Needs logic to upload video and image
-Customizable
-Logic to upload blocks
+[X] Add a new block
+[] Needs drag and drop functionality
+[X] Needs video and image support
+[X] Needs logic to upload video and image
+[] Customizable
+[X] Logic to upload blocks
+[X] Needs user feedback
+
+## COURSE PAGE
+
+## PROFILE PAGE
+
+## HOME PAGE
+
+## SEARCH FUNCTIONALITY
