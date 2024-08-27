@@ -4,7 +4,7 @@ import { postgresDB } from "./db/postgresDB";
 import { auth, signIn } from "@/auth";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
-import { coursesTable, sectionsTable, users } from "./db/schema";
+import { coursesTable, reviewsTable, sectionsTable, users } from "./db/schema";
 import { checkEmailExists } from "./queries";
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
@@ -357,6 +357,39 @@ export async function editCourse(
   } catch (error) {
     return { error: true, message: "Database Error: Failed to update course" };
   }
+}
+
+const reviewValidation = z.object({
+  review: z.string(),
+});
+
+export async function reviewCourse(courseId: string, review: string) {
+  const session = await auth();
+  if (!session) {
+    redirect("/signup");
+  }
+  const validatedFields = reviewValidation.safeParse({ review });
+
+  if (!validatedFields.success) {
+    return { error: true, message: "Maneee who you fuckin wit" };
+  }
+
+  const review_validated = validatedFields.data;
+  try {
+    await postgresDB.insert(reviewsTable).values({
+      course_id: courseId,
+      user_id: session.user.id,
+      user_name: session.user.name,
+      comment: review_validated.review,
+    });
+  } catch (error) {
+    return {
+      error: true,
+      message: "Database Error: Comment didn't go through",
+    };
+  }
+  revalidatePath("/");
+  redirect(`/course/${courseId}`);
 }
 
 // Delete course

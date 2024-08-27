@@ -1,8 +1,10 @@
-import classes from "./add-sections.module.css";
-export default function AddSections() {
+import Link from "next/link";
+export default function AddSections({ courseId }: { courseId: string }) {
   return (
-    <div className={classes.container}>
-      <button className={classes.btn}>Add Sections</button>
-    </div>
+    <>
+      <Link href={`${courseId}/edit`}>
+        <button className="">Add Section</button>
+      </Link>
+    </>
   );
 }

@@ -3,10 +3,20 @@ import { postgresDB } from "./db/postgresDB";
 import {
   categoriesTable,
   coursesTable,
+  reviewsTable,
   sectionsTable,
   users,
 } from "./db/schema";
 import { eq } from "drizzle-orm";
+
+export async function fetchReviews(courseId: string) {
+  const result = await postgresDB
+    .select()
+    .from(reviewsTable)
+    .where(eq(reviewsTable.course_id, courseId));
+
+  return result;
+}
 export async function fetchCourseDeets(courseId: string) {
   const result = await postgresDB
     .select()

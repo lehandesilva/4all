@@ -81,6 +81,7 @@ export const reviewsTable = pgTable("reviews", {
     .$defaultFn(() => crypto.randomUUID()),
   course_id: text("course_id").references(() => coursesTable.id),
   user_id: text("user_id").references(() => users.id),
+  user_name: text("user_name"),
   comment: text("comment").notNull(),
   timestamp: timestamp("timestamp").defaultNow(),
 });

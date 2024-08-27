@@ -13,7 +13,7 @@ export default async function Header() {
 
   return (
     <>
-      <div className="w-full h-20 flex items-center justify-between sticky">
+      <div className="w-full h-20 flex items-center justify-between">
         <div className="w-36">
           <FourallLogo />
         </div>

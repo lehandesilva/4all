@@ -24,6 +24,13 @@ Be able to create quizes as well.
 
 ## COURSE PAGE
 
+[] comments section
+[] rate course
+[] view course
+[] if owner? edit button
+[] view sections
+[] sections page
+
 ## PROFILE PAGE
 
 ## HOME PAGE
