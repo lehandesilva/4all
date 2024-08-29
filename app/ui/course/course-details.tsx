@@ -2,8 +2,13 @@ import { Course } from "@/app/server/definitions";
 import Link from "next/link";
 import Image from "next/image";
 import { IoStar } from "react-icons/io5";
-
-export default function CourseDetails({ course }: { course: Course }) {
+import { auth } from "@/auth";
+export default async function CourseDetails({ course }: { course: Course }) {
+  const session = await auth();
+  let owner: boolean = false;
+  if (session?.user.id === course.instructor_id) {
+    owner = true;
+  }
   return (
     <>
       {course.img_url && (
@@ -38,6 +43,13 @@ export default function CourseDetails({ course }: { course: Course }) {
                 </div>
               </Link>
             ))}
+            {owner && (
+              <Link href={`/course/${course.id}/edit`}>
+                <div className="my-2 rounded-lg h-8 text-s-2 hover:bg-s-2 ">
+                  <h3 className="text-s-2 hover:text-s-3 ml-4">Edit Course</h3>
+                </div>
+              </Link>
+            )}
           </div>
         </div>
       </div>

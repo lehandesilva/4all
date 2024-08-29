@@ -70,9 +70,5 @@ export async function fetchAllSectionsOfCourse(courseId: string) {
     .from(coursesTable)
     .where(eq(coursesTable.id, courseId));
 
-  sectionResults[0].sections?.forEach(async (section) => {
-    await fetchSectionById(section.id).then((section) => {
-      console.log(section);
-    });
-  });
+  return sectionResults[0];
 }

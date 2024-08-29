@@ -1,9 +1,5 @@
 import { section_for_section } from "@/app/server/definitions";
-import {
-  fetchAllSectionsOfCourse,
-  fetchCourseDeets,
-  fetchSectionById,
-} from "@/app/server/queries";
+import { fetchCourseDeets, fetchSectionById } from "@/app/server/queries";
 import SectionEdit from "@/app/ui/editor/section-edit";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";

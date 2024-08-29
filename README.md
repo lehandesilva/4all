@@ -24,15 +24,21 @@ Be able to create quizes as well.
 
 ## COURSE PAGE
 
-[] comments section
+[X] Course Page
+[X] comments section
 [] rate course
-[] view course
-[] if owner? edit button
-[] view sections
-[] sections page
+[X] if owner? edit button
+[X] sections page
 
 ## PROFILE PAGE
 
+[] Display courses
+[] Delete and Edit button for each course
+[] Button to create course
+[] Sign Out Button
+
 ## HOME PAGE
+
+[] Grid display courses that are public
 
 ## SEARCH FUNCTIONALITY

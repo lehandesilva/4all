@@ -12,7 +12,6 @@ export default function ReviewCourse({ courseId }: { courseId: string }) {
     const input = e.currentTarget.querySelector<HTMLInputElement>("#review");
     if (input) {
       if (input?.value.trim() !== "") {
-        console.log(input.value);
         await reviewCourse(courseId, input?.value);
       }
     }
