@@ -1,5 +1,3 @@
-import CoursesGrid from "./ui/courses-grid";
-
 type Course = {
   id: string;
   name: string;
