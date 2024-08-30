@@ -7,8 +7,6 @@ export default async function Page() {
   return (
     <>
       <Profile user={session?.user} />
-
-      {/* <ProfileCourses userCourses={userCourses} /> */}
     </>
   );
 }
