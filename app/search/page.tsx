@@ -1,4 +1,3 @@
-import CoursesGrid from "../ui/courses-grid";
 import SearchBox from "../ui/searchBox";
 
 export default async function Page({
