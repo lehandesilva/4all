@@ -1,4 +1,3 @@
-import { fetchCourses } from "@/app/lib/data";
 import CoursesGrid from "./ui/courses-grid";
 
 type Course = {
@@ -10,7 +9,7 @@ type Course = {
 };
 
 export default async function Home() {
-  const courses = await fetchCourses();
+  // const courses = await fetchCourses();
   return (
     <main>
       {/* <CoursesGrid heading="Recommendations" data={courses as Course[]} /> */}
