@@ -393,3 +393,22 @@ export async function reviewCourse(courseId: string, review: string) {
 }
 
 // Delete course
+export async function deleteCourse(courseId: string) {
+  const session = await auth();
+
+  const instructor_id = await postgresDB
+    .select({ instructor_id: coursesTable.instructor_id })
+    .from(coursesTable)
+    .where(eq(coursesTable.id, courseId));
+
+  if (session?.user.id !== instructor_id[0].instructor_id) {
+    redirect("/");
+  } else {
+    await postgresDB
+      .delete(reviewsTable)
+      .where(eq(reviewsTable.course_id, courseId));
+    await postgresDB.delete(coursesTable).where(eq(coursesTable.id, courseId));
+    revalidatePath("/");
+    redirect("/profile");
+  }
+}

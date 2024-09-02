@@ -72,3 +72,12 @@ export type history = {
   course_id: number;
   section_id: number;
 };
+
+export type CurrentUserCourses = {
+  id: string | null;
+  name: string | null;
+  public: boolean | null;
+  rating: string | null;
+  img_url: string | null;
+  category_id: string | null;
+};

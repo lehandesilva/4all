@@ -72,3 +72,19 @@ export async function fetchAllSectionsOfCourse(courseId: string) {
 
   return sectionResults[0];
 }
+
+export async function fetchAllCoursesByCurrentUser(userId: string) {
+  const result = await postgresDB
+    .select({
+      id: coursesTable.id,
+      name: coursesTable.name,
+      public: coursesTable.public,
+      rating: coursesTable.rating,
+      img_url: coursesTable.img_url,
+      category_id: coursesTable.category_id,
+    })
+    .from(coursesTable)
+    .where(eq(coursesTable.instructor_id, userId));
+
+  return result;
+}
