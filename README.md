@@ -1,3 +1,8 @@
+# STILL IN DEVELOPMENT
+
+https://4all-gold.vercel.app/
+
+
 TODO:
 [X] = Switch to drizzle ORM
 [X] = Add userId to JWT
