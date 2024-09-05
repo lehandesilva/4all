@@ -9,10 +9,12 @@ export default function SectionMenu({
   sectionName,
   all_sections_details,
   currentSectionId,
+  courseId,
 }: {
   sectionName: string;
   all_sections_details: section_for_course[] | null;
   currentSectionId: string;
+  courseId: string;
 }) {
   const [expandedMenu, setExpandedMenu] = useState<boolean>(false);
   const expandMenu = () => {
@@ -37,20 +39,30 @@ export default function SectionMenu({
         {expandedMenu === false ? (
           <p className="text-s-5 ml-7 text-xl">{sectionName}</p>
         ) : (
-          all_sections_details?.map((section) => (
-            <div key={section.id}>
-              <Link key={section.id} href={`${section.id}`}>
-                <p
-                  className={clsx("text-s-5 ml-7 text-xl", {
-                    "border-b-2 my-2 text-s-3 text-2xl":
-                      section.id === currentSectionId,
-                  })}
-                >
-                  {section.name}
-                </p>
-              </Link>
-            </div>
-          ))
+          <div>
+            {all_sections_details?.map((section) => (
+              <div key={section.id}>
+                <Link key={section.id} href={`${section.id}`}>
+                  <p
+                    className={clsx(
+                      "text-s-5 ml-7 text-base hover:text-s-3 hover:text-lg",
+                      {
+                        "my-2 text-s-3 border-b-2 ":
+                          section.id === currentSectionId,
+                      }
+                    )}
+                  >
+                    {section.name}
+                  </p>
+                </Link>
+              </div>
+            ))}
+            <Link key="courseID" href={`/course/${courseId}`}>
+              <p className="text-s-5 ml-7 text-sm my-2 hover:text-s-3 hover:text-lg">
+                Go back to main page
+              </p>
+            </Link>
+          </div>
         )}
       </div>
     </div>

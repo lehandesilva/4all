@@ -81,3 +81,11 @@ export type CurrentUserCourses = {
   img_url: string | null;
   category_id: string | null;
 };
+
+export type Courses_for_page = {
+  id: string | null;
+  name: string | null;
+  instructor_name: string | null;
+  rating: string | null;
+  img_url: string | null;
+};

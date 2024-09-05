@@ -26,7 +26,9 @@ export default async function CourseDetails({ course }: { course: Course }) {
           <p className="text-s-3 text-sm mb-14">by {course.instructor_name}</p>
           <p className="text-s-5 mb-8">{course.description}</p>
           <div className="flex">
-            <p className="text-s-5 text-2xl mr-2 self-center">4.5</p>
+            <p className="text-s-5 text-2xl mr-2 self-center">
+              {course.rating}
+            </p>
             <IoStar className="text-amber-400 text-2xl " />
           </div>
         </div>

@@ -46,7 +46,7 @@ export default function Profile({
         {courses.map((course, index) => (
           <div
             key={index}
-            className="flex justify-between bg-p-2 rounded-2xl shadow-2xl px-5 py-4 my-5"
+            className="flex justify-between hover:bg-p-1 bg-p-2 rounded-2xl shadow-lg hover:shadow-2xl px-5 py-4 my-5"
           >
             <div className="flex">
               <Image
@@ -54,6 +54,7 @@ export default function Profile({
                 alt={course.name || "Untitled Course"}
                 width={240}
                 height={240}
+                className="rounded-xl"
               />
               <h3 className="ml-10 text-s-5 text-lg">{course.name}</h3>
             </div>
@@ -61,7 +62,7 @@ export default function Profile({
               <p className="w-min h-min px-3 py-1 bg-s-6 text-sm rounded-full text-s-3">
                 {course.public ? "Public" : "Private"}
               </p>
-              <div className="">
+              <div className="w-[70.5px]">
                 <button className="">
                   <Link href={`/course/${course.id}/edit`}>
                     <CiEdit className="text-s-1 text-3xl" />

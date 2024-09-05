@@ -1,16 +1,10 @@
-type Course = {
-  id: string;
-  name: string;
-  instructor_name: string;
-  rating: string;
-  img_url: string;
-};
-
+import { fetchCoursesForHomePage } from "./server/queries";
+import CoursesGrid from "./ui/home/coursesGrid";
 export default async function Home() {
-  // const courses = await fetchCourses();
+  const courses = await fetchCoursesForHomePage();
   return (
     <main>
-      {/* <CoursesGrid heading="Recommendations" data={courses as Course[]} /> */}
+      <CoursesGrid courses={courses} title="Recommended" />
     </main>
   );
 }

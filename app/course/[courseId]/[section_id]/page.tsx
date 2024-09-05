@@ -23,8 +23,9 @@ export default async function Page({
           sectionName={section.name}
           all_sections_details={sections}
           currentSectionId={params.section_id}
+          courseId={params.courseId}
         />
-        <div className="mt-16 flex flex-col items-center w-4/5">
+        <div className="mt-16 flex flex-col w-4/5">
           {section.blocks?.map((block, index) => (
             <div key={index}>
               <Block block={block} />

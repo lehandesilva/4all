@@ -15,6 +15,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import crypto from "crypto";
 import { eq } from "drizzle-orm";
 import { block, block_for_editor } from "./definitions";
+import { error } from "console";
 
 const generateFileName = (bytes = 32) =>
   crypto.randomBytes(bytes).toString("hex");
@@ -142,6 +143,7 @@ export async function createNewCourse(formData: FormData, signedURL: string) {
         img_url: signedURL.split("?")[0],
         category_id: category,
         public: false,
+        rating: "0",
       })
       .returning({ id: coursesTable.id });
 
@@ -294,7 +296,7 @@ export async function createSection(
     return { error: true, message: "Database Error: Failed to create section" };
   }
   revalidatePath("/");
-  redirect(`/course/${courseId}`);
+  return { error: false, message: "Section saved successfully" };
 }
 
 // make course public logic

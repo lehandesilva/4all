@@ -4,7 +4,7 @@ import Image from "next/image";
 export default function Block({ block }: { block: block }) {
   if (block.type === "subtitle") {
     return (
-      <h2 key={block.id} className="my-4 text-s-3 text-xl border-b-2 ">
+      <h2 key={block.id} className="my-4 text-s-3 text-xl font-bold">
         {block.content}
       </h2>
     );
@@ -21,7 +21,7 @@ export default function Block({ block }: { block: block }) {
         alt={`Image ${block.id}`}
         width={1280}
         height={720}
-        className="my-10"
+        className="my-10 self-center"
         key={block.id}
       />
     );
@@ -30,7 +30,7 @@ export default function Block({ block }: { block: block }) {
       <video
         key={block.id}
         src={block.content}
-        className="my-10"
+        className="my-10 self-center"
         width="1280"
         height="720"
         controls
