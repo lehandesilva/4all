@@ -1,4 +1,4 @@
-import { Courses_for_page } from "@/app/server/definitions";
+import { Courses_for_page } from "../../server/definitions";
 import Image from "next/image";
 import Link from "next/link";
 

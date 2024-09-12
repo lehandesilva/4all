@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import "@/app/ui/globals.css";
-import { inter } from "@/app/ui/fonts";
+import "./ui/globals.css";
+import { inter } from "./ui/fonts";
 import Header from "./ui/header";
 
 export const metadata: Metadata = {

@@ -1,9 +1,12 @@
-import { section_for_section } from "@/app/server/definitions";
-import { fetchCourseDeets, fetchSectionById } from "@/app/server/queries";
-import SectionEdit from "@/app/ui/editor/section-edit";
+import { section_for_section } from "@/frontend/app/server/definitions";
+import {
+  fetchCourseDeets,
+  fetchSectionById,
+} from "@/frontend/app/server/queries";
+import SectionEdit from "@/frontend/app/ui/editor/section-edit";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import { createId } from "@/app/lib/util";
+import { createId } from "@/frontend/app/lib/util";
 
 export default async function Page({
   params,
