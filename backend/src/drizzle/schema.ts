@@ -8,7 +8,11 @@ import {
   jsonb,
   boolean,
 } from "drizzle-orm/pg-core";
-import { section_for_course, history, block } from "../definitions";
+import {
+  section_for_course,
+  history,
+  block,
+} from "../../../shared/definitions";
 
 export const roleEnum = pgEnum("role", ["admin", "user", "paidUser"]);
 

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { signOut } from "@/auth";
-import { CurrentUserCourses } from "@/app/server/definitions";
+import { CurrentUserCourses } from "../../../../shared/definitions";
 import { CiEdit } from "react-icons/ci";
 import Link from "next/link";
 import DeleteCourseBtn from "./deleteCourseBtn";
