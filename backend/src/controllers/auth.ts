@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
+import { checkEmailExists, createUser } from "../services/auth";
 
 export async function signUp(req: Request, res: Response, next: NextFunction) {
   try {
@@ -11,7 +12,19 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
     }
     const email = req.body.email;
     const name = req.body.name;
+    const age = req.body.age;
     const password = req.body.password;
-    const hashedPw = bcrypt.hash(password, 12);
+    const email_exists = await checkEmailExists(email);
+    if (email_exists && email_exists.length > 0) {
+      res.status(409).json({ message: "User already exists" });
+      return;
+    } else {
+      const hashedPw = await bcrypt.hash(password, 12);
+      const result = await createUser(name, email, hashedPw, age);
+      res.status(201).json({
+        message: "User created successfully",
+        userId: result[0].userId,
+      });
+    }
   } catch (error) {}
 }

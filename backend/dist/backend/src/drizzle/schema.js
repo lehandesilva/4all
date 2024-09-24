@@ -7,9 +7,8 @@ exports.users = (0, pg_core_1.pgTable)("user", {
     id: (0, pg_core_1.text)("id")
         .primaryKey()
         .$defaultFn(() => crypto.randomUUID()),
-    name: (0, pg_core_1.text)("name"),
+    name: (0, pg_core_1.text)("name").notNull(),
     email: (0, pg_core_1.text)("email").notNull(),
-    emailVerified: (0, pg_core_1.timestamp)("emailVerified", { mode: "date" }),
     password: (0, pg_core_1.text)("password").notNull(),
     image: (0, pg_core_1.text)("image"),
     role: (0, pg_core_1.text)("role").notNull(),

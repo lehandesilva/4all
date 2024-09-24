@@ -8,6 +8,5 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const postgres_js_1 = require("drizzle-orm/postgres-js");
 const postgres_1 = __importDefault(require("postgres"));
 dotenv_1.default.config();
-// const client = postgres("postgresql://admin:admin@localhost:5432/elearning_db");
 const client = (0, postgres_1.default)(process.env.DATABASE_URL);
 exports.db = (0, postgres_js_1.drizzle)(client);

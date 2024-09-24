@@ -178,30 +178,28 @@ export async function createNewUser(formData: FormData) {
     return { error: true, message: errorMessage };
   }
 
-  // Check if user already exists
   const { name, email, age, password } = validatedFields.data;
 
-  try {
-    const existingUser = await checkEmailExists(email);
-    if (existingUser.length > 0) {
-      return { error: true, message: "User already exists" };
-    }
-  } catch (err) {
-    return { error: true, message: "Database Error: Failed to check email" };
-  }
-  // If user does not exist, create new user
-  // Hash password
-  const hashedPassword = await bcrypt.hash(password, 10);
   // Insert user into database
   try {
-    const result = await postgresDB.insert(users).values({
-      name: name,
-      email: email,
-      password: hashedPassword,
-      age: age,
-      role: "user",
+    console.log("called");
+    const response = await fetch("http://localhost:8080/auth/signup", {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        password: password,
+        age: age,
+      }),
     });
-    redirect("/login");
+    if (response.ok) {
+      redirect("/login");
+    } else if (response.status === 409) {
+      return { error: true, message: "Maneee who you fuckin wit" };
+    }
   } catch (error) {
     console.log(error);
     return { error: true, message: "Database Error: Failed to create user" };
