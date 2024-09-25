@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
-import { checkEmailExists, createUser } from "../services/auth";
+import { checkEmailExists, createUser, getUserInfo } from "../services/auth";
+import { error } from "console";
 
 export async function signUp(req: Request, res: Response, next: NextFunction) {
   try {
@@ -17,7 +18,6 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
     const email_exists = await checkEmailExists(email);
     if (email_exists && email_exists.length > 0) {
       res.status(409).json({ message: "User already exists" });
-      return;
     } else {
       const hashedPw = await bcrypt.hash(password, 12);
       const result = await createUser(name, email, hashedPw, age);
@@ -25,6 +25,22 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
         message: "User created successfully",
         userId: result[0].userId,
       });
+    }
+  } catch (error) {}
+}
+
+export async function login(req: Request, res: Response, next: NextFunction) {
+  try {
+    const email = req.body.email;
+    const password = req.body.email;
+    const user = await getUserInfo(email);
+    if (!user) {
+      res.status(401).json({ message: "No account under this email" });
+    } else {
+      const result = await bcrypt.compare(password, user[0].password);
+      if (!result) {
+        res.status(401).json({ message: "Wrong password" });
+      }
     }
   } catch (error) {}
 }

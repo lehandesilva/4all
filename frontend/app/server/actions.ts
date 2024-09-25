@@ -195,15 +195,14 @@ export async function createNewUser(formData: FormData) {
         age: age,
       }),
     });
-    if (response.ok) {
-      redirect("/login");
-    } else if (response.status === 409) {
+    if (response.status === 409) {
       return { error: true, message: "Maneee who you fuckin wit" };
     }
   } catch (error) {
     console.log(error);
     return { error: true, message: "Database Error: Failed to create user" };
   }
+  redirect("/login");
 }
 
 const styleSchema = z.object({

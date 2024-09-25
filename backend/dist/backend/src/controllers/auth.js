@@ -30,10 +30,11 @@ function signUp(req, res, next) {
             const password = req.body.password;
             const email_exists = yield (0, auth_1.checkEmailExists)(email);
             if (email_exists && email_exists.length > 0) {
+                console.log("exists block");
                 res.status(409).json({ message: "User already exists" });
-                return;
             }
             else {
+                console.log("doesnt exists block");
                 const hashedPw = yield bcryptjs_1.default.hash(password, 12);
                 const result = yield (0, auth_1.createUser)(name, email, hashedPw, age);
                 res.status(201).json({
