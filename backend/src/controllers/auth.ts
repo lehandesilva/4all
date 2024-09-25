@@ -40,6 +40,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
       const result = await bcrypt.compare(password, user[0].password);
       if (!result) {
         res.status(401).json({ message: "Wrong password" });
+      } else {
       }
     }
   } catch (error) {}
