@@ -13,8 +13,8 @@ export default function LoginForm() {
     event.preventDefault();
     try {
       const response = await authenticate(new FormData(event.currentTarget));
-      if (response) {
-        setErrorMessage(response);
+      if (response?.error) {
+        setErrorMessage(response.message);
         return;
       }
     } catch (error) {

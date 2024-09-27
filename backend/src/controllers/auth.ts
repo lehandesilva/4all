@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
 import { checkEmailExists, createUser, getUserInfo } from "../services/auth";
-import { error } from "console";
+import jwt from "jsonwebtoken";
 
 export async function signUp(req: Request, res: Response, next: NextFunction) {
   try {
@@ -32,15 +32,23 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
 export async function login(req: Request, res: Response, next: NextFunction) {
   try {
     const email = req.body.email;
-    const password = req.body.email;
+    const password = req.body.password;
     const user = await getUserInfo(email);
+    console.log(user);
     if (!user) {
       res.status(401).json({ message: "No account under this email" });
     } else {
       const result = await bcrypt.compare(password, user[0].password);
+      console.log(result);
       if (!result) {
         res.status(401).json({ message: "Wrong password" });
       } else {
+        const token = jwt.sign(
+          { id: user[0].id, email: user[0].email, role: user[0].role },
+          process.env.PRIVATE_KEY as string,
+          { expiresIn: "1h" }
+        );
+        res.status(200).json({ token: token, userId: user[0].id });
       }
     }
   } catch (error) {}

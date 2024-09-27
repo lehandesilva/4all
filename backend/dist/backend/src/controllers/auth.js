@@ -13,9 +13,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.signUp = signUp;
+exports.login = login;
 const express_validator_1 = require("express-validator");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const auth_1 = require("../services/auth");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 function signUp(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -30,17 +32,40 @@ function signUp(req, res, next) {
             const password = req.body.password;
             const email_exists = yield (0, auth_1.checkEmailExists)(email);
             if (email_exists && email_exists.length > 0) {
-                console.log("exists block");
                 res.status(409).json({ message: "User already exists" });
             }
             else {
-                console.log("doesnt exists block");
                 const hashedPw = yield bcryptjs_1.default.hash(password, 12);
                 const result = yield (0, auth_1.createUser)(name, email, hashedPw, age);
                 res.status(201).json({
                     message: "User created successfully",
                     userId: result[0].userId,
                 });
+            }
+        }
+        catch (error) { }
+    });
+}
+function login(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const email = req.body.email;
+            const password = req.body.password;
+            const user = yield (0, auth_1.getUserInfo)(email);
+            console.log(user);
+            if (!user) {
+                res.status(401).json({ message: "No account under this email" });
+            }
+            else {
+                const result = yield bcryptjs_1.default.compare(password, user[0].password);
+                console.log(result);
+                if (!result) {
+                    res.status(401).json({ message: "Wrong password" });
+                }
+                else {
+                    const token = jsonwebtoken_1.default.sign({ id: user[0].id, email: user[0].email, role: user[0].role }, process.env.PRIVATE_KEY, { expiresIn: "1h" });
+                    res.status(200).json({ token: token, userId: user[0].id });
+                }
             }
         }
         catch (error) { }

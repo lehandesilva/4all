@@ -32,7 +32,12 @@ export async function checkEmailExists(email: string) {
 
 export async function getUserInfo(email: string) {
   const result = await db
-    .select({ email: users.email, password: users.password, role: users.role })
+    .select({
+      id: users.id,
+      email: users.email,
+      password: users.password,
+      role: users.role,
+    })
     .from(users)
     .where(eq(users.email, email));
   return result;

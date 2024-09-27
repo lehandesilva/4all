@@ -16,6 +16,7 @@ import crypto from "crypto";
 import { eq } from "drizzle-orm";
 import { block, block_for_editor } from "./definitions";
 import { error } from "console";
+import { cookies } from "next/headers";
 
 const generateFileName = (bytes = 32) =>
   crypto.randomBytes(bytes).toString("hex");
@@ -79,23 +80,32 @@ export async function authenticate(formData: FormData) {
   const email = formData.get("email");
 
   try {
-    await signIn("credentials", {
-      email,
-      password,
-      redirect: true,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+    const response = await fetch("http://localhost:8080/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
     });
-  } catch (error) {
-    if (error instanceof AuthError) {
-      switch (error.type) {
-        case "CredentialsSignin":
-          return "Invalid credentials.";
-        default:
-          return "Something went wrong.";
-      }
+    const resData = await response.json();
+    console.log(resData);
+    if (response.ok) {
+      cookies().set({
+        name: "token",
+        value: resData.token,
+        httpOnly: true,
+        secure: true,
+        path: "/",
+        maxAge: 60 * 60, // 1 hour, matches the token expiration
+      });
+    } else {
+      return { error: true, message: resData.message };
     }
-    throw error;
-  }
+    redirect("/");
+  } catch (error) {}
 }
 
 const courseFormValidation = z.object({
