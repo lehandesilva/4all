@@ -44,12 +44,13 @@ function getUserInfo(email) {
         const result = yield db_1.db
             .select({
             id: schema_1.users.id,
+            name: schema_1.users.name,
             email: schema_1.users.email,
             password: schema_1.users.password,
             role: schema_1.users.role,
         })
             .from(schema_1.users)
             .where((0, drizzle_orm_1.eq)(schema_1.users.email, email));
-        return result;
+        return result[0];
     });
 }

@@ -1,15 +1,15 @@
 import Image from "next/image";
-import { signOut } from "@/auth";
-import { CurrentUserCourses } from "../../../../shared/definitions";
+import { CurrentUserCourses, userAuth } from "../../../../shared/definitions";
 import { CiEdit } from "react-icons/ci";
 import Link from "next/link";
 import DeleteCourseBtn from "./deleteCourseBtn";
+import { signOut } from "@/app/server/actions";
 
 export default function Profile({
   user,
   courses,
 }: {
-  user: any;
+  user: userAuth;
   courses: CurrentUserCourses[];
 }) {
   return (
@@ -24,7 +24,7 @@ export default function Profile({
             <form
               action={async () => {
                 "use server";
-                await signOut({ redirectTo: "/" });
+                await signOut();
               }}
             >
               <button className="px-4 py-2 bg-s-6 rounded-full text-s-3 ">

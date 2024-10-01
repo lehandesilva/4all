@@ -12,7 +12,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@auth/drizzle-adapter": "^1.1.0",
     "@aws-sdk/client-s3": "^3.554.0",
     "@aws-sdk/s3-request-presigner": "^3.554.0",
     "@vercel/postgres": "^0.9.0",
@@ -20,7 +19,6 @@
     "dotenv": "^16.3.1",
     "drizzle-orm": "^0.30.10",
     "next": "^14.2.1",
-    "next-auth": "^5.0.0-beta.18",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.2.1",

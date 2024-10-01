@@ -1,20 +1,20 @@
-import { auth } from "@/auth";
 import Profile from "../ui/profile/profile-view";
 import Link from "next/link";
 import { fetchAllCoursesByCurrentUser } from "../server/queries";
 import { notFound } from "next/navigation";
+import { userAuthCheck } from "../server/actions";
 export default async function Page() {
-  const session = await auth();
-  if (!session?.user.id) {
+  const user = await userAuthCheck();
+  if (!user?.userId) {
     notFound();
   }
-  const userId = session?.user.id;
+  const userId = user.userId;
 
   const courses = await fetchAllCoursesByCurrentUser(userId);
 
   return (
     <>
-      <Profile user={session?.user} courses={courses} />
+      <Profile user={user} courses={courses} />
     </>
   );
 }

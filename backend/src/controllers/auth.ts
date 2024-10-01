@@ -36,20 +36,34 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     const user = await getUserInfo(email);
     console.log(user);
     if (!user) {
-      res.status(401).json({ message: "No account under this email" });
+      return res.status(401).json({ message: "No account under this email" });
     } else {
-      const result = await bcrypt.compare(password, user[0].password);
+      const result = await bcrypt.compare(password, user.password);
       console.log(result);
       if (!result) {
-        res.status(401).json({ message: "Wrong password" });
+        return res.status(401).json({ message: "Wrong password" });
       } else {
         const token = jwt.sign(
-          { id: user[0].id, email: user[0].email, role: user[0].role },
+          { id: user.id, name: user.name, email: user.email, role: user.role },
           process.env.PRIVATE_KEY as string,
           { expiresIn: "1h" }
         );
-        res.status(200).json({ token: token, userId: user[0].id });
+        // Respond with user info, not the token
+        return res.status(200).json({ token });
       }
     }
   } catch (error) {}
+}
+
+export async function logout(req: Request, res: Response, next: NextFunction) {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+    });
+    return res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    return res.status(401).json({ message: "token invalid" });
+  }
 }

@@ -7,6 +7,13 @@ export type User = {
   password: string;
 };
 
+export type userAuth = {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+};
+
 export type Course = {
   id: string | null;
   name: string | null;
