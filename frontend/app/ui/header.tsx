@@ -6,7 +6,6 @@ import { userAuthCheck } from "../server/actions";
 
 export default async function Header() {
   const result = await userAuthCheck();
-  console.log(result);
 
   return (
     <>

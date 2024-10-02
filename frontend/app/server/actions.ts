@@ -372,7 +372,7 @@ export async function authenticate(formData: FormData) {
         secure: true, // Send only over HTTPS
         path: "/",
         sameSite: "strict",
-        maxAge: 60 * 60, // 1 hour, matches the token expiration
+        maxAge: 60 * 60 * 24 * 30, // 1 month token expiration
       });
     }
   } catch (error) {

@@ -48,7 +48,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
           process.env.PRIVATE_KEY as string,
           { expiresIn: "1h" }
         );
-        // Respond with user info, not the token
+        // Respond with token
         return res.status(200).json({ token });
       }
     }
