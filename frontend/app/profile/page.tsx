@@ -5,10 +5,10 @@ import { notFound } from "next/navigation";
 import { userAuthCheck } from "../server/actions";
 export default async function Page() {
   const user = await userAuthCheck();
-  if (!user?.userId) {
+  if (!user?.id) {
     notFound();
   }
-  const userId = user.userId;
+  const userId = user.id;
 
   const courses = await fetchAllCoursesByCurrentUser(userId);
 

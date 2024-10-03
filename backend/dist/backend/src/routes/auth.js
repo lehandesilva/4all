@@ -16,5 +16,4 @@ router.put("/signup", [
 ], auth_1.signUp);
 router.post("/login", auth_1.login);
 router.get("/check", jwt_auth_1.verifyToken, auth_check_1.authCheck);
-router.post("/logout", auth_1.logout);
 exports.default = router;

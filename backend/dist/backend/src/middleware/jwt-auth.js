@@ -17,8 +17,8 @@ function verifyToken(req, res, next) {
     }
     try {
         // Verify the token using the secret key
-        console.log("checking token");
         const decoded = jsonwebtoken_1.default.verify(token, process.env.PRIVATE_KEY);
+        console.log("checking token");
         if (typeof decoded !== "string") {
             const payload = decoded; // Type casting to the correct interface
             req.user = payload; // Attach decoded token (user info) to the request object
@@ -26,6 +26,7 @@ function verifyToken(req, res, next) {
         next(); // Continue to the next middleware or route handler
     }
     catch (error) {
+        console.log("token invalid");
         return res.status(401).json({ message: "Token is invalid or expired" });
     }
 }

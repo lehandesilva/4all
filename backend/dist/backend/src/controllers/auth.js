@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.signUp = signUp;
 exports.login = login;
-exports.logout = logout;
 const express_validator_1 = require("express-validator");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const auth_1 = require("../services/auth");
@@ -65,26 +64,11 @@ function login(req, res, next) {
                 }
                 else {
                     const token = jsonwebtoken_1.default.sign({ id: user.id, name: user.name, email: user.email, role: user.role }, process.env.PRIVATE_KEY, { expiresIn: "1h" });
-                    // Respond with user info, not the token
+                    // Respond with token
                     return res.status(200).json({ token });
                 }
             }
         }
         catch (error) { }
-    });
-}
-function logout(req, res, next) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            res.clearCookie("token", {
-                httpOnly: true,
-                sameSite: "strict",
-                secure: process.env.NODE_ENV === "production",
-            });
-            return res.status(200).json({ message: "Logged out successfully" });
-        }
-        catch (error) {
-            return res.status(401).json({ message: "token invalid" });
-        }
     });
 }

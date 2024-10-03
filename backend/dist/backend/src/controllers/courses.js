@@ -19,7 +19,7 @@ function getRecommendedCourses(req, res, next) {
             res.status(200).json(result);
         }
         catch (error) {
-            // return {}
+            return error;
         }
     });
 }

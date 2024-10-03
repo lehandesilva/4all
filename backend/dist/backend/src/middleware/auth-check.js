@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.authCheck = authCheck;
 function authCheck(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(req.user);
         return res.status(200).json({ authenticated: true, user: req.user });
     });
 }

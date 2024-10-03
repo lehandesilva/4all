@@ -323,28 +323,24 @@ const reviewValidation = z.object({
 //   redirect(`/course/${courseId}`);
 // }
 
-// // Delete course
-// export async function deleteCourse(courseId: string) {
-//   const session = await auth();
-
-//   const instructor_id = await postgresDB
-//     .select({ instructor_id: coursesTable.instructor_id })
-//     .from(coursesTable)
-//     .where(eq(coursesTable.id, courseId));
-
-//   if (session?.user.id !== instructor_id[0].instructor_id) {
-//     redirect("/");
-//   } else {
-//     await postgresDB
-//       .delete(reviewsTable)
-//       .where(eq(reviewsTable.course_id, courseId));
-//     await postgresDB.delete(coursesTable).where(eq(coursesTable.id, courseId));
-//     revalidatePath("/");
-//     redirect("/profile");
-//   }
-// }
-
 // Convereted actions
+
+// Delete course
+export async function deleteCourse(courseId: string) {
+  try {
+    const token = cookies().get("token")?.value;
+    await fetch(`${process.env.API_URL}/users/${courseId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return { error: true, message: "An error occurred" };
+  }
+  redirect("/");
+}
 
 export async function authenticate(formData: FormData) {
   const password = formData.get("password");
@@ -356,7 +352,6 @@ export async function authenticate(formData: FormData) {
       headers: {
         "Content-type": "application/json",
       },
-      credentials: "include",
       body: JSON.stringify({
         email: email,
         password: password,
@@ -443,11 +438,6 @@ export async function userAuthCheck() {
 }
 
 export async function signOut() {
-  try {
-    await fetch("http://localhost:8080/auth/logout", {
-      method: "POST",
-      credentials: "include",
-    });
-  } catch (error) {}
+  cookies().delete("token");
   redirect("/");
 }

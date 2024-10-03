@@ -43,7 +43,7 @@ export default function Profile({
             </Link>
           </button>
         </div>
-        {courses.map((course, index) => (
+        {courses?.map((course, index) => (
           <div
             key={index}
             className="flex justify-between hover:bg-p-1 bg-p-2 rounded-2xl shadow-lg hover:shadow-2xl px-5 py-4 my-5"

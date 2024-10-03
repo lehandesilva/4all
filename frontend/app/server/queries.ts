@@ -8,6 +8,11 @@ import {
   users,
 } from "./db/schema";
 import { eq } from "drizzle-orm";
+import {
+  Courses_for_page,
+  CurrentUserCourses,
+} from "../../../shared/definitions";
+import { cookies } from "next/headers";
 
 export async function fetchReviews(courseId: string) {
   const result = await postgresDB
@@ -74,31 +79,32 @@ export async function fetchAllSectionsOfCourse(courseId: string) {
 }
 
 export async function fetchAllCoursesByCurrentUser(userId: string) {
-  const result = await postgresDB
-    .select({
-      id: coursesTable.id,
-      name: coursesTable.name,
-      public: coursesTable.public,
-      rating: coursesTable.rating,
-      img_url: coursesTable.img_url,
-      category_id: coursesTable.category_id,
-    })
-    .from(coursesTable)
-    .where(eq(coursesTable.instructor_id, userId));
+  const token = cookies().get("token")?.value;
+  const response = await fetch(
+    `${process.env.API_URL}/users/${userId}/courses`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
-  return result;
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data: CurrentUserCourses[] = await response.json(); // Parse the JSON
+  return data;
 }
 
 export async function fetchCoursesForHomePage() {
-  const result = await postgresDB
-    .select({
-      id: coursesTable.id,
-      name: coursesTable.name,
-      instructor_name: coursesTable.instructor_name,
-      rating: coursesTable.rating,
-      img_url: coursesTable.img_url,
-    })
-    .from(coursesTable)
-    .where(eq(coursesTable.public, true));
-  return result;
+  const response = await fetch(`${process.env.API_URL}/course`);
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data: Courses_for_page[] = await response.json(); // Parse the JSON
+  return data;
 }

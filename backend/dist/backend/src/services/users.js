@@ -9,35 +9,40 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.queryAllCoursesService = queryAllCoursesService;
-exports.getCourseInstructorById = getCourseInstructorById;
+exports.queryCoursesFromInstructorById = queryCoursesFromInstructorById;
+exports.queryCourseInstructorFromCourseId = queryCourseInstructorFromCourseId;
+exports.deleteCourseService = deleteCourseService;
 const drizzle_orm_1 = require("drizzle-orm");
 const db_1 = require("../drizzle/db");
 const schema_1 = require("../drizzle/schema");
-function queryAllCoursesService() {
+function queryCoursesFromInstructorById(userId) {
     return __awaiter(this, void 0, void 0, function* () {
         const result = yield db_1.db
             .select({
             id: schema_1.coursesTable.id,
             name: schema_1.coursesTable.name,
-            instructor_name: schema_1.coursesTable.instructor_name,
+            public: schema_1.coursesTable.public,
             rating: schema_1.coursesTable.rating,
             img_url: schema_1.coursesTable.img_url,
+            category_id: schema_1.coursesTable.category_id,
         })
             .from(schema_1.coursesTable)
-            .where((0, drizzle_orm_1.eq)(schema_1.coursesTable.public, true));
+            .where((0, drizzle_orm_1.eq)(schema_1.coursesTable.instructor_id, userId));
         return result;
     });
 }
-function getCourseInstructorById(courseId) {
+function queryCourseInstructorFromCourseId(courseId) {
     return __awaiter(this, void 0, void 0, function* () {
-        const result = yield db_1.db
-            .select({
-            courseId: schema_1.coursesTable.id,
-            instructorId: schema_1.coursesTable.instructor_id,
-        })
+        const result = db_1.db
+            .select({ instructor_id: schema_1.coursesTable.instructor_id })
             .from(schema_1.coursesTable)
             .where((0, drizzle_orm_1.eq)(schema_1.coursesTable.id, courseId));
-        return result[0];
+        return result;
+    });
+}
+function deleteCourseService(courseId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield db_1.db.delete(schema_1.reviewsTable).where((0, drizzle_orm_1.eq)(schema_1.reviewsTable.course_id, courseId));
+        yield db_1.db.delete(schema_1.coursesTable).where((0, drizzle_orm_1.eq)(schema_1.coursesTable.id, courseId));
     });
 }

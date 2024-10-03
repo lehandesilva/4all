@@ -5,6 +5,5 @@ export async function authCheck(
   res: Response,
   next: NextFunction
 ) {
-  console.log(req.user);
   return res.status(200).json({ authenticated: true, user: req.user });
 }

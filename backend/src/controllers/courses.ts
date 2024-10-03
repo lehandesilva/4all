@@ -11,6 +11,6 @@ export async function getRecommendedCourses(
     const result = await queryAllCoursesService();
     res.status(200).json(result);
   } catch (error) {
-    // return {}
+    return error;
   }
 }
