@@ -20,5 +20,3 @@ https://4all-gold.vercel.app/
 [] Elastic Search
 
 [] NLP sentiment analysis for reviews
-
-[]

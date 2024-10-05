@@ -1,11 +1,11 @@
 "use client";
-// import { deleteCourse } from "@/app/server/actions";
+import { deleteCourse } from "@/app/server/actions";
 import { MdDeleteOutline } from "react-icons/md";
 
 export default function DeleteCourseBtn({ courseId }: { courseId: string }) {
   const handleDeleteCourse = async (courseId: string | null) => {
     if (courseId !== null) {
-      // await deleteCourse(courseId);
+      await deleteCourse(courseId);
     }
   };
   return (

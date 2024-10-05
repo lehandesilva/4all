@@ -30,3 +30,28 @@ export async function deleteCourseService(courseId: string) {
   await db.delete(reviewsTable).where(eq(reviewsTable.course_id, courseId));
   await db.delete(coursesTable).where(eq(coursesTable.id, courseId));
 }
+
+export async function insertNewCourse(
+  name: string,
+  description: string,
+  userId: string,
+  userName: string,
+  url: string,
+  category: string
+) {
+  const result = await db
+    .insert(coursesTable)
+    .values({
+      name: name,
+      description: description,
+      instructor_id: userId,
+      instructor_name: userName,
+      img_url: url,
+      category_id: category,
+      public: false,
+      rating: "0",
+    })
+    .returning({ id: coursesTable.id });
+
+  return result[0].id;
+}

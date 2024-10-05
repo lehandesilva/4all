@@ -51,91 +51,96 @@ const signupFormSchema = z.object({
   password: z.string().min(8),
 });
 
-// export async function geteSignedUrl(
-//   type: string,
-//   size: number,
-//   checksum: string
-// ) {
-//   const session = await auth();
-//   if (!session) {
-//     return { failure: "Not authenticated" };
-//   }
-//   if (!acceptedTypes_EDITOR.includes(type)) {
-//     return { failure: "Invalid file type" };
-//   }
+export async function geteSignedUrl(
+  type: string,
+  size: number,
+  checksum: string
+) {
+  const user = await userAuthCheck();
+  if (!user) {
+    return { failure: "Not authenticated" };
+  }
 
-//   if (size > maxSize) {
-//     return { failure: "Invalid file size" };
-//   }
+  if (!acceptedTypes_EDITOR.includes(type)) {
+    return { failure: "Invalid file type" };
+  }
 
-//   const putObjctCommand = new PutObjectCommand({
-//     Bucket: process.env.AWS_BUCKET_NAME!,
-//     Key: generateFileName(),
-//     ContentType: type,
-//     ContentLength: size,
-//     ChecksumSHA256: checksum,
-//     Metadata: {
-//       userId: session.user.id !== undefined ? session.user.id : "",
-//     },
-//   });
+  if (size > maxSize) {
+    return { failure: "Invalid file size" };
+  }
 
-//   const signedURL = await getSignedUrl(s3, putObjctCommand, {
-//     expiresIn: 60,
-//   });
+  const putObjctCommand = new PutObjectCommand({
+    Bucket: process.env.AWS_BUCKET_NAME!,
+    Key: generateFileName(),
+    ContentType: type,
+    ContentLength: size,
+    ChecksumSHA256: checksum,
+    Metadata: {
+      userId: user.id !== undefined ? user.id : "",
+    },
+  });
 
-//   return { success: { url: signedURL } };
-// }
+  const signedURL = await getSignedUrl(s3, putObjctCommand, {
+    expiresIn: 60,
+  });
 
-// export async function createNewCourse(formData: FormData, signedURL: string) {
-//   const session = await auth();
-//   if (!session) {
-//     return { error: true, message: "Not authenticated" };
-//   }
+  return { success: { url: signedURL } };
+}
 
-//   const validatedFields = courseFormValidation.safeParse({
-//     name: formData.get("name"),
-//     description: formData.get("description"),
-//     category: formData.get("categoryId"),
-//   });
+export async function createNewCourse(formData: FormData, signedURL: string) {
+  const user = await userAuthCheck();
+  if (!user) {
+    return { error: true, message: "Not authenticated" };
+  }
 
-//   if (!validatedFields.success) {
-//     let errorMessage = "";
-//     validatedFields.error.issues.forEach((issue) => {
-//       errorMessage = errorMessage + issue.path[0] + ": " + issue.message + ". ";
-//     });
-//     return { error: true, message: errorMessage };
-//   }
+  const validatedFields = courseFormValidation.safeParse({
+    name: formData.get("name"),
+    description: formData.get("description"),
+    category: formData.get("categoryId"),
+  });
 
-//   if (!signedURL) {
-//     return { error: true, message: "Image was not uploaded" };
-//   }
+  if (!validatedFields.success) {
+    let errorMessage = "";
+    validatedFields.error.issues.forEach((issue) => {
+      errorMessage = errorMessage + issue.path[0] + ": " + issue.message + ". ";
+    });
+    return { error: true, message: errorMessage };
+  }
 
-//   const { name, description, category } = validatedFields.data;
+  if (!signedURL) {
+    return { error: true, message: "Image was not uploaded" };
+  }
 
-//   let courseId: string | null = null;
+  const { name, description, category } = validatedFields.data;
 
-//   try {
-//     const result = await postgresDB
-//       .insert(coursesTable)
-//       .values({
-//         name: name,
-//         description: description,
-//         instructor_id: session.user.id,
-//         instructor_name: session.user.name,
-//         img_url: signedURL.split("?")[0],
-//         category_id: category,
-//         public: false,
-//         rating: "0",
-//       })
-//       .returning({ id: coursesTable.id });
+  let courseId: string | null = null;
 
-//     courseId = result[0].id;
-//   } catch (error) {
-//     return { error: true, message: "Database Error: Failed to create course" };
-//   }
-//   revalidatePath("/");
-//   redirect(`/course/${courseId}`);
-// }
+  try {
+    const token = cookies().get("token")?.value;
+    const response = await fetch("http://localhost:8080/users/newCourse", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        name: name,
+        description: description,
+        url: signedURL.split("?")[0],
+        category: category,
+      }),
+    });
+
+    const resData = await response.json();
+    courseId = resData.courseId;
+  } catch (error) {
+    return { error: true, message: "Database Error: Failed to create course" };
+  }
+  revalidatePath("/");
+  if (courseId !== null) {
+    redirect(`/course/${courseId}`);
+  }
+}
 
 const styleSchema = z.object({
   color: z.string().nullable(),

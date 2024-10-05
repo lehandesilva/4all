@@ -3,9 +3,10 @@ import SearchBox from "./searchBox";
 import Link from "next/link";
 import { FaUser } from "react-icons/fa";
 import { cookies } from "next/headers";
+import { userAuthCheck } from "../server/actions";
 
 export default async function Header() {
-  const result = cookies().get("token") ? true : false;
+  const result = await userAuthCheck();
   return (
     <>
       <div className="w-full h-20 flex items-center justify-between">
@@ -22,8 +23,8 @@ export default async function Header() {
           </Link>
         </div>
         <div className="w-36 flex justify-end pr-10">
-          <Link href={result ? "/profile" : "/login"}>
-            {result ? (
+          <Link href={result?.id ? "/profile" : "/login"}>
+            {result?.id ? (
               <FaUser className="text-s-3 text-3xl outline outline-1 rounded-full outline-s-3 outline-offset-4" />
             ) : (
               <button className="px-4 py-2 bg-s-1 rounded-full text-s-3 ml-12">
