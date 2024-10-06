@@ -1,5 +1,4 @@
 import Profile from "../ui/profile/profile-view";
-import Link from "next/link";
 import { fetchAllCoursesByCurrentUser } from "../server/queries";
 import { notFound } from "next/navigation";
 import { userAuthCheck } from "../server/actions";

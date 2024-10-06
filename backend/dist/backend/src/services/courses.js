@@ -11,6 +11,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.queryAllCoursesService = queryAllCoursesService;
 exports.getCourseInstructorById = getCourseInstructorById;
+exports.insertNewReview = insertNewReview;
+exports.queryAllSectionsOfACourse = queryAllSectionsOfACourse;
+exports.querySectionById = querySectionById;
+exports.queryCourseDetails = queryCourseDetails;
 const drizzle_orm_1 = require("drizzle-orm");
 const db_1 = require("../drizzle/db");
 const schema_1 = require("../drizzle/schema");
@@ -36,6 +40,43 @@ function getCourseInstructorById(courseId) {
             courseId: schema_1.coursesTable.id,
             instructorId: schema_1.coursesTable.instructor_id,
         })
+            .from(schema_1.coursesTable)
+            .where((0, drizzle_orm_1.eq)(schema_1.coursesTable.id, courseId));
+        return result[0];
+    });
+}
+function insertNewReview(courseId, userId, userName, review) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield db_1.db.insert(schema_1.reviewsTable).values({
+            course_id: courseId,
+            user_id: userId,
+            user_name: userName,
+            comment: review,
+        });
+    });
+}
+function queryAllSectionsOfACourse(courseId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const sectionResults = yield db_1.db
+            .select({ sections: schema_1.coursesTable.sections })
+            .from(schema_1.coursesTable)
+            .where((0, drizzle_orm_1.eq)(schema_1.coursesTable.id, courseId));
+        return sectionResults[0];
+    });
+}
+function querySectionById(sectionId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const result = yield db_1.db
+            .select()
+            .from(schema_1.sectionsTable)
+            .where((0, drizzle_orm_1.eq)(schema_1.sectionsTable.id, sectionId));
+        return result[0];
+    });
+}
+function queryCourseDetails(courseId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const result = yield db_1.db
+            .select()
             .from(schema_1.coursesTable)
             .where((0, drizzle_orm_1.eq)(schema_1.coursesTable.id, courseId));
         return result[0];

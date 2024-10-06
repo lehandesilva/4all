@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import coursesRouter from "./routes/courses";
 import authRouter from "./routes/auth";
 import usersRouter from "./routes/users";
+import categoriesRouter from "./routes/categories";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
@@ -19,6 +20,7 @@ app.use(cookieParser());
 app.use("/course", coursesRouter);
 app.use("/auth", authRouter);
 app.use("/users", usersRouter);
+app.use("/categories", categoriesRouter);
 
 app.listen(8080, () => {
   console.log("Server is running on port 8080");

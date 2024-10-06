@@ -6,7 +6,6 @@ import Link from "next/link";
 import { Category } from "@/app/server/definitions";
 import { createNewCourse, geteSignedUrl } from "@/app/server/actions";
 import { MdError } from "react-icons/md";
-import { IoCloudUploadSharp } from "react-icons/io5";
 
 export default function CreateCourseForm({
   categories,

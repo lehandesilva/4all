@@ -1,7 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db } from "../drizzle/db";
 import { users } from "../drizzle/schema";
-import { emit } from "process";
 
 export async function createUser(
   name: string,

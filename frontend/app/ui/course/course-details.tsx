@@ -2,11 +2,11 @@ import { Course } from "@/app/server/definitions";
 import Link from "next/link";
 import Image from "next/image";
 import { IoStar } from "react-icons/io5";
-import { auth } from "@/auth";
+import { userAuthCheck } from "@/app/server/actions";
 export default async function CourseDetails({ course }: { course: Course }) {
-  const session = await auth();
+  const user = await userAuthCheck();
   let owner: boolean = false;
-  if (session?.user.id === course.instructor_id) {
+  if (user?.id === course.instructor_id && user !== null) {
     owner = true;
   }
   return (
