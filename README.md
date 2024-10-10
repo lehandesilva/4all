@@ -1,10 +1,5 @@
 # STILL IN DEVELOPMENT
 
-For now deployed on vercel and can be viewed at :
-https://4all-gold.vercel.app/
-
-### Planned features
-
 [] Rate Limiting & IP Blocking
 
 [] Server-Side Caching
