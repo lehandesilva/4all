@@ -1,9 +1,10 @@
 import { fetchReviews } from "@/app/server/queries";
 import { FaUser } from "react-icons/fa";
 import ReviewCourse from "./review-course";
+import { review } from "../../../../shared/definitions";
 
 export default async function Reviews({ courseId }: { courseId: string }) {
-  const reviews = await fetchReviews(courseId);
+  const reviews: review[] = await fetchReviews(courseId);
   return (
     <div className="bg-p-1 p-6 pt-16">
       <h3 className="text-s-4 text-xl border-t-2 pt-4">Reviews</h3>

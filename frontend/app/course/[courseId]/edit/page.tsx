@@ -13,6 +13,7 @@ export default async function Page({
   searchParams: { sectionId?: string };
 }) {
   const user = await userAuthCheck();
+  const courseId = params.courseId;
   const sectionId = searchParams?.sectionId;
   const courseDetails = await fetchCourseDeets(params.courseId);
   if (user?.id !== courseDetails.instructor_id || user === null) {
@@ -39,7 +40,7 @@ export default async function Page({
         ],
       };
     } else {
-      sectionData = await fetchSectionById(sectionId);
+      sectionData = await fetchSectionById(courseId, sectionId);
     }
   }
   return (

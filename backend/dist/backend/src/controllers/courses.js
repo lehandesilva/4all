@@ -8,20 +8,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getRecommendedCourses = getRecommendedCourses;
 exports.reviewCourse = reviewCourse;
 exports.getSectionById = getSectionById;
 exports.getAllSectionsOfCourse = getAllSectionsOfCourse;
 exports.getCourseDetails = getCourseDetails;
+exports.getCourseReviews = getCourseReviews;
 const courses_1 = require("../services/courses");
+const redis_1 = __importDefault(require("../redis/redis"));
 function getRecommendedCourses(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             // recommendation system logic for later but for now just all courses.
-            const result = yield (0, courses_1.queryAllCoursesService)();
-            console.log(result);
-            return res.status(200).json(result);
+            const courses = yield redis_1.default.get("courses");
+            if (courses) {
+                return res.status(200).json(JSON.parse(courses));
+            }
+            else {
+                const result = yield (0, courses_1.queryAllCoursesService)();
+                const cacheExpiry = Number(process.env.DEFAULT_CACHE_EXPIRY) || 3600;
+                yield redis_1.default.setEx("courses", cacheExpiry, JSON.stringify(result));
+                return res.status(200).json(result);
+            }
         }
         catch (error) {
             return res.status(500).json({ message: "Internal Server Error" });
@@ -73,6 +85,18 @@ function getCourseDetails(req, res, next) {
         try {
             const courseId = req.params.courseId;
             const result = yield (0, courses_1.queryCourseDetails)(courseId);
+            return res.status(200).json({ result });
+        }
+        catch (error) {
+            return res.status(500).json({ message: "Internal Server Error" });
+        }
+    });
+}
+function getCourseReviews(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const courseId = req.params.courseId;
+            const result = yield (0, courses_1.queryCourseReviews)(courseId);
             return res.status(200).json({ result });
         }
         catch (error) {

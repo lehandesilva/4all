@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   getAllSectionsOfCourse,
   getCourseDetails,
+  getCourseReviews,
   getRecommendedCourses,
   getSectionById,
   reviewCourse,
@@ -11,6 +12,8 @@ import { verifyToken } from "../middleware/jwt-auth";
 const router = Router();
 
 router.get("/", getRecommendedCourses);
+
+router.get("/reviews/:courseId", getCourseReviews);
 
 router.get("/:courseId", verifyToken, getCourseDetails);
 

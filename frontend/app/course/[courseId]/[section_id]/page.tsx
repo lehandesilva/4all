@@ -5,13 +5,17 @@ import {
 import Block from "@/app/ui/course/blocks";
 import { notFound } from "next/navigation";
 import SectionMenu from "@/app/ui/course/menu";
+import { section_for_section } from "../../../../../shared/definitions";
 
 export default async function Page({
   params,
 }: {
   params: { courseId: string; section_id: string };
 }) {
-  const section = await fetchSectionById(params.section_id);
+  const section: section_for_section = await fetchSectionById(
+    params.courseId,
+    params.section_id
+  );
   const { sections } = await fetchAllSectionsOfCourse(params.courseId);
   if (!section) {
     notFound();

@@ -64,9 +64,12 @@ export type block_for_editor = {
 };
 
 export type review = {
-  user: string;
-  review: string;
-  timestamp: string;
+  review_id: string;
+  course_id: string;
+  user_id: string;
+  user_name: string;
+  comment: string;
+  timestamp: Date;
 };
 
 export type Category = {

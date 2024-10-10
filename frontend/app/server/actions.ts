@@ -49,7 +49,7 @@ export async function createSection(
     try {
       const token = cookies().get("token")?.value;
       const response = await fetch(
-        `${process.env.API_URL}/newSection/${courseId}`,
+        `${process.env.API_URL}/users/newSection/${courseId}`,
         {
           method: "POST",
           headers: {
@@ -64,14 +64,14 @@ export async function createSection(
       );
       const resData = await response.json();
       if (response.status !== 201) {
-        return { error: true, message: resData.message };
+        return resData.message;
       }
       newSectionId = resData.sectionId;
     } catch (error) {
       console.log(error);
       return {
         error: true,
-        message: "Database Error: Failed to create section",
+        message: "Database Errorr: Failed to create section",
       };
     }
     revalidatePath("/");
@@ -116,7 +116,7 @@ export async function makeCoursePublic(courseId: string) {
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.API_URL}/updateCourse/public/${courseId}`,
+      `${process.env.API_URL}/users/updateCourse/public/${courseId}`,
       {
         method: "PUT",
         headers: {
@@ -139,7 +139,7 @@ export async function makeCoursePrivate(courseId: string) {
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.API_URL}/updateCourse/private/${courseId}`,
+      `${process.env.API_URL}/users/updateCourse/private/${courseId}`,
       {
         method: "PUT",
         headers: {
@@ -192,7 +192,7 @@ export async function editCourse(
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.API_URL}/updateCourse/${courseId}`,
+      `${process.env.API_URL}/users/updateCourse/${courseId}`,
       {
         method: "PUT",
         headers: {
@@ -406,6 +406,7 @@ export async function deleteCourse(courseId: string) {
     console.error(error);
     return { error: true, message: "An error occurred" };
   }
+  revalidatePath("/");
   redirect("/");
 }
 

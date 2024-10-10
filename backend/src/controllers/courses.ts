@@ -4,8 +4,10 @@ import {
   queryAllCoursesService,
   queryAllSectionsOfACourse,
   queryCourseDetails,
+  queryCourseReviews,
   querySectionById,
 } from "../services/courses";
+import redisClient from "../redis/redis";
 
 export async function getRecommendedCourses(
   req: Request,
@@ -14,9 +16,15 @@ export async function getRecommendedCourses(
 ) {
   try {
     // recommendation system logic for later but for now just all courses.
-    const result = await queryAllCoursesService();
-    console.log(result);
-    return res.status(200).json(result);
+    const courses = await redisClient.get("courses");
+    if (courses) {
+      return res.status(200).json(JSON.parse(courses));
+    } else {
+      const result = await queryAllCoursesService();
+      const cacheExpiry = Number(process.env.DEFAULT_CACHE_EXPIRY) || 3600;
+      await redisClient.setEx("courses", cacheExpiry, JSON.stringify(result));
+      return res.status(200).json(result);
+    }
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
   }
@@ -82,6 +90,22 @@ export async function getCourseDetails(
     const courseId = req.params.courseId;
 
     const result = await queryCourseDetails(courseId);
+
+    return res.status(200).json({ result });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+}
+
+export async function getCourseReviews(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const courseId = req.params.courseId;
+
+    const result = await queryCourseReviews(courseId);
 
     return res.status(200).json({ result });
   } catch (error) {

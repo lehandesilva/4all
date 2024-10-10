@@ -67,3 +67,12 @@ export async function queryCourseDetails(courseId: string) {
 
   return result[0];
 }
+
+export async function queryCourseReviews(courseId: string) {
+  const result = await db
+    .select()
+    .from(reviewsTable)
+    .where(eq(reviewsTable.course_id, courseId));
+
+  return result;
+}

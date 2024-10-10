@@ -15,6 +15,7 @@ exports.insertNewReview = insertNewReview;
 exports.queryAllSectionsOfACourse = queryAllSectionsOfACourse;
 exports.querySectionById = querySectionById;
 exports.queryCourseDetails = queryCourseDetails;
+exports.queryCourseReviews = queryCourseReviews;
 const drizzle_orm_1 = require("drizzle-orm");
 const db_1 = require("../drizzle/db");
 const schema_1 = require("../drizzle/schema");
@@ -80,5 +81,14 @@ function queryCourseDetails(courseId) {
             .from(schema_1.coursesTable)
             .where((0, drizzle_orm_1.eq)(schema_1.coursesTable.id, courseId));
         return result[0];
+    });
+}
+function queryCourseReviews(courseId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const result = yield db_1.db
+            .select()
+            .from(schema_1.reviewsTable)
+            .where((0, drizzle_orm_1.eq)(schema_1.reviewsTable.course_id, courseId));
+        return result;
     });
 }
