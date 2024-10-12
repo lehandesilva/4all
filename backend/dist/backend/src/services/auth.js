@@ -36,6 +36,7 @@ function checkEmailExists(email) {
             .select({ email: schema_1.users.email })
             .from(schema_1.users)
             .where((0, drizzle_orm_1.eq)(schema_1.users.email, email));
+        console.log(result);
         return result;
     });
 }

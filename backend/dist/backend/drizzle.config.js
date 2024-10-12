@@ -6,7 +6,7 @@ exports.default = (0, drizzle_kit_1.defineConfig)({
     out: "./src/drizzle/migrations",
     dialect: "postgresql",
     dbCredentials: {
-        url: process.env.DATABASE_URL,
+        url: process.env.POSTGRES_URL,
     },
     verbose: true,
     strict: true,

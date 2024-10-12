@@ -26,6 +26,7 @@ export async function checkEmailExists(email: string) {
     .select({ email: users.email })
     .from(users)
     .where(eq(users.email, email));
+  console.log(result);
   return result;
 }
 

@@ -1,8 +1,8 @@
 import { createClient } from "redis";
 
+const redisHost = process.env.REDIS_HOST || "localhost"; // Default to localhost if not set
 const redisClient = createClient({
-  url: "redis://localhost:6379",
-  database: 0,
+  url: `redis://${redisHost}:6379`, // Use the service name here
 });
 
 (async () => {

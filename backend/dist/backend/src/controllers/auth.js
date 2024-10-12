@@ -30,15 +30,17 @@ function signUp(req, res, next) {
             const name = req.body.name;
             const age = req.body.age;
             const password = req.body.password;
+            console.log("called");
             const email_exists = yield (0, auth_1.checkEmailExists)(email);
+            console.log("called");
             if (email_exists && email_exists.length > 0) {
-                res.status(409).json({ message: "User already exists" });
+                return res.status(409).json({ message: "User already exists" });
             }
             else {
                 const hashedPw = yield bcryptjs_1.default.hash(password, 12);
                 const result = yield (0, auth_1.createUser)(name, email, hashedPw, age);
-                res.status(201).json({
-                    message: "User created successfully",
+                return res.status(201).json({
+                    message: "User was created successfully ",
                     userId: result[0].userId,
                 });
             }
@@ -69,6 +71,9 @@ function login(req, res, next) {
                 }
             }
         }
-        catch (error) { }
+        catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Internal server error" });
+        }
     });
 }

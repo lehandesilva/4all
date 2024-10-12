@@ -465,7 +465,6 @@ export async function createNewUser(formData: FormData) {
 
   // Insert user into database
   try {
-    console.log("called");
     const response = await fetch(`${process.env.API_URL}/auth/signup`, {
       method: "PUT",
       headers: {

@@ -15,14 +15,16 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
     const name = req.body.name;
     const age = req.body.age;
     const password = req.body.password;
+    console.log("called");
     const email_exists = await checkEmailExists(email);
+    console.log("called");
     if (email_exists && email_exists.length > 0) {
-      res.status(409).json({ message: "User already exists" });
+      return res.status(409).json({ message: "User already exists" });
     } else {
       const hashedPw = await bcrypt.hash(password, 12);
       const result = await createUser(name, email, hashedPw, age);
-      res.status(201).json({
-        message: "User created successfully",
+      return res.status(201).json({
+        message: "User was created successfully ",
         userId: result[0].userId,
       });
     }
@@ -52,5 +54,8 @@ export async function login(req: Request, res: Response, next: NextFunction) {
         return res.status(200).json({ token });
       }
     }
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 }
