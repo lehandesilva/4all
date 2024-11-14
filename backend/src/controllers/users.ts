@@ -13,7 +13,6 @@ import {
   updateSectionInSectionsTable,
 } from "../services/users";
 import { block } from "../../../shared/definitions";
-import redisClient from "../redis/redis";
 
 export async function getCoursesFromInstructorById(
   req: Request,
@@ -46,11 +45,7 @@ export async function deleteCourseById(
     if (req.user?.id !== result[0].instructor_id) {
       res.status(403).json({ message: "Forbidden" });
     }
-
     await deleteCourseService(courseId);
-
-    await redisClient.del("courses");
-
     return res.status(204).send(); // No content response
   } catch (error) {
     console.error("Error deleting course:", error);
@@ -74,8 +69,6 @@ export async function createNewCourse(
       url,
       category
     );
-
-    await redisClient.del("courses");
 
     return res.status(200).json({ result });
   } catch (error) {
@@ -160,8 +153,6 @@ export async function updateCourseDetails(
 
     await updateCourseTable(name, description, url, courseId);
 
-    await redisClient.del("courses");
-
     return res.status(200).json({ courseId: courseId });
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
@@ -178,8 +169,6 @@ export async function makeCoursePrivate(
 
     await updateCoursePrivate(courseId);
 
-    await redisClient.del("courses");
-
     return res.status(200);
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
@@ -195,8 +184,6 @@ export async function makeCoursePublic(
     const courseId = req.params.courseId;
 
     await updateCoursePublic(courseId);
-
-    await redisClient.del("courses");
 
     return res.status(200);
   } catch (error) {

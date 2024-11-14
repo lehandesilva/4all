@@ -7,7 +7,6 @@ import {
   queryCourseReviews,
   querySectionById,
 } from "../services/courses";
-import redisClient from "../redis/redis";
 
 export async function getRecommendedCourses(
   req: Request,
@@ -16,15 +15,8 @@ export async function getRecommendedCourses(
 ) {
   try {
     // recommendation system logic for later but for now just all courses.
-    const courses = await redisClient.get("courses");
-    if (courses) {
-      return res.status(200).json(JSON.parse(courses));
-    } else {
-      const result = await queryAllCoursesService();
-      const cacheExpiry = Number(process.env.DEFAULT_CACHE_EXPIRY) || 3600;
-      await redisClient.setEx("courses", cacheExpiry, JSON.stringify(result));
-      return res.status(200).json(result);
-    }
+    const result = await queryAllCoursesService();
+    return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
   }
