@@ -10,7 +10,7 @@ RUN npm install
 COPY . .
 
 # Step 6: Expose the port your application will run on
-EXPOSE 8080
+EXPOSE 80
 
 # Define the command to run your app
 CMD [ "npm", "start" ]
