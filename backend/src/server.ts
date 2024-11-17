@@ -24,6 +24,6 @@ app.use("/auth", authRouter);
 app.use("/users", usersRouter);
 app.use("/categories", categoriesRouter);
 
-app.listen(8080, () => {
-  console.log("Server is running on port 8080");
+app.listen(80, () => {
+  console.log("Server is running on port 80");
 });
