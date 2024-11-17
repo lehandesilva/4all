@@ -23,6 +23,9 @@ app.use("/course", coursesRouter);
 app.use("/auth", authRouter);
 app.use("/users", usersRouter);
 app.use("/categories", categoriesRouter);
+app.use("/", (req, res) => {
+  res.status(200).send("Hello from the backend!");
+});
 
 app.listen(80, () => {
   console.log("Server is running on port 80");
