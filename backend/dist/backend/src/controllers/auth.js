@@ -18,6 +18,8 @@ const express_validator_1 = require("express-validator");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const auth_1 = require("../services/auth");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 function signUp(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

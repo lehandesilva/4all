@@ -12,12 +12,5 @@ COPY . .
 # Step 6: Expose the port your application will run on
 EXPOSE 8080
 
-# Step 7: Set environment variables for PostgreSQL and Redis
-# You should set these at runtime using Docker Compose or `docker run` commands
-ENV POSTGRES_URL=postgresql://admin:admin@postgres:5432/elearning_db
-ENV REDIS_URL=redis://redis:6379
-ENV REDIS_HOST=redis
-ENV PRIVATE_KEY=secretbutitsuperdupersecret
-
 # Define the command to run your app
 CMD [ "npm", "start" ]

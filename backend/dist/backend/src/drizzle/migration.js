@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const postgres_js_1 = require("drizzle-orm/postgres-js");
 const migrator_1 = require("drizzle-orm/postgres-js/migrator");
 const postgres_1 = __importDefault(require("postgres"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const migrationClient = (0, postgres_1.default)(process.env.POSTGRES_URL, {
     max: 1,
 });

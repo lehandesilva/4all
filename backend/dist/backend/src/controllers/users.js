@@ -8,9 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCoursesFromInstructorById = getCoursesFromInstructorById;
 exports.deleteCourseById = deleteCourseById;
@@ -21,7 +18,6 @@ exports.updateCourseDetails = updateCourseDetails;
 exports.makeCoursePrivate = makeCoursePrivate;
 exports.makeCoursePublic = makeCoursePublic;
 const users_1 = require("../services/users");
-const redis_1 = __importDefault(require("../redis/redis"));
 function getCoursesFromInstructorById(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         var _a;
@@ -49,7 +45,6 @@ function deleteCourseById(req, res, next) {
                 res.status(403).json({ message: "Forbidden" });
             }
             yield (0, users_1.deleteCourseService)(courseId);
-            yield redis_1.default.del("courses");
             return res.status(204).send(); // No content response
         }
         catch (error) {
@@ -64,7 +59,6 @@ function createNewCourse(req, res, next) {
         try {
             const { name, description, url, category } = req.body;
             const result = yield (0, users_1.insertNewCourse)(name, description, (_a = req.user) === null || _a === void 0 ? void 0 : _a.id, (_b = req.user) === null || _b === void 0 ? void 0 : _b.name, url, category);
-            yield redis_1.default.del("courses");
             return res.status(200).json({ result });
         }
         catch (error) {
@@ -124,7 +118,6 @@ function updateCourseDetails(req, res, next) {
             const description = req.body.description;
             const url = req.body.url;
             yield (0, users_1.updateCourseTable)(name, description, url, courseId);
-            yield redis_1.default.del("courses");
             return res.status(200).json({ courseId: courseId });
         }
         catch (error) {
@@ -137,7 +130,6 @@ function makeCoursePrivate(req, res, next) {
         try {
             const courseId = req.params.courseId;
             yield (0, users_1.updateCoursePrivate)(courseId);
-            yield redis_1.default.del("courses");
             return res.status(200);
         }
         catch (error) {
@@ -150,7 +142,6 @@ function makeCoursePublic(req, res, next) {
         try {
             const courseId = req.params.courseId;
             yield (0, users_1.updateCoursePublic)(courseId);
-            yield redis_1.default.del("courses");
             return res.status(200);
         }
         catch (error) {

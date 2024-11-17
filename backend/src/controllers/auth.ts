@@ -3,6 +3,8 @@ import { validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
 import { checkEmailExists, createUser, getUserInfo } from "../services/auth";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 export async function signUp(req: Request, res: Response, next: NextFunction) {
   try {

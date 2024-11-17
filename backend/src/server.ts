@@ -6,6 +6,8 @@ import usersRouter from "./routes/users";
 import categoriesRouter from "./routes/categories";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 app.use(
