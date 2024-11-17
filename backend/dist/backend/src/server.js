@@ -24,6 +24,9 @@ app.use("/course", courses_1.default);
 app.use("/auth", auth_1.default);
 app.use("/users", users_1.default);
 app.use("/categories", categories_1.default);
-app.listen(8080, () => {
-    console.log("Server is running on port 8080");
+app.use("/", (req, res) => {
+    res.status(200).send("Hello from the backend!");
+});
+app.listen(80, () => {
+    console.log("Server is running on port 80");
 });
