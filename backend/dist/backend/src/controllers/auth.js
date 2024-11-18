@@ -32,9 +32,7 @@ function signUp(req, res, next) {
             const name = req.body.name;
             const age = req.body.age;
             const password = req.body.password;
-            console.log("called");
             const email_exists = yield (0, auth_1.checkEmailExists)(email);
-            console.log("called");
             if (email_exists && email_exists.length > 0) {
                 return res.status(409).json({ message: "User already exists" });
             }
@@ -56,7 +54,6 @@ function login(req, res, next) {
             const email = req.body.email;
             const password = req.body.password;
             const user = yield (0, auth_1.getUserInfo)(email);
-            console.log(user);
             if (!user) {
                 return res.status(401).json({ message: "No account under this email" });
             }
@@ -73,7 +70,6 @@ function login(req, res, next) {
             }
         }
         catch (error) {
-            console.error(error);
             return res.status(500).json({ message: "Internal server error" });
         }
     });
