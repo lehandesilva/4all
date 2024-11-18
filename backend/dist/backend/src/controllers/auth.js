@@ -62,7 +62,6 @@ function login(req, res, next) {
             }
             else {
                 const result = yield bcryptjs_1.default.compare(password, user.password);
-                console.log(result);
                 if (!result) {
                     return res.status(401).json({ message: "Wrong password" });
                 }

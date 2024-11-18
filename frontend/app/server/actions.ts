@@ -68,7 +68,6 @@ export async function createSection(
       }
       newSectionId = resData.sectionId;
     } catch (error) {
-      console.log(error);
       return {
         error: true,
         message: "Database Errorr: Failed to create section",
@@ -100,7 +99,6 @@ export async function createSection(
         return { error: true, message: resData.message };
       }
     } catch (error) {
-      console.log(error);
       return {
         error: true,
         message: "Database Error: Failed to create section",
@@ -403,7 +401,6 @@ export async function deleteCourse(courseId: string) {
       },
     });
   } catch (error) {
-    console.error(error);
     return { error: true, message: "An error occurred" };
   }
   revalidatePath("/");
@@ -439,7 +436,6 @@ export async function authenticate(formData: FormData) {
       });
     }
   } catch (error) {
-    console.error(error);
     return { error: true, message: "An error occurred" };
   }
   redirect("/");
@@ -481,7 +477,6 @@ export async function createNewUser(formData: FormData) {
       return { error: true, message: "Maneee who you fuckin wit" };
     }
   } catch (error) {
-    console.log(error);
     return { error: true, message: "Database Error: Failed to create user" };
   }
   redirect("/login");

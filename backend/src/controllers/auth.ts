@@ -17,9 +17,7 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
     const name = req.body.name;
     const age = req.body.age;
     const password = req.body.password;
-    console.log("called");
     const email_exists = await checkEmailExists(email);
-    console.log("called");
     if (email_exists && email_exists.length > 0) {
       return res.status(409).json({ message: "User already exists" });
     } else {
@@ -38,12 +36,10 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     const email = req.body.email;
     const password = req.body.password;
     const user = await getUserInfo(email);
-    console.log(user);
     if (!user) {
       return res.status(401).json({ message: "No account under this email" });
     } else {
       const result = await bcrypt.compare(password, user.password);
-      console.log(result);
       if (!result) {
         return res.status(401).json({ message: "Wrong password" });
       } else {
@@ -57,7 +53,6 @@ export async function login(req: Request, res: Response, next: NextFunction) {
       }
     }
   } catch (error) {
-    console.error(error);
     return res.status(500).json({ message: "Internal server error" });
   }
 }

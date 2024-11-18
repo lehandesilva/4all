@@ -6,10 +6,10 @@ export default function CoursesGrid({
   courses,
   title,
 }: {
-  courses: Courses_for_page[];
+  courses: Courses_for_page[] | null;
   title: string;
 }) {
-  if (courses.length === 0 || !courses) {
+  if (!courses || !Array.isArray(courses) || courses.length === 0) {
     return (
       <div className="w-full p-16">
         <h1 className="text-s-5 text-3xl">{title}</h1>
