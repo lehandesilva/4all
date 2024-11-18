@@ -49,7 +49,7 @@ export async function createSection(
     try {
       const token = cookies().get("token")?.value;
       const response = await fetch(
-        `${process.env.API_URL}/users/newSection/${courseId}`,
+        `${process.env.BACKEND_API_URL}/users/newSection/${courseId}`,
         {
           method: "POST",
           headers: {
@@ -79,7 +79,7 @@ export async function createSection(
     try {
       const token = cookies().get("token")?.value;
       const response = await fetch(
-        `${process.env.API_URL}/updateSection/${courseId}/${sectionId}`,
+        `${process.env.BACKEND_API_URL}/updateSection/${courseId}/${sectionId}`,
         {
           method: "PUT",
           headers: {
@@ -114,7 +114,7 @@ export async function makeCoursePublic(courseId: string) {
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.API_URL}/users/updateCourse/public/${courseId}`,
+      `${process.env.BACKEND_API_URL}/users/updateCourse/public/${courseId}`,
       {
         method: "PUT",
         headers: {
@@ -137,7 +137,7 @@ export async function makeCoursePrivate(courseId: string) {
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.API_URL}/users/updateCourse/private/${courseId}`,
+      `${process.env.BACKEND_API_URL}/users/updateCourse/private/${courseId}`,
       {
         method: "PUT",
         headers: {
@@ -190,7 +190,7 @@ export async function editCourse(
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.API_URL}/users/updateCourse/${courseId}`,
+      `${process.env.BACKEND_API_URL}/users/updateCourse/${courseId}`,
       {
         method: "PUT",
         headers: {
@@ -234,7 +234,7 @@ export async function reviewCourse(courseId: string, review: string) {
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.API_URL}/course/newReview/${courseId}`,
+      `${process.env.BACKEND_API_URL}/course/newReview/${courseId}`,
       {
         method: "POST",
         headers: {
@@ -365,19 +365,22 @@ export async function createNewCourse(formData: FormData, signedURL: string) {
 
   try {
     const token = cookies().get("token")?.value;
-    const response = await fetch(`${process.env.API_URL}/users/newCourse`, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        name: name,
-        description: description,
-        url: signedURL.split("?")[0],
-        category: category,
-      }),
-    });
+    const response = await fetch(
+      `${process.env.BACKEND_API_URL}/users/newCourse`,
+      {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name: name,
+          description: description,
+          url: signedURL.split("?")[0],
+          category: category,
+        }),
+      }
+    );
 
     const resData = await response.json();
     courseId = resData.result;
@@ -394,7 +397,7 @@ export async function createNewCourse(formData: FormData, signedURL: string) {
 export async function deleteCourse(courseId: string) {
   try {
     const token = cookies().get("token")?.value;
-    await fetch(`${process.env.API_URL}/users/${courseId}`, {
+    await fetch(`${process.env.BACKEND_API_URL}/users/${courseId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -412,7 +415,7 @@ export async function authenticate(formData: FormData) {
   const email = formData.get("email");
 
   try {
-    const response = await fetch(`${process.env.API_URL}/auth/login`, {
+    const response = await fetch(`${process.env.BACKEND_API_URL}/auth/login`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -461,7 +464,7 @@ export async function createNewUser(formData: FormData) {
 
   // Insert user into database
   try {
-    const response = await fetch(`${process.env.API_URL}/auth/signup`, {
+    const response = await fetch(`${process.env.BACKEND_API_URL}/auth/signup`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json",
@@ -485,7 +488,7 @@ export async function createNewUser(formData: FormData) {
 export async function userAuthCheck() {
   try {
     const token = cookies().get("token")?.value;
-    const response = await fetch(`${process.env.API_URL}/auth/check`, {
+    const response = await fetch(`${process.env.BACKEND_API_URL}/auth/check`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,

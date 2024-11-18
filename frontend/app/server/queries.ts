@@ -10,7 +10,7 @@ export async function fetchReviews(courseId: string) {
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.API_URL}/course/reviews/${courseId}`,
+      `${process.env.BACKEND_API_URL}/course/reviews/${courseId}`,
       {
         method: "GET",
         headers: {
@@ -33,12 +33,15 @@ export async function fetchReviews(courseId: string) {
 export async function fetchCourseDeets(courseId: string) {
   try {
     const token = cookies().get("token")?.value;
-    const response = await fetch(`${process.env.API_URL}/course/${courseId}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `${process.env.BACKEND_API_URL}/course/${courseId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (!response.ok) {
       const resData = await response.json();
       return resData.message;
@@ -55,7 +58,7 @@ export async function fetchSectionById(courseId: string, sectionId: string) {
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.API_URL}/course/${courseId}/${sectionId}`,
+      `${process.env.BACKEND_API_URL}/course/${courseId}/${sectionId}`,
       {
         method: "GET",
         headers: {
@@ -79,7 +82,7 @@ export async function fetchAllSectionsOfCourse(courseId: string) {
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.API_URL}/course/${courseId}/sections`,
+      `${process.env.BACKEND_API_URL}/course/${courseId}/sections`,
       {
         method: "GET",
         headers: {
@@ -102,7 +105,7 @@ export async function fetchAllSectionsOfCourse(courseId: string) {
 export async function fetchAllCoursesByCurrentUser(userId: string) {
   const token = cookies().get("token")?.value;
   const response = await fetch(
-    `${process.env.API_URL}/users/${userId}/courses`,
+    `${process.env.BACKEND_API_URL}/users/${userId}/courses`,
     {
       method: "GET",
       headers: {
@@ -120,8 +123,7 @@ export async function fetchAllCoursesByCurrentUser(userId: string) {
 }
 
 export async function fetchCoursesForHomePage() {
-  console.log(process.env.API_URL);
-  const response = await fetch(`${process.env.API_URL}/course`, {
+  const response = await fetch(`${process.env.BACKEND_API_URL}/course`, {
     cache: "no-store",
   });
 
@@ -135,7 +137,7 @@ export async function fetchCoursesForHomePage() {
 
 export default async function fetchCategories() {
   try {
-    const response = await fetch(`${process.env.API_URL}/categories`, {
+    const response = await fetch(`${process.env.BACKEND_API_URL}/categories`, {
       cache: "no-store",
     });
     if (!response.ok) {
