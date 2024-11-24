@@ -34,6 +34,19 @@ export class InfrastructureStack extends cdk.Stack {
         passwordLength: 16,
         includeSpace: false,
         excludePunctuation: true,
+        excludeCharacters: '"/@:',
+      },
+    });
+
+    // Create secret for private key
+    const privateKey = new Secret(this, "4allPrivateKey", {
+      secretName: "4allPrivateKey",
+      description: "Private key for 4all",
+      generateSecretString: {
+        generateStringKey: "password",
+        passwordLength: 16,
+        includeSpace: false,
+        excludePunctuation: true,
       },
     });
 
@@ -106,7 +119,7 @@ export class InfrastructureStack extends cdk.Stack {
         DB_PORT: rdsInstance.dbInstanceEndpointPort.toString(),
         DB_USER: dbSecret.secretName,
         DB_PASSWORD: dbSecret.secretValueFromJson("password").toString(),
-        PRIVATE_KEY: "secretkey",
+        PRIVATE_KEY: privateKey.secretValueFromJson("password").toString(),
         NODE_ENV: "production",
         NEXT_PUBLIC_FRONTEND_ORIGIN: "*",
       },
