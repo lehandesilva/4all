@@ -43,6 +43,7 @@ export class InfrastructureStack extends cdk.Stack {
       secretName: "4allPrivateKey",
       description: "Private key for 4all",
       generateSecretString: {
+        secretStringTemplate: JSON.stringify({ username: "private-key" }),
         generateStringKey: "password",
         passwordLength: 16,
         includeSpace: false,
@@ -62,7 +63,7 @@ export class InfrastructureStack extends cdk.Stack {
     );
 
     // Create RDS instance
-    const rdsInstance = new rds.DatabaseInstance(this, "4allDatabase", {
+    const rdsInstance = new rds.DatabaseInstance(this, "rds-instance-4all", {
       vpc: vpc,
       vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_ISOLATED },
       securityGroups: [dbSecurityGroup],
@@ -70,7 +71,7 @@ export class InfrastructureStack extends cdk.Stack {
         version: rds.PostgresEngineVersion.VER_16,
       }),
       credentials: rds.Credentials.fromSecret(dbSecret),
-      databaseName: "4all",
+      databaseName: "db_4all",
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       storageType: rds.StorageType.GP2,
       instanceType: ec2.InstanceType.of(
@@ -85,8 +86,6 @@ export class InfrastructureStack extends cdk.Stack {
       publiclyAccessible: false,
     });
 
-    dbSecret.attach(rdsInstance);
-
     // Create ECS cluster
     const cluster = new ecs.Cluster(this, "4allCluster", {
       vpc: vpc,
@@ -96,6 +95,8 @@ export class InfrastructureStack extends cdk.Stack {
     cluster.addCapacity("DefaultAutoScalingGroupCapacity", {
       instanceType: new ec2.InstanceType("t2.micro"),
       desiredCapacity: 1,
+      maxCapacity: 2,
+      vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
     });
 
     // Create ECS task definition
@@ -117,11 +118,14 @@ export class InfrastructureStack extends cdk.Stack {
       environment: {
         DB_HOST: rdsInstance.dbInstanceEndpointAddress,
         DB_PORT: rdsInstance.dbInstanceEndpointPort.toString(),
-        DB_USER: dbSecret.secretName,
-        DB_PASSWORD: dbSecret.secretValueFromJson("password").toString(),
-        PRIVATE_KEY: privateKey.secretValueFromJson("password").toString(),
+        DB_NAME: "db_4all",
         NODE_ENV: "production",
         NEXT_PUBLIC_FRONTEND_ORIGIN: "*",
+      },
+      secrets: {
+        DB_USER: ecs.Secret.fromSecretsManager(dbSecret, "username"),
+        DB_PASSWORD: ecs.Secret.fromSecretsManager(dbSecret, "password"),
+        PRIVATE_KEY: ecs.Secret.fromSecretsManager(privateKey, "password"),
       },
       memoryLimitMiB: 512,
     });
@@ -139,6 +143,7 @@ export class InfrastructureStack extends cdk.Stack {
     });
     const listener = alb.addListener("4all-alb-listener", {
       port: 80,
+      open: true,
     });
     listener.addTargets("4all-alb-targets", {
       port: 80,
@@ -148,6 +153,15 @@ export class InfrastructureStack extends cdk.Stack {
           containerPort: 80,
         }),
       ],
+      healthCheck: {
+        interval: cdk.Duration.seconds(10),
+        path: "/",
+        timeout: cdk.Duration.seconds(5),
+      },
+    });
+
+    new cdk.CfnOutput(this, "LoadBalancerDNS", {
+      value: alb.loadBalancerDnsName,
     });
   }
 }
