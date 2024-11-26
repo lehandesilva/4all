@@ -17,7 +17,7 @@ const migrator_1 = require("drizzle-orm/postgres-js/migrator");
 const postgres_1 = __importDefault(require("postgres"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-const URL = `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
+const URL = `postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
 const migrationClient = (0, postgres_1.default)(URL, {
     max: 1,
 });
