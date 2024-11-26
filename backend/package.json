@@ -10,7 +10,9 @@
     "db:push": "drizzle-kit push",
     "db:stu": "drizzle-kit studio",
     "db:gen": "drizzle-kit generate",
-    "db:mig": "tsx src/drizzle/migrate.ts"
+    "db:mig": "tsx src/drizzle/migrate.ts",
+    "generate:migration": "drizzle-kit generate",
+    "migrate": "drizzle-kit migrate"
   },
   "author": "",
   "license": "ISC",

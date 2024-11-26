@@ -128,6 +128,7 @@ export class InfrastructureStack extends cdk.Stack {
         PRIVATE_KEY: ecs.Secret.fromSecretsManager(privateKey, "password"),
       },
       memoryLimitMiB: 512,
+      command: ["sh", "-c", "npm run migrate && npm start"],
     });
 
     // Instantiate an Amazon ECS Service
