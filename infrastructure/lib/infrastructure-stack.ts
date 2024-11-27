@@ -99,6 +99,43 @@ export class InfrastructureStack extends cdk.Stack {
       vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
     });
 
+    // Create ECS task definition for migration
+
+    const migrationTaskDef = new ecs.Ec2TaskDefinition(
+      this,
+      "4allMigrationTaskDef",
+      {
+        family: "4all-migration-taskDEF",
+        networkMode: ecs.NetworkMode.HOST,
+      }
+    );
+
+    migrationTaskDef.addContainer("4allMigrationContainer", {
+      image: ecs.ContainerImage.fromEcrRepository(
+        cdk.aws_ecr.Repository.fromRepositoryArn(this, "", ""),
+        "latest"
+      ),
+      portMappings: [{ containerPort: 80 }],
+      environment: {
+        DB_HOST: rdsInstance.dbInstanceEndpointAddress,
+        DB_PORT: rdsInstance.dbInstanceEndpointPort.toString(),
+        DB_NAME: "db_4all",
+      },
+      secrets: {
+        DB_USER: ecs.Secret.fromSecretsManager(dbSecret, "username"),
+        DB_PASSWORD: ecs.Secret.fromSecretsManager(dbSecret, "password"),
+        PRIVATE_KEY: ecs.Secret.fromSecretsManager(privateKey, "password"),
+      },
+      memoryLimitMiB: 512,
+    });
+
+    const migrationService = new ecs.Ec2Service(this, "4allMigrationService", {
+      cluster: cluster,
+      taskDefinition: migrationTaskDef,
+      desiredCount: 1,
+      serviceName: "4allMigrationService",
+    });
+
     // Create ECS task definition
     const taskDef = new ecs.Ec2TaskDefinition(this, "4allTaskDef", {
       family: "4all-taskDEF",
@@ -128,7 +165,6 @@ export class InfrastructureStack extends cdk.Stack {
         PRIVATE_KEY: ecs.Secret.fromSecretsManager(privateKey, "password"),
       },
       memoryLimitMiB: 512,
-      command: ["sh", "-c", "npm run migrate && npm start"],
     });
 
     // Instantiate an Amazon ECS Service
