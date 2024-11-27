@@ -65,7 +65,7 @@ export class InfrastructureStack extends cdk.Stack {
     // Create RDS instance
     const rdsInstance = new rds.DatabaseInstance(this, "rds-instance-4all", {
       vpc: vpc,
-      vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_ISOLATED },
+      vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
       securityGroups: [dbSecurityGroup],
       engine: rds.DatabaseInstanceEngine.postgres({
         version: rds.PostgresEngineVersion.VER_16,
