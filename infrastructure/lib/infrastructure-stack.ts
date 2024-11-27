@@ -102,7 +102,7 @@ export class InfrastructureStack extends cdk.Stack {
     // Create ECS task definition
     const taskDef = new ecs.Ec2TaskDefinition(this, "4allTaskDef", {
       family: "4all-taskDEF",
-      networkMode: ecs.NetworkMode.HOST,
+      networkMode: ecs.NetworkMode.AWS_VPC,
     });
 
     taskDef.addContainer("4allContainer", {
@@ -118,7 +118,7 @@ export class InfrastructureStack extends cdk.Stack {
       environment: {
         DB_HOST: rdsInstance.dbInstanceEndpointAddress,
         DB_PORT: rdsInstance.dbInstanceEndpointPort.toString(),
-        DB_NAME: "db_4all",
+        DB_NAME: "db_4all?sslmode=require",
         NODE_ENV: "production",
         NEXT_PUBLIC_FRONTEND_ORIGIN: "*",
       },
