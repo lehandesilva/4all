@@ -123,6 +123,7 @@ export async function fetchAllCoursesByCurrentUser(userId: string) {
 }
 
 export async function fetchCoursesForHomePage() {
+  console.log(process.env.BACKEND_API_URL);
   const response = await fetch(`${process.env.BACKEND_API_URL}/course`, {
     cache: "no-store",
   });
