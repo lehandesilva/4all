@@ -112,7 +112,11 @@ export class InfrastructureStack extends cdk.Stack {
 
     migrationTaskDef.addContainer("4allMigrationContainer", {
       image: ecs.ContainerImage.fromEcrRepository(
-        cdk.aws_ecr.Repository.fromRepositoryArn(this, "", ""),
+        cdk.aws_ecr.Repository.fromRepositoryArn(
+          this,
+          "4all/db_migration",
+          "arn:aws:ecr:eu-west-2:631640527929:repository/4all/db_migration"
+        ),
         "latest"
       ),
       portMappings: [{ containerPort: 80 }],
