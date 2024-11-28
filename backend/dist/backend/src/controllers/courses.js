@@ -25,7 +25,7 @@ function getRecommendedCourses(req, res, next) {
         }
         catch (error) {
             console.error(error);
-            return res.status(500).json({ message: "Internal Serve Error" });
+            return res.status(500).json({ message: "Internal Server Error" });
         }
     });
 }
