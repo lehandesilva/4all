@@ -83,7 +83,7 @@ export class InfrastructureStack extends cdk.Stack {
       multiAz: false,
       backupRetention: cdk.Duration.days(0),
       deleteAutomatedBackups: true,
-      publiclyAccessible: true,
+      publiclyAccessible: false,
     });
 
     // Create ECS cluster
