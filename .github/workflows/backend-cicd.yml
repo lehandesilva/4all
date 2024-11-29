@@ -11,7 +11,7 @@ env:
   ECR_REPOSITORY: 4all/backend
   ECS_SERVICE: InfrastructureStack-4allService3F41AD35-ll5ZDoErcZN4
   ECS_CLUSTER: 4allCluster
-  ECS_TASK_DEFINITION: arn:aws:ecs:eu-west-2:631640527929:task-definition/4all-taskDEF:11
+  ECS_TASK_DEFINITION: arn:aws:ecs:eu-west-2:631640527929:task-definition/4all-taskDEF
   CONTAINER_NAME: 4allContainer
 
 permissions:
@@ -58,10 +58,11 @@ jobs:
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image }}
 
-      - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      - name: Deploy to ECS
+        uses: imehedi/actions-awscli-v2@latest
         with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: ${{ env.ECS_SERVICE }}
-          cluster: ${{ env.ECS_CLUSTER }}
-          wait-for-service-stability: true
+          args: ecs update-service --cluster 4allCluster --service InfrastructureStack-4allService3F41AD35-ll5ZDoErcZN4 --force-new-deployment
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}

@@ -25,7 +25,7 @@ app.use("/auth", auth_1.default);
 app.use("/users", users_1.default);
 app.use("/categories", categories_1.default);
 app.use("/", (req, res) => {
-    res.status(200).send("Hello from the backend!");
+    res.status(200).send("Hope this bitch ass works");
 });
 app.listen(80, () => {
     console.log("Server is running on port 80");
