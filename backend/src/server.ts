@@ -24,7 +24,7 @@ app.use("/auth", authRouter);
 app.use("/users", usersRouter);
 app.use("/categories", categoriesRouter);
 app.use("/", (req, res) => {
-  res.status(200).send("Hello from the backend");
+  res.status(200).send("Hope this bitch ass works");
 });
 
 app.listen(80, () => {

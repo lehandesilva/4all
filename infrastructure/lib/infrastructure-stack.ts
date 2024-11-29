@@ -102,11 +102,6 @@ export class InfrastructureStack extends cdk.Stack {
       }
     );
 
-    autoScalingGroup.scaleOnCpuUtilization("CpuScaling", {
-      targetUtilizationPercent: 60,
-      cooldown: cdk.Duration.seconds(300), // 5-minute cooldown
-    });
-
     // Create ECS task definition
     const taskDef = new ecs.Ec2TaskDefinition(this, "4allTaskDef", {
       family: "4all-taskDEF",
@@ -135,7 +130,7 @@ export class InfrastructureStack extends cdk.Stack {
         DB_PASSWORD: ecs.Secret.fromSecretsManager(dbSecret, "password"),
         PRIVATE_KEY: ecs.Secret.fromSecretsManager(privateKey, "password"),
       },
-      memoryLimitMiB: 512,
+      memoryLimitMiB: 256,
     });
 
     // Instantiate an Amazon ECS Service
