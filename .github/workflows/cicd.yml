@@ -4,6 +4,14 @@ on:
   push:
     branches: ["main"]
 
+env:
+  AWS_REGION: eu-west-2
+  ECR_REPOSITORY: 4all/backend
+  ECS_SERVICE: InfrastructureStack-4allService3F41AD35-ll5ZDoErcZN4
+  ECS_CLUSTER: 4allCluster
+  ECS_TASK_DEFINITION: 4all-taskDEF
+  CONTAINER_NAME: 4allContainer
+
 permissions:
   contents: read
 
