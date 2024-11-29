@@ -92,11 +92,19 @@ export class InfrastructureStack extends cdk.Stack {
       clusterName: "4allCluster",
     });
 
-    cluster.addCapacity("DefaultAutoScalingGroupCapacity", {
-      instanceType: new ec2.InstanceType("t2.micro"),
-      desiredCapacity: 1,
-      maxCapacity: 2,
-      vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
+    const autoScalingGroup = cluster.addCapacity(
+      "DefaultAutoScalingGroupCapacity",
+      {
+        instanceType: new ec2.InstanceType("t2.micro"),
+        desiredCapacity: 1,
+        maxCapacity: 2,
+        vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
+      }
+    );
+
+    autoScalingGroup.scaleOnCpuUtilization("CpuScaling", {
+      targetUtilizationPercent: 60,
+      cooldown: cdk.Duration.seconds(300), // 5-minute cooldown
     });
 
     // Create ECS task definition
