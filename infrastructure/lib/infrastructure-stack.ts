@@ -137,10 +137,6 @@ export class InfrastructureStack extends cdk.Stack {
     const ecsService = new ecs.Ec2Service(this, "4all-Service", {
       cluster: cluster,
       taskDefinition: taskDef,
-      circuitBreaker: {
-        enable: true,
-        rollback: true,
-      },
     });
 
     // Create ALB
